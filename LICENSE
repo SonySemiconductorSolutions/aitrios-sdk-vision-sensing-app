@@ -4,6 +4,7 @@
 ========================================================================
 
 .devcontainer/vott/vott.sh
+docs/development-docs
 tutorials/2_prepare_dataset/
 tutorials/4_quantize_model/
 tutorials/5_post_process/build.sh
