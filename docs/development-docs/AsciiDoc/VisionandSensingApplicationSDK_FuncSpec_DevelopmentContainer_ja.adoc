@@ -1,14 +1,25 @@
-= pass:[<br/>]Vision and Sensing Application SDK Development Container 機能仕様書
+= Vision and Sensing pass:[<br/>] Application SDK pass:[<br/>] Development Container pass:[<br/>] 機能仕様書 pass:[<br/>]
+:title-page-background-image: image:Trademark.png[fit=none,pdfwidth=50%,position=bottom center]
+:sectnums:
+:sectnumlevels: 4
+:chapter-label:
+:author: Copyright 2022 Sony Semiconductor Solutions Corporation
+:revdate: 2022 - xx - xx
+:revnumber: 0.0.x
 :toc:
-:toclevels: 1
-:toc-title: Table of Contents（目次）
+:toc-title: 目次
+:toclevels: 4
+:chapter-label:
+:document-title-header:
+ifndef::imagesdir[:imagesdir: ../../../images]
+:lang: ja
 
 == 更新履歴
 
 |===
 |Date |What/Why
 
-|2022/11/10
+|2022/11/16
 |初版作成
 |===
 
