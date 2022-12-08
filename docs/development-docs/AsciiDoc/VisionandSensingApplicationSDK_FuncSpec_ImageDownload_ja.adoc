@@ -1,0 +1,301 @@
+= Vision and Sensing pass:[<br/>] Application SDK pass:[<br/>] 画像ダウンロード pass:[<br/>] 機能仕様書 pass:[<br/>]
+:title-page-background-image: image:Trademark.png[fit=none,pdfwidth=50%,position=bottom center]
+:sectnums:
+:sectnumlevels: 4
+:chapter-label:
+:author: Copyright 2022 Sony Semiconductor Solutions Corporation
+:revdate: 2022 - xx - xx
+:revnumber: 0.0.x
+:toc:
+:toc-title: 目次
+:toclevels: 4
+:chapter-label:
+:document-title-header:
+ifndef::imagesdir[:imagesdir: ../../../images]
+:lang: ja
+
+== 更新履歴
+
+|===
+|Date |What/Why
+
+|2022/11/16
+|初版作成
+|===
+
+== 用語・略語
+|===
+|Terms/Abbreviations |Meaning 
+
+|COCO
+|Common Objects in Context +
+大規模なオブジェクト検出、セグメンテーション、キャプションのデータセット
+
+|
+|
+|===
+
+== 参照資料
+
+[[anchor-ref]]
+* Reference/Related documents（関連資料）
+** COCO Download
+*** https://cocodataset.org/#download
+** COCO Annotations ファイル
+*** http://images.cocodataset.org/annotations/annotations_trainval2017.zip
+
+
+== 想定ユースケース
+
+* Console for AITRIOSへインポートしてアノテーションするためのサンプル画像をCOCOからDownloadしたい
+
+
+== 機能概要、アルゴリズム
+
+=== Functional Overview
+
+SDKにて下記のフローでCOCOからサンプル画像をDownloadできる
+
+[mermaid]
+----
+flowchart TD;
+    %% definition
+    classDef object fill:#FFE699, stroke:#FFD700
+    style legend fill:#FFFFFF, stroke:#000000
+
+    %% impl
+    subgraph legend["凡例"]
+        process(処理/ユーザーの行動)
+    end
+----
+
+
+* フロー概要
+
+[mermaid]
+----
+flowchart TD
+    start((Start)) --> id1(1.Notebook実行向けセットアップ)
+    id1 --> id2(2.Notebook実行向け設定ファイル編集)
+    id2 --> id3(3.Notebook実行)
+    id3 --> finish(((Finish)))
+----
+
+* フロー詳細
+
+. Notebook実行向けセットアップ
+
+** <<anchor-ref, 関連資料: COCO Annotations ファイル>> 取得
+
+. Notebook実行向け設定ファイル編集
+
+** 設定ファイルconfiguration.jsonを編集してNotebook実行時の設定を行う
+
+. Notebook実行
+
+*** COCOからサンプル画像Download機能をもつNotebookを実行する
+
+== 操作性仕様、画面仕様
+=== How to start each function
+. SDK環境を立ち上げ、Topの `**README.md**` をプレビュー表示する
+. SDK環境Topの `**README.md**` に含まれるハイパーリンクから、 `**tutorials**` ディレクトリの `**README.md**` にジャンプする
+. `**tutorials**` ディレクトリの `**README.md**` に含まれるハイパーリンクから、prepare datasetディレクトリにジャンプする
+. prepare datasetディレクトリの `**README.md**` に含まれるハイパーリンクから、download imagesディレクトリにジャンプする
+. download imagesディレクトリの各ファイルから各機能に遷移する
+
+
+=== Notebook実行向けセットアップ
+. prepare datasetディレクトリの `**README.md**` に記載の手順・リンクから<<anchor-ref, 関連資料: COCO Annotations ファイル>>をBrowserでDownloadする
+. Downloadした<<anchor-ref, 関連資料: COCO Annotations ファイル>> zipを解凍し、設定ファイルで指定のパスに展開する
+
+[mermaid]
+----
+sequenceDiagram
+    Title Notebook実行向けセットアップ
+    participant user as User
+    participant readme as prepare datasetディレクトリのREADME.md
+    participant browser as Browser
+    participant coco as COCO Web Site
+
+    user->>readme: リンククリック
+    readme->>browser: Download要求
+    browser->>coco: Download要求
+    coco-->>browser: COCO Annotations ファイル zip
+    browser-->>user: COCO Annotations ファイル zip
+    user-->>user: COCO Annotations ファイル zip解凍・展開
+----
+
+
+=== Notebook実行向け設定ファイル編集
+. prepare datasetディレクトリの設定ファイル(`**configuration.json**`)を編集する
+
+[[anchor-conf]]
+|===
+
+h|Configuration h|Meaning h|Range h|Initial h|Remarks
+
+|`**annotation_file**`
+|COCO Annotations ファイルパス
+|絶対パスまたはconfiguration.json/Notebook(*.ipynb)からの相対パス
+|./annotations/instances_val2017.json
+|・省略不可
+
+|`**category_names**`
+|画像カテゴリ名 +
+ +
+本カテゴリに該当する画像のみDownload
+|["カテゴリ1", "カテゴリ2", ・・・] +
+ + 
+カテゴリは<<anchor-category, category_names一覧>>参照
+|["cat", "dog"]
+|・省略可 +
+・省略、またはカテゴリを指定しない(空リストを指定する)場合、全カテゴリがダウンロード対象となる
+
+|`**max_download_count**`
+|各カテゴリ最大Download画像数
+|各カテゴリに対して下記枚数Download + 
+0: 枚数制限なし +
+1: 1枚Download +
+2: 2枚Download +
+・・・ +
+全画像数: 全画像Download +
+全画像数+1: 全画像Download +
+|15
+|・省略可 +
+・省略または0を指定した場合、条件に合致した画像すべてがダウンロード対象となる +
+・category_namesを省略、またはカテゴリ指定しない(空リストを指定する)場合、本パラメータはカテゴリごとのdownload枚数ではなく全体のdownload枚数となる
+
+|`**licenses**`
+|画像License + 
+ +
+本Licenseに該当する画像のみDownload
+|[License1 ID, License2 ID, ・・・] +
+ + 
+Licenseは<<anchor-license, License一覧>>参照
+|[4, 5, 6]
+|・省略可 +
+・省略、またはライセンスを指定しない(空リストを指定する)場合、全ライセンスがダウンロード対象となる
+
+|`**remove_categories**`
+|除外するカテゴリ名 +
+ +
+本カテゴリに該当する画像はダウンロードされない
+|["カテゴリ1", "カテゴリ2", ・・・] +
+ + 
+カテゴリは<<anchor-category, category_names一覧>>参照
+|["person"]
+|・省略可 +
+・省略、またはカテゴリを指定しない(空リストを指定する)場合、除外対象なしとなる
+
+|`**output_dir**`
+|Download画像出力ディレクトリパス
+|絶対パスまたはconfiguration.json/Notebook(*.ipynb)からの相対パス
+|./output
+|・省略不可
+
+|===
+
+[[anchor-category]]
+`**category_names**` 一覧
+|===
+h|type h|Person h|Vehicle h|Outdoor h|Animal h|Accessory h|Sports h|Kitchen h|Food h|Furniture h|Electronic h|Appliance h|Indoor
+|**category name**|person|bicycle|traffic light|bird|backpack|frisbee|bottle|banana|chair|tv|microwave|book
+|||car|fire hydrant|cat|umbrella|skis|wine glass|apple|couch|laptop|oven|clock
+|||motorcycle|stop sign|dog|handbag|snowboard|cup|sandwich|potted plant|mouse|toaster|vase
+|||airplane|parking meter|horse|tie|sports ball|fork|orange|bed|remote|sink|scissors
+|||bus|bench|sheep|suitcase|kite|knife|broccoli|dining table|keyboard|refrigerator|teddy bear
+|||train||cow||baseball bat|spoon|carrot|toilet|cell phone||hair drier
+|||truck||elephant||baseball glove|bowl|hot dog||||toothbrush
+|||boat||bear||skateboard||pizza||||
+|||||zebra||surfboard||donut||||
+|||||giraffe||tennis racket||cake||||
+|===
+
+[[anchor-license]]
+License一覧
+|===
+h|License h|商用利用 h|再配布 h|ID
+|[Attribution-NonCommercial-ShareAlike License](https://creativecommons.org/licenses/by-nc-sa/2.0/) + 
+(CC BY-NC-SA 2.0)|No|Yes|1
+|[Attribution-NonCommercial License](https://creativecommons.org/licenses/by-nc/2.0/) + 
+(CC BY-NC 2.0)|No|Yes|2
+|[Attribution-NonCommercial-NoDerivs License](http://creativecommons.org/licenses/by-nc-nd/2.0/) + 
+(CC BY-NC-ND 2.0)|No|Yes|3
+|[Attribution License](http://creativecommons.org/licenses/by/2.0/) + 
+(CC BY 2.0)|Yes|Yes|4
+|[Attribution-ShareAlike License](http://creativecommons.org/licenses/by-sa/2.0/) + 
+(CC BY-SA 2.0)|Yes|Yes|5
+|[Attribution-NoDerivs License](http://creativecommons.org/licenses/by-nd/2.0/) + 
+(CC BY-ND 2.0)|Yes|Yes|6
+|[No known copyright restrictions](http://flickr.com/commons/usage/)|See <<anchor-note,NOTE>>|See <<anchor-note,NOTE>>|7
+|[United States Government Work](http://www.usa.gov/copyright.shtml)|Yes (例外あり)|Yes (例外あり)|8
+|===
+
+[[anchor-note]]
+.No known copyright restrictions (既知の著作権制限がない) について
+[NOTE]
+====
+各作品の著作権が明確にクリアにされてないことを意味する。詳細は各参加機関のRights Statementの確認が必要。次のような様々なケースがある。
+
+* 有効期限が切れているため、著作権はパブリックドメインにある
+* 著作権は、必要な手続きや条件を順守しなかったなど、他の理由でパブリックドメインに入れられた
+* 機関は著作権を所有しているが、管理を行使することに関心がない、または他の人が制限なしに作品を使用することを許可するのに十分な法的権利を持っている
+====
+
+=== Notebook実行
+. prepare datasetディレクトリのNotebook(*.ipynb)を開き、その中のPythonスクリプトを実行する
+** その後下記の動作をする
+*** prepare datasetディレクトリの<<anchor-conf, `**configuration.json**`>>の存在をチェックする
+**** エラー発生時はその内容を表示し、中断する
+*** <<anchor-conf, `**configuration.json**`>>の内容をチェックする
+**** エラー発生時はその内容を表示し、中断する
+*** <<anchor-conf, `**configuration.json**`>> `**annotation_file**` (<<anchor-ref, 関連資料: COCO Annotations ファイル>>) の存在をチェックする
+**** エラー発生時はその内容を表示し、中断する
+*** <<anchor-conf, `**configuration.json**`>> `**annotation_file**` のCOCO Annotationsファイルを読み取り、Pycocotoolsへ必要な設定を行う
+*** Pycocotoolsなどの外製ソフトでエラー発生時は、外製ソフトが出力するエラーを表示し、中断する
+*** 下記から決まる画像をDownloadする
+**** <<anchor-conf, `**configuration.json**`>> `**category_names**` に一致する画像
+***** `**category_names**` のリスト内に
+<<anchor-category, category_names一覧>>に存在しない値のみが設定された場合、エラー内容を表示し、中断する
+***** `**category_names**` のリスト内に<<anchor-category, category_names一覧>>に存在する値と存在しない値の両方が設定された場合、category_names一覧に存在しない値についてWarningを表示し、category_names一覧に存在する値のみを使用して続行する
+**** <<anchor-conf, `**configuration.json**`>> `**max_download_count**` で決まるDownload画像数
+***** `**max_download_count**` に負の値が設定された場合、エラー内容を表示し、中断する
+**** <<anchor-conf, `**configuration.json**`>> `**licenses**` に一致する画像
+***** `**licenses**` のリスト内に<<anchor-license, License一覧>>に存在しない値のみが設定された場合、エラー内容を表示し、中断する
+***** `**licenses**` のリスト内に<<anchor-license, License一覧>>に存在する値と存在しない値の両方が設定された場合、License一覧に存在しない値についてWarningを表示し、License一覧に存在する値のみを使用して続行する
+**** <<anchor-conf, `**configuration.json**`>> `**remove_categories**` に一致する画像を除外
+***** `**remove_categories**` のリスト内に<<anchor-category, category_names一覧>>に存在しない値のみが設定された場合、エラー内容を表示し、中断する
+***** `**remove_categories**` のリスト内に<<anchor-category, category_names一覧>>に存在する値と存在しない値の両方が設定された場合、category_names一覧に存在しない値についてWarningを表示し、category_names一覧に存在する値に一致する画像を除外する
+**** 上記の条件に合致する画像枚数が0枚になった場合は、Warningを表示する
+*** <<anchor-conf, `**configuration.json**`>> `**output_dir**` で指定するディレクトリがなければ作成し、そこにDownload画像を出力する
+*** Download中は下記のような表示をする
++
+```
+downloading id: 416256
+downloaded 1/30 images (t=1.0s)
+
+downloading id: 269314
+downloaded 2/30 images (t=1.0s)
+
+downloading id: 17029
+downloaded 3/30 images (t=1.4s)
+
+...
+downloading id: 117374
+downloaded 30/30 images (t=1.3s)
+```
+
+*** Download中でもNotebook Cell機能のStop Cell Executionで中断できる
+
+== 目標性能
+** SDKの環境構築完了後、追加のインストール手順なしに、COCOからサンプル画像をDownloadできること
+
+== 制限事項
+* なし
+
+== その他特記事項
+* なし
+
+== 未決定事項
+
+* なし

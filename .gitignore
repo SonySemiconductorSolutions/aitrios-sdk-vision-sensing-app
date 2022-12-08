@@ -1,0 +1,15 @@
+# python
+__pycache__/
+.ipynb_checkpoints/
+.coverage
+.pytest_cache
+
+# c/c++
+*.o
+
+# documents
+.asciidoctor
+diag-*.png
+
+# resources
+tutorials/4_quantize_model/images/
