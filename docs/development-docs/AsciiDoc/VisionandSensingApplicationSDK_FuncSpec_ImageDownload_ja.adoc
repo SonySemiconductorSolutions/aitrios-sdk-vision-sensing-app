@@ -1,5 +1,5 @@
 = Vision and Sensing pass:[<br/>] Application SDK pass:[<br/>] 画像ダウンロード pass:[<br/>] 機能仕様書 pass:[<br/>]
-:title-page-background-image: image:Trademark.png[fit=none,pdfwidth=50%,position=bottom center]
+:title-page-background-image: image:../../images/Trademark.png[fit=none,pdfwidth=50%,position=bottom center]
 :sectnums:
 :sectnumlevels: 4
 :chapter-label:
@@ -11,7 +11,6 @@
 :toclevels: 4
 :chapter-label:
 :document-title-header:
-ifndef::imagesdir[:imagesdir: ../../../images]
 :lang: ja
 
 == 更新履歴
@@ -19,7 +18,7 @@ ifndef::imagesdir[:imagesdir: ../../../images]
 |===
 |Date |What/Why
 
-|2022/11/16
+|2022/12/12
 |初版作成
 |===
 
@@ -110,19 +109,20 @@ flowchart TD
 
 [mermaid]
 ----
+%%{init:{'themeVariables':{'fontSize':'20px'}, 'themeCSS':'text.actor {font-size:18px !important;} .messageText {font-size:18px !important;}'}}%%
 sequenceDiagram
     Title Notebook実行向けセットアップ
     participant user as User
-    participant readme as prepare datasetディレクトリのREADME.md
+    participant readme as prepare dataset<br/>ディレクトリの<br/>README.md
     participant browser as Browser
     participant coco as COCO Web Site
 
     user->>readme: リンククリック
     readme->>browser: Download要求
     browser->>coco: Download要求
-    coco-->>browser: COCO Annotations ファイル zip
-    browser-->>user: COCO Annotations ファイル zip
-    user-->>user: COCO Annotations ファイル zip解凍・展開
+    coco-->>browser: COCO Annotations<br/>ファイル zip
+    browser-->>user: COCO Annotations<br/>ファイル zip
+    user-->>user: COCO Annotations<br/>ファイル zip解凍・展開
 ----
 
 
