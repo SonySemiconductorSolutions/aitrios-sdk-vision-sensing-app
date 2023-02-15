@@ -1,0 +1,57 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "required": [
+        "should_create_deploy_config",
+        "config_id",
+        "device_ids"
+    ],
+    "properties": {
+        "should_create_deploy_config": {
+            "type": "boolean"
+        },
+        "config_id": {
+            "type": "string"
+        },
+        "create_config": {
+            "type": "object",
+            "properties": {
+                "comment": {
+                    "type": "string"
+                },
+                "model_id": {
+                    "type": "string"
+                },
+                "model_version_number": {
+                    "type": "string"
+                }
+            }
+        },
+        "device_ids": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
+        },
+        "replace_model_id": {
+            "type": "string"
+        },
+        "comment": {
+            "type": "string"
+        }
+    },
+    "if": {
+        "properties": {
+            "should_create_deploy_config": { "const": true }
+        }
+    },
+    "then": { 
+        "required": ["create_config"],
+        "properties": {
+            "create_config": {
+                "required": ["model_id"]
+            }
+        }
+    },
+    "additionalProperties": false
+}

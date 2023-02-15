@@ -1,0 +1,27 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "required": [
+        "app_name",
+        "version_number",
+        "device_ids"
+    ],
+    "properties": {
+        "app_name": {
+            "type": "string"
+        },
+        "version_number": {
+            "type": "string"
+        },
+        "device_ids": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
+        },
+        "comment": {
+            "type": "string"
+        }
+    },
+    "additionalProperties": false
+}

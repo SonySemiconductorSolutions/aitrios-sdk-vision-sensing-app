@@ -1,16 +1,15 @@
 = Vision and Sensing pass:[<br/>] Application SDK pass:[<br/>] バージョン管理 pass:[<br/>] 機能仕様書 pass:[<br/>]
-:title-page-background-image: image:../../images/Trademark.png[fit=none,pdfwidth=50%,position=bottom center]
 :sectnums:
-:sectnumlevels: 4
-:chapter-label:
-:author: Copyright 2022 Sony Semiconductor Solutions Corporation
-:revdate: 2022 - xx - xx
-:revnumber: 0.0.x
+:sectnumlevels: 1
+:author: Copyright 2023 Sony Semiconductor Solutions Corporation
+:version-label: Version 
+:revnumber: x.x.x
+:revdate: YYYY - MM - DD
+:trademark-desc: AITRIOS™、およびそのロゴは、ソニーグループ株式会社またはその関連会社の登録商標または商標です。
 :toc:
 :toc-title: 目次
-:toclevels: 4
+:toclevels: 1
 :chapter-label:
-:document-title-header:
 :lang: ja
 
 == 更新履歴
@@ -20,15 +19,21 @@
 
 |2022/12/12
 |初版作成
+
+|2023/01/30
+|フォルダ構成変更。 +
+バージョン管理対象の追加。 + 
+シークレット情報の削除に伴い、configuration.jsonの記載を削除。 + 
+PDFビルド環境更新。
 |===
 
 
 == 用語・略語
 |===
 |Terms/Abbreviations |Meaning 
+
 |GitHub
 |ソフトウェアバージョン管理プラットフォーム
-
 
 |===
 
@@ -70,13 +75,12 @@
 +
 ----
 /tutorials
+	/_common
 	/1_initialize 
 	/2_prepare_dataset
 	/3_prepare_model
-	/4_quantize_model
-	/5_post_process
-	/6_deploy
-	/7_evaluate
+	/4_prepare_application
+	/5_evaluate
 /.devcontainer
 /README.md
 ----
@@ -94,14 +98,14 @@
 同じ画像データで学習を再現したい場合などに参照
 できるようにしておく。
 
-|quantize model
-|Notebook、設定ファイル
-|自前のAIモデルを量子化するためのJupyter Notebook
+|prepare model
+|学習用、量子化用Notebook、設定ファイル
+|自前のAIモデルを学習、量子化するためのJupyter Notebook
 |目的に合わせて各種設定値を編集する。
-|モデルを量子化した際のパラメータなどの情報を記録しておき、 +
+|モデルを学習、量子化した際のパラメータなどの情報を記録しておき、 +
 同じパラメータで学習を再現したい場合などに参照できるようにしておく。
 
-|post process
+|prepare application
 |post processソース一式、Makefile
 |モデルの後処理を記述するソースコード、 + 
 および、Wasm形式にコンパイルするためのビルドファイル
@@ -113,22 +117,22 @@
 
 * ブランチ
 ** ブランチを作成することで、複数の機能開発を同時に進めることができる
-** また、prepare dataset、quantize model、post processの編集をそれぞれ別ブランチで行うことにより、 +
+** また、prepare dataset、prepare model、prepare applicationの編集をそれぞれ別ブランチで行うことにより、 +
 独立してバージョン管理することもできる
 *** ブランチ運用例：
 +
 [source, sh]
 ----
 main
-	│-- feature/post_process/object_detection_xxx (1)
-	│-- feature/post_process/image_classification_xxx (2)
-	│-- feature/quantize/xxx (3)
+	│-- feature/prepare_application/object_detection_xxx (1)
+	│-- feature/prepare_application/image_classification_xxx (2)
+	│-- feature/prepare_model/xxx (3)
 	│-- feature/prepare_dataset/xxx (4)
 	│-- bugfix/XXX (5)
 ----
 (1) Object Detectionモデル向け機能開発ブランチ +
 (2) Image Classificationモデル向け機能開発ブランチ +
-(3) 量子化管理用ブランチ +
+(3) モデル作成管理用ブランチ +
 (4) データセットダウンロード管理用ブランチ +
 (5) バグ修正用ブランチ
 
@@ -136,7 +140,7 @@ main
 ** ファイルの変更内容を、保存したいタイミングでコミットすることで、変更履歴として後から参照できる
 *** 運用例：
 **** Notebook実行時の情報を保存する
-. `**configuration.json**` の設定値やNotebookを編集した状態でGitブランチにコミットする
+. Notebookを編集した状態でGitブランチにコミットする
 ***** これにより、Notebookを過去と同じパラメータ設定で再実行したい場合に、 +
 コミット履歴から設定を参照することができる
 
@@ -159,7 +163,7 @@ Quantization test
 #
 # On branch feature/quantize/xxx
 # Changes to be committed:
-#       modified:   configuration.json
+#       modified:   xxxx.ipynb
 ----
 
 * タグ

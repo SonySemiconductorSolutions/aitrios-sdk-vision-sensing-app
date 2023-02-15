@@ -1,0 +1,44 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "required": [
+        "cvat_username",
+        "cvat_password",
+        "cvat_project_id",
+        "import_dir",
+        "import_image_extension",
+        "import_task_name"
+    ],
+    "properties": {
+        "cvat_username": {
+            "type": ["string"],
+            "default":["django"],
+            "minLength": 1
+        },
+        "cvat_password": {
+            "type": ["string"],
+            "default":[""],
+            "minLength": 1
+        },
+        "cvat_project_id": {
+            "type": ["integer"],
+            "default":[1],
+            "minLength": 1
+        },
+        "import_dir": {
+            "type": ["string"],
+            "default":["./images"],
+            "minLength": 1
+        },
+        "import_image_extension": {
+            "type": ["string"],
+            "enum" : ["jpg","JPG","jpeg","JPEG"],
+            "default":["jpg"]
+        },
+        "import_task_name": {
+            "type": ["string"],
+            "default":["your_task_name"],
+            "minLength": 1
+        }
+    }
+}

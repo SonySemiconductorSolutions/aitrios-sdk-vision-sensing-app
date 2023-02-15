@@ -9,9 +9,10 @@ ARG NODE_VERSION="none"
 RUN if [ "${NODE_VERSION}" != "none" ]; then su vscode -c "umask 0002 && . /usr/local/share/nvm/nvm.sh && nvm install ${NODE_VERSION} 2>&1"; fi
 
 # [Optional] If your pip requirements rarely change, uncomment this section to add them to the image.
+COPY .devcontainer/dependencies/aitrios-sdk-console-access-lib-python /.devcontainer/dependencies/aitrios-sdk-console-access-lib-python
 COPY requirements.txt /tmp/pip-tmp/
 RUN pip3 --disable-pip-version-check --no-cache-dir install -r /tmp/pip-tmp/requirements.txt \
-   && rm -rf /tmp/pip-tmp
+   && rm -rf /tmp/pip-tmp && rm -rf /.devcontainer
 
 # [Optional] Uncomment this section to install additional OS packages.
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
@@ -20,8 +21,3 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
 
 # [Optional] Uncomment this line to install global node packages.
 # RUN su vscode -c "source /usr/local/share/nvm/nvm.sh && npm install -g <your-package-here>" 2>&1
-
-RUN curl -sSL https://github.com/microsoft/VoTT/archive/refs/tags/v2.2.0.tar.gz -o /tmp/v2.2.0.tar.gz
-RUN su vscode -c "cd /home/vscode && tar -zxvf /tmp/v2.2.0.tar.gz && . /usr/local/share/nvm/nvm.sh && cd /home/vscode/VoTT-2.2.0 && nvm install 10.15.1 && nvm use && npm install -g serve@~13.0.4 && npm ci && nvm use default"
-COPY .devcontainer/vott/vott.sh /home/vscode/
-RUN chown vscode:vscode /home/vscode/vott.sh

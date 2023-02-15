@@ -1,17 +1,15 @@
 = Vision and Sensing pass:[<br/>] Application SDK pass:[<br/>] Development Container pass:[<br/>] 機能仕様書 pass:[<br/>]
-:title-page-background-image: image:Trademark.png[fit=none,pdfwidth=50%,position=bottom center]
 :sectnums:
-:sectnumlevels: 4
-:chapter-label:
-:author: Copyright 2022 Sony Semiconductor Solutions Corporation
-:revdate: 2022 - xx - xx
-:revnumber: 0.0.x
+:sectnumlevels: 1
+:author: Copyright 2023 Sony Semiconductor Solutions Corporation
+:version-label: Version 
+:revnumber: x.x.x
+:revdate: YYYY - MM - DD
+:trademark-desc: AITRIOS™、およびそのロゴは、ソニーグループ株式会社またはその関連会社の登録商標または商標です。
 :toc:
 :toc-title: 目次
-:toclevels: 4
+:toclevels: 1
 :chapter-label:
-:document-title-header:
-ifndef::imagesdir[:imagesdir: ../../../images]
 :lang: ja
 
 == 更新履歴
@@ -21,6 +19,9 @@ ifndef::imagesdir[:imagesdir: ../../../images]
 
 |2022/11/16
 |初版作成
+
+|2023/01/30
+|フォルダ構成変更。SDKが提供する機能の追加・変更。PDFビルド環境更新。
 |===
 
 == 用語・略語
@@ -45,8 +46,8 @@ ifndef::imagesdir[:imagesdir: ../../../images]
 *** https://marketplace.visualstudio.com/items?itemName=GitHub.codespaces
 ** [[remote-development]]VS Code Remote Development Extension Pack
 *** https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.vscode-remote-extensionpack
-** VoTT
-*** https://github.com/microsoft/VoTT
+** CVAT
+*** https://github.com/opencv/cvat
 ** MCT
 *** https://github.com/sony/model_optimization
 ** COCO
@@ -85,6 +86,8 @@ NOTE: コンテナに含まれる各機能の具体的内容に関しては、�
 * エッジAIデバイスのファームウェアのビルド環境は提供しない
 * サンプルのCloud Appは参照となるリンクを提供する
 
+<<<
+
 [[workflow]]
 === AIアプリケーション開発ワークフローと提供する機能
 
@@ -112,10 +115,9 @@ flowchart TB
     id3(AIモデル作成)
     id4(AIモデル量子化)
     id5(後処理開発)
-    id6("AIモデルの変換・パッケージング")
-    id7("AIモデル・後処理のデプロイ")
-    id8(評価)
-    id9(((Finish)))
+    id6("AIモデル・後処理のデプロイ")
+    id7(評価)
+    id8(((Finish)))
     id0 -->id1
     id1 -->id2
     id2 -->id3
@@ -124,7 +126,6 @@ flowchart TB
     id5 -->id6
     id6 -->id7
     id7 -->id8
-    id8 -->id9
 ----
 
 ==== SDKが提供する機能
@@ -140,17 +141,20 @@ flowchart TB
 
 |データセット準備
 |
-* VoTTを使用してアノテーションを実施する手順
+* CVATを使用してアノテーションを実施する手順
 * Console for AITRIOS 手順
 |
-* VoTTを使用できる環境
-* アノテーションファイルのフォーマットをVoTTからCOCOに変換するNotebook
+* CVATを使用できる環境
 * COCOから画像をダウンロードするNotebook
+* CVATからデータセットをインポート・エクスポートするNotebook
+* データセットをTrain用/Validate用に分割するNotebook
 
 |AIモデルの作成
 |
+* AIモデル（Image Classification）を転移学習する手順
 * Console for AITRIOS 手順
-|-
+|
+* AIモデル（Image Classification）を転移学習するサンプルNotebook
 
 |AIモデル量子化
 |
@@ -167,20 +171,24 @@ flowchart TB
 
 |後処理開発
 |
-* 後処理を実装し、Wasmファイルにビルドする手順
+* 後処理を実装、デバッグし、Wasmファイルにビルドする手順
 |
 * 後処理をWasmビルドする環境
 * 後処理のサンプルコード（C、C++）
+* 後処理コードをデバッグする環境
 
-|AIモデルの変換・パッケージング
-|
-* Console for AITRIOS 手順
-|-
 
-|AIモデル・後処理のデプロイ
+|AIモデル・後処理をConsole for AITRIOSにインポート
 |
+* Notebookを使ってAIモデル・後処理をConsole for AITRIOSにインポートする手順
 * Console for AITRIOS 手順
-|-
+|* AIモデル・後処理をConsole for AITRIOSにインポートするNotebook
+
+|AIモデル・後処理をエッジAIデバイスにデプロイ
+|
+* Notebookを使ってAIモデル・後処理をエッジAIデバイスにデプロイする手順
+* Console for AITRIOS 手順
+|* AIモデル・後処理をエッジAIデバイスにデプロイするNotebook
 
 |評価
 |
@@ -202,13 +210,12 @@ flowchart TB
 === コンテナのフォルダ構成
 ----
 /tutorials
-    /1_initialize
-    /2_prepare_dataset
-    /3_prepare_model
-    /4_quantize_model
-    /5_post_process
-    /6_deploy
-    /7_evaluate
+	/_common
+	/1_initialize 
+	/2_prepare_dataset
+	/3_prepare_model
+	/4_prepare_application
+	/5_evaluate
 /docs/development-docs
 /.devcontainer
 /README.md
@@ -217,7 +224,7 @@ flowchart TB
 == 操作性仕様、画面仕様
 === 前提条件
 * Codespacesの場合、Codespacesを使用できる状態になっていること
-** Codespaces（VS Code desktop）の場合、<<codespaces-extension, VS Code Codespaces extesnsion>>をインストールしていること
+** Codespaces（VS Code desktop）の場合、<<codespaces-extension, VS Code Codespaces extension>>をインストールしていること
 * Local PCでVS Codeを利用する場合、<<remote-development, VS Code Remote Development Extension Pack>>をインストールしていること
 
 === コンテナの起動

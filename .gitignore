@@ -11,5 +11,6 @@ __pycache__/
 .asciidoctor
 diag-*.png
 
-# resources
-tutorials/4_quantize_model/images/
+# tutorials setting
+tutorials/**/configuration.json
+
