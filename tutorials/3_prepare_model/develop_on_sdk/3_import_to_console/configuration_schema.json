@@ -1,0 +1,32 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "required": [
+        "model_id",
+        "model"
+    ],
+    "properties": {
+        "model_id": {
+            "type": "string"
+        },
+        "model": {
+            "type": "string"
+        },
+        "converted": {
+            "type": "boolean"
+        },
+        "vendor_name": {
+            "type": "string"
+        },
+        "comment": {
+            "type": "string"
+        },
+        "network_type": {
+            "type": "string"
+        },
+        "labels": {
+            "type": "array"
+        }
+    },
+    "additionalProperties": false
+}

@@ -68,31 +68,41 @@
 				"ms-toolsai.jupyter-keymap",
 				"ms-vscode.cpptools",
 				"bierner.markdown-mermaid",
-				"tomoki1207.pdf"
+				"tomoki1207.pdf",
+				"ms-vscode.cpptools"
 			]
-		}
+		},
+
+		// For git submodules: https://docs.github.com/ja/codespaces/managing-your-codespaces/managing-repository-access-for-your-codespaces
+		"codespaces": {
+			"repositories": {
+				"SonySemiconductorSolutions/aitrios-sdk-console-access-lib-python": {
+					"permissions": {
+						"contents": "read"
+					}
+				}
+			}
+		}		
 	},
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	"forwardPorts": [6080, 5901],
+	"forwardPorts": [6080, 5901, 8080],
 	"portsAttributes": {
-		"6080": {
-			"label": "Desktop access",
-			"onAutoForward": "silent"
-		},
-		"5901": {
-			"label": "VNC TCP port",
+		"8080": {
+			"label": "CVAT Web UI",
 			"onAutoForward": "silent"
 		}
 	},
 
+	// Use 'initializeCommand' to run commands before the container is created.
+	"initializeCommand": [".devcontainer/initializeCommand"],
+
 	// Use 'postCreateCommand' to run commands after the container is created.
-	// "postCreateCommand": "pip3 install --user -r requirements_frequent_change.txt",
+	"postCreateCommand": ".devcontainer/postCreateCommand.sh",
 
 	// Comment out to connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
 	"remoteUser": "vscode",
 	"features": {
-		"docker-in-docker": "20.10",
-		"desktop-lite": "latest"
+		"docker-in-docker": "20.10"
 	}
 }

@@ -1,17 +1,15 @@
 = Vision and Sensing pass:[<br/>] Application SDK pass:[<br/>] Post Vision App pass:[<br/>] 機能仕様書 pass:[<br/>]
-:title-page-background-image: image:Trademark.png[fit=none,pdfwidth=50%,position=bottom center]
 :sectnums:
-:sectnumlevels: 4
-:chapter-label:
-:author: Copyright 2022 Sony Semiconductor Solutions Corporation
-:revdate: 2022 - xx - xx
-:revnumber: 0.0.x
+:sectnumlevels: 1
+:author: Copyright 2023 Sony Semiconductor Solutions Corporation
+:version-label: Version 
+:revnumber: x.x.x
+:revdate: YYYY - MM - DD
+:trademark-desc: AITRIOS™、およびそのロゴは、ソニーグループ株式会社またはその関連会社の登録商標または商標です。
 :toc:
 :toc-title: 目次
-:toclevels: 4
+:toclevels: 1
 :chapter-label:
-:document-title-header:
-ifndef::imagesdir[:imagesdir: ../../../images]
 :lang: ja
 
 == 更新履歴
@@ -21,6 +19,9 @@ ifndef::imagesdir[:imagesdir: ../../../images]
 
 |2022/11/16
 |初版作成
+
+|2023/01/30
+|後処理のデバッグ機能の追加。フォルダ構成変更。PDFビルド環境更新。
 |===
 
 == 用語・略語
@@ -38,21 +39,35 @@ ifndef::imagesdir[:imagesdir: ../../../images]
 
 |FlatBuffers
 |シリアライゼーションライブラリ
+
+|WAMR-IDE
+|WebAssemblyアプリケーションの実行、デバッグをサポートする統合開発環境
+
+|PPL Parameter
+|PPLライブラリの初期化に使用するパラメータ
+
+|LLDB
+|ソフトウェアデバッガ
 |===
 
 == 参照資料
 * Reference/Related documents（関連資料）
 ** WebAssembly
 *** https://webassembly.org/
-** [[pplifspec]]IMX500用PPLライブラリAPI規格書
+** [[pplifspec]]IMX500用PPLライブラリ API規格書
 *** https://developer.aitrios.sony-semicon.com/development-guides/documents/specifications/
 ** FlatBuffers
 *** https://google.github.io/flatbuffers/
-
+** WebAssembly Micro Runtime(WAMR)
+*** https://github.com/bytecodealliance/wasm-micro-runtime/
+** LLDB
+*** https://lldb.llvm.org/
 
 == 想定ユースケース
 * 後処理を設計、実装したい
 * 後処理コードを、エッジAIデバイスにデプロイ可能な形式に変換したい
+* 後処理コードを、エッジAIデバイスにデプロイする前にコードのデバッグを行いたい
+* エッジAIデバイスにデプロイした後処理コードをデバッグしたい
 
 == 機能概要、アルゴリズム
 === Functional Overview
@@ -60,8 +75,11 @@ ifndef::imagesdir[:imagesdir: ../../../images]
 * Post Vision Appの出力を「FlatBuffers」でシリアライズできる
 ** 「FlatBuffers」のスキーマファイルからクラス定義ファイルを生成できる
 * C言語、または、C++言語で実装したPost Vision AppをWasmにビルドできる
-* Post Vision Appサンプル環境が提供されている +
+* Post Vision Appサンプル環境(デバッグ用コードも含む)が提供されている
 * Post Vision Appのサンプルコードを使用してWasmビルドができる
+* デバッグ用にWasmビルドしたPost Vision Appを、テストアプリを使用しSDK環境上でデバッグ実行できる
+
+<<<
 
 ==== Post Vision App作成フロー
 
@@ -88,22 +106,15 @@ flowchart TD;
 flowchart TD
     %% definition
     classDef object fill:#FFE699, stroke:#FFD700
-    style console fill:#BFBFBF, stroke:#6b8e23, stroke-dasharray: 10 2
 
     start((Start))
     id1("Post Vision App出力の「FlatBuffers」スキーマ定義")
     id2(クラス定義ファイル生成)
     id3(Post Vision App実装)
-    id4(Wasmビルド)
-    subgraph console["Console for AITRIOS"]
-    id5(AoTコンパイル)
-    end
     data1["「FlatBuffers」スキーマ"]:::object
     data2[クラス定義ファイル]:::object
     data3[Post Vision Appコード]:::object
-    data4[.wasm]:::object
-    data5[.aot]:::object
-    finish(((Finish)))
+    continue("Continued on the next page")
 
     %% impl
     start --> id1
@@ -112,29 +123,115 @@ flowchart TD
     id2 --- data2
     data2 --> id3
     id3 --- data3
-    data3 --> id4
+    data3 --> continue
+----
+
+<<<
+
+[mermaid]
+----
+flowchart TD
+    %% definition
+    classDef object fill:#FFE699, stroke:#FFD700
+    style console fill:#BFBFBF, stroke:#6b8e23, stroke-dasharray: 10 2
+
+    continue("Continued from the previous page")
+    id3-1("デバッグ用入力データの準備 (Optional)")
+    id3-2("デバッグ用Wasmビルド (Optional)")
+    id3-3("Wasmデバッグ実行 (Optional)")
+    id4(リリース用Wasmビルド)
+    subgraph console["Console for AITRIOS"]
+      id5(AOTコンパイル)
+    end
+    data3-1["デバッグ用 Output Tensor, PPL Parameter (Optional)"]:::object
+    data3-2["デバッグ用 .wasm (Optional)"]:::object
+    data4[リリース用 .wasm]:::object
+    data5[.aot]:::object
+    finish(((Finish)))
+
+    %% impl
+    continue --> id3-1
+    id3-1 --- data3-1
+    data3-1 --> id3-2
+    id3-2 --- data3-2
+    data3-2 --> id3-3
+    id3-3 --> id4
     id4 --- data4
     data4 --> id5
     id5 --- data5
     data5 --> finish
 ----
 
-NOTE: SDK環境で作成したWasmファイルはConsole for AITRIOSでAoTコンパイルを実施し、エッジAIデバイスにデプロイ可能な形式に変換する。
+NOTE: SDK環境で作成したWasmファイルはConsole for AITRIOSでAOTコンパイルを実施し、エッジAIデバイスにデプロイ可能な形式に変換する。（デバッグ用ビルドは対象外）
 
 === ビルド機能
 下記のビルド機能を提供する。
 
-* [[wasm-build]]Wasmビルド +
+* [[wasm-build]]リリース用Wasmビルド +
     エッジAIデバイスにデプロイするために、Wasmファイル（.wasm）を生成する。
 ** Post Vision Appコード（.c、または、.cpp）からWasmファイル（.wasm）を生成する
 *** なお、Wasmビルドの過程で中間生成物としてオブジェクトファイル（.o）を生成する
+
+* [[wasm-build-debug]]デバッグ用Wasmビルド +
+    エッジAIデバイスにデプロイする前に、コードのデバッグを行うために、Wasmファイル（.wasm）を生成する。
+** Post Vision Appコード（.c、または、.cpp）からWasmファイル（.wasm）を生成する
+*** なお、Wasmビルドの過程で中間生成物としてオブジェクトファイル（.o）を生成する
+
+=== デバッグ機能
+==== テストアプリを使用したデバッグ実行機能
+* LLDBライブラリとWAMR-IDEライブラリとVS Code UIによる下記のWasmデバッグ実行機能を利用できる。
+** breakpointを指定
+** ステップ実行（ステップイン、ステップアウト、ステップオーバー）を指定
+** watch expressionを指定
+** variableを確認
+** call stackを確認
+** ターミナル上でログを確認
+
+* Wasmファイルの処理を呼び出すドライバとして、テストアプリを提供する。
+** Wasmに入力するパラメータ(Output Tensor、PPL Parameter)をテストアプリ実行時に指定できる
+
+NOTE: WAMR-IDEのproject管理機能は本SDKでは非サポートとする。
+
+==== デバッグ用サンプルコードで実現できる機能
+デバッグ用のサンプルコードを提供する。 +
+デバッグ用のサンプルコードでは、Post Vision Appの出力にデバッグ情報を格納することができる。 +
+仕組みとして本来はPost Vision Appにて処理された推論結果を格納する箇所に、代わりにデバッグ情報を格納することによってデバッグ情報を取得できる。
+
+本機能を利用することで、Post Vision AppをエッジAIデバイスにデプロイした後に推論結果が取得できないなどの推論実行時の予期しない動作に対して、エラー情報を取得することができる。
+
+* Console for AITRIOSで推論実行した場合の例
+
+下記はConsole for AITRIOSにて推論実行した際に取得できる推論結果の例である。
+
+[source,json]
+----
+{
+  "DeviceID": "xxxxx",
+  "ModelID": "xxxxx",
+  "Image": true,
+  "Inferences": [
+    {
+      "T": "xxxxx",
+      "O": "AQAAAA=="
+    }
+  ],
+  "id": "xxxxx",
+  "_rid": "xxxxx",
+  "_self": "xxxxx",
+  "_etag": "xxxxx",
+  "_attachments": "xxxxx",
+  "_ts": 0
+}
+----
+
+`**"Inferences"**` の `**"O"**` に推論結果が格納される代わりに、デバッグ情報が格納される仕組みとなっている。上記では、Base64エンコードされたデバッグ情報 `**"AQAAAA=="**` が格納されている。
 
 == 操作性仕様、画面仕様
 === How to start each function
 . SDK環境を立ち上げ、Topの `**README.md**` をプレビュー表示する
 . SDK環境Topの `**README.md**` に含まれるハイパーリンクから、 `**tutorials**` ディレクトリの `**README.md**` にジャンプする
-. `**tutorials**` ディレクトリの `**README.md**` に含まれるハイパーリンクから、post processディレクトリの `**README.md**` にジャンプする
-. post processディレクトリの各ファイルから各機能に遷移する
+. `**tutorials**` ディレクトリの `**README.md**` に含まれるハイパーリンクから、`**4_prepare_application**` ディレクトリの `**README.md**` にジャンプする
+. `**4_prepare_application**` ディレクトリの各ファイルから各機能に遷移する
 
 === Post Vision Appの設計・実装
 . `**README.md**` の手順に従って、Post Vision App出力の「FlatBuffers」スキーマファイルを作成する
@@ -149,18 +246,38 @@ NOTE: SDK環境で作成したWasmファイルはConsole for AITRIOSでAoTコン
 
 NOTE: ユーザーが任意で使用する、OSSや外部ライブラリのインストール、使用については本SDKでは保証しない。
 
+=== Post Vision Appコードからデバッグ用Wasmファイルを生成
+
+NOTE: デバッグ機能を使用する場合のみ、本手順を実施する。
+
+. `**README.md**` の手順に従って、Post Vision Appコードのファイル格納場所やファイル名についてMakefileを修正する
+. `**README.md**` の手順に従って、VS Code UIからターミナルを開き、デバッグ用Wasmビルドするコマンドを実行する +
+** Dev Container上にデバッグ用Wasmビルドとデバッグ環境用のDockerイメージが作成され、`**Makefile**` と同階層にdebugフォルダが作成され、そのフォルダ内に.wasm形式のファイルが格納される
+
+=== Wasmファイルのデバッグ用入力パラメータ編集
+
+NOTE: デバッグ機能を使用する場合のみ、本手順を実施する。
+
+. `**README.md**` の手順に従って、テスト実行時の入力パラメータ(Output Tensor、PPL Parameter)を修正する
+
+=== Wasmファイルをデバッグ実行
+
+NOTE: デバッグ機能を使用する場合のみ、本手順を実施する。
+
+. `**README.md**` の手順に従って、デバッグ実行し、VS Code UIのターミナルでログを確認したり、VS Code UIにてWasmソースコードを開きbreakpointを指定してstack等を確認する
+
 === Post Vision AppコードからWasmファイルを生成
 . `**README.md**` の手順に従って、Post Vision Appコードのファイル格納場所やファイル名についてMakefileを修正する
 . `**README.md**` の手順に従って、VS Code UIからターミナルを開き、Wasmビルドするコマンドを実行する +
-** Dev Container上にWasmビルド環境用のDockerイメージが作成され、`**Makefile**` と同階層に.wasm形式のファイルが格納される
+** Dev Container上にWasmビルド環境用のDockerイメージが作成され、`**Makefile**` と同階層にreleaseフォルダが作成され、そのフォルダ内に.wasm形式のファイルが格納される
 
 === ビルド生成物の削除
 . `**README.md**` の手順に従って、VS Code UIからターミナルを開き、ビルド生成物を削除するコマンドを実行する
-** <<wasm-build, Wasmビルド>>によって生成されたファイル(オブジェクトファイル、Wasmファイル)がすべてDev Container上から削除される
+** <<wasm-build, リリース用Wasmビルド>>、<<wasm-build-debug, デバッグ用Wasmビルド>>によって生成されたファイル(オブジェクトファイル、Wasmファイル)がすべてDev Container上から削除される
 
 === ビルド生成物とWasmビルド環境用Dockerイメージの削除
 . `**README.md**` の手順に従って、VS Code UIからターミナルを開き、ビルド生成物とWasmビルド環境用のDockerイメージを削除するコマンドを実行する +
-** <<wasm-build, Wasmビルド>>によって生成されたファイル(オブジェクトファイル、Wasmファイル)とWasmビルド環境用のDockerイメージがDev Container上からすべて削除される
+** <<wasm-build, リリース用Wasmビルド>>、<<wasm-build-debug, デバッグ用Wasmビルド>>によって生成されたファイル(オブジェクトファイル、Wasmファイル)とWasmビルド環境用のDockerイメージがDev Container上からすべて削除される
 
 Wasmビルドやビルド生成物・ビルド環境用Dockerイメージを削除するコマンドを実行する際に、`**README.md**` に記載している以外の引数をつけてコマンドを実行すると下記のエラーを返す。
 ....
@@ -174,15 +291,15 @@ Post Vision Appを設計する際は、Post Vision Appのインタフェース�
 
 == 目標性能
 * ユーザビリティ
-** SDKの環境構築完了後、追加のインストール手順なしに「FlatBuffers」のクラス定義ファイルの生成、Wasmビルドができること
+** SDKの環境構築完了後、追加のインストール手順なしに「FlatBuffers」のクラス定義ファイルの生成、Wasmビルド、Wasmデバッグができること
 
 == 制限事項
 * Wasmビルドについて、C言語、または、C++言語で実装したPost Vision Appコードのみをサポートする
 
 == その他特記事項
 * SDKに付属する、Post Vision Appの開発に必要なツールのバージョン情報は下記から確認する
-** 「FlatBuffers」: post processディレクトリにある `**README.md**` に記載
-** その他のツール : post processディレクトリにある `**Dockerfile**` に記載
+** 「FlatBuffers」: `**4_prepare_application**` ディレクトリにある `**README.md**` に記載
+** その他のツール : `**4_prepare_application**` ディレクトリにある `**Dockerfile**` に記載
 
 == 未決定事項
 * なし

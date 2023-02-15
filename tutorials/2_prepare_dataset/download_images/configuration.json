@@ -1,8 +1,0 @@
-{
-    "annotation_file": "./annotations/instances_val2017.json",
-    "category_names": ["cat", "dog"],
-    "max_download_count": 15,
-    "licenses": [4, 5, 6],
-    "remove_categories": ["person"],
-    "output_dir": "./output"
-}

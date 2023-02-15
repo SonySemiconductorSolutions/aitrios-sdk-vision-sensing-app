@@ -1,0 +1,57 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "required": [
+        "cvat_username",
+        "cvat_password",
+        "cvat_project_id",
+        "export_format",
+        "export_dir"
+    ],
+    "properties": {
+        "cvat_username": {
+            "type": ["string"],
+            "default":["django"],
+            "minLength": 1
+        },
+        "cvat_password": {
+            "type": ["string"],
+            "default":[""],
+            "minLength": 1
+        },
+        "cvat_project_id": {
+            "type": ["integer"],
+            "default":[1],
+            "minLength": 1
+        },
+        "export_format": {
+            "type": ["string"],
+            "enum" : [
+                "CamVid 1.0",
+                "Cityscapes 1.0",
+                "COCO 1.0",
+                "COCO Keypoints 1.0",
+                "CVAT for images 1.1",
+                "CVAT for video 1.1",
+                "Datumaro 1.0",
+                "ICDAR Localization 1.0",
+                "KITTI 1.0",
+                "LabelMe 3.0",
+                "MOT 1.1",
+                "Open Images V6 1.0",
+                "PASCAL VOC 1.1",
+                "Segmentation mask 1.1",
+                "TFRecord 1.0",
+                "VGGFace2 1.0",
+                "WiderFace 1.0",
+                "YOLO 1.1"
+            ],
+            "default":["COCO 1.0"]
+        },
+        "export_dir": {
+            "type": ["string"],
+            "default":["../../../dataset/"],
+            "minLength": 1
+        }
+    }
+}

@@ -1,0 +1,24 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "required": [
+        "app_name",
+        "version_number",
+        "ppl_file"
+    ],
+    "properties": {
+        "app_name": {
+            "type": "string"
+        },
+        "version_number": {
+            "type": "string"
+        },
+        "comment": {
+            "type": "string"
+        },
+        "ppl_file": {
+            "type": "string"
+        }
+    },
+    "additionalProperties": false
+}

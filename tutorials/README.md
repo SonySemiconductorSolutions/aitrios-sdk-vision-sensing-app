@@ -11,39 +11,22 @@ This part describes how to prepare images and datasets for training and evaluati
 
 It contains the following sub-parts:
 - download images
-  - You can download COCO images using a Jupyter notebook.
 - annotate images
-  - You can annotate images using VoTT.
-  - Also, you can convert dataset format from VoTT to COCO using a Jupyter notebook.
-
-The COCO images may also be useful as training images if you want to train or retrain AI model on Console for AITRIOS (and if your training AI model's label is also included in COCO dataset's categories).
 
 See [README](./2_prepare_dataset/README.md) for details.
 
 ## 3. Prepare model
-This part describes how to train AI models. <br>
+This part describes how to prepare AI models that can run on Edge AI Devices. <br>
+You can develop AI models on SDK or Console for AITRIOS.
 
-Dev Container does not provide a training environment for AI models.<br>
-Train using Console for AITRIOS or prepare your own training environment.<br>
-See [README](./3_prepare_model/README.md) for details.
+See [README](3_prepare_model/README.md) for details.
 
-## 4. Quantize model
-This part describes how to quantize an AI model and convert it into a format that can be uploaded to Console for AITRIOS. <br>
-Supported AI models are based on [Model Compression Toolkit (MCT)'s features](https://github.com/sony/model_optimization/tree/v1.3.0#supported-features).<br>
-
-See [README](./4_quantize_model/README.md) for details.
-
-## 5. Post process
+## 4. Prepare application
 This part describes how to develop and build a post-process application.<br>
 
-See [README](./5_post_process/README.md) for details.
+See [README](./4_prepare_application/README.md) for details.
 
-## 6. Deploy
-This part describes how to deploy AI models and applications to devices using Console for AITRIOS.<br>
-
-See [README](./6_deploy/README.md) for details.
-
-## 7. Evaluate
+## 5. Evaluate
 This part describes how to evaluate the output results of AI models and applications on Console for AITRIOS. <br>
 
-See [README](./7_evaluate/README.md) for details.
+See [README](./5_evaluate/README.md) for details.

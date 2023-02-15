@@ -1,16 +1,15 @@
 = Vision and Sensing pass:[<br/>] Application SDK pass:[<br/>] 画像ダウンロード pass:[<br/>] 機能仕様書 pass:[<br/>]
-:title-page-background-image: image:../../images/Trademark.png[fit=none,pdfwidth=50%,position=bottom center]
 :sectnums:
-:sectnumlevels: 4
-:chapter-label:
-:author: Copyright 2022 Sony Semiconductor Solutions Corporation
-:revdate: 2022 - xx - xx
-:revnumber: 0.0.x
+:sectnumlevels: 1
+:author: Copyright 2023 Sony Semiconductor Solutions Corporation
+:version-label: Version 
+:revnumber: x.x.x
+:revdate: YYYY - MM - DD
+:trademark-desc: AITRIOS™、およびそのロゴは、ソニーグループ株式会社またはその関連会社の登録商標または商標です。
 :toc:
 :toc-title: 目次
-:toclevels: 4
+:toclevels: 1
 :chapter-label:
-:document-title-header:
 :lang: ja
 
 == 更新履歴
@@ -20,6 +19,12 @@
 
 |2022/12/12
 |初版作成
+
+|2023/01/30
+|フォルダ構成変更。 + 
+シンボリックリンク対応の追加。 + 
+シークレット情報の削除に伴い、設定ファイルのInitial項目を削除、設定ファイルを作成する旨を追記。 + 
+PDFビルド環境更新。
 |===
 
 == 用語・略語
@@ -30,8 +35,6 @@
 |Common Objects in Context +
 大規模なオブジェクト検出、セグメンテーション、キャプションのデータセット
 
-|
-|
 |===
 
 == 参照資料
@@ -75,7 +78,7 @@ flowchart TD;
 ----
 flowchart TD
     start((Start)) --> id1(1.Notebook実行向けセットアップ)
-    id1 --> id2(2.Notebook実行向け設定ファイル編集)
+    id1 --> id2("2.Notebook実行向け設定ファイル作成・編集")
     id2 --> id3(3.Notebook実行)
     id3 --> finish(((Finish)))
 ----
@@ -86,9 +89,9 @@ flowchart TD
 
 ** <<anchor-ref, 関連資料: COCO Annotations ファイル>> 取得
 
-. Notebook実行向け設定ファイル編集
+. Notebook実行向け設定ファイル作成・編集
 
-** 設定ファイルconfiguration.jsonを編集してNotebook実行時の設定を行う
+** 設定ファイルconfiguration.jsonを作成、編集してNotebook実行時の設定を行う
 
 . Notebook実行
 
@@ -98,13 +101,13 @@ flowchart TD
 === How to start each function
 . SDK環境を立ち上げ、Topの `**README.md**` をプレビュー表示する
 . SDK環境Topの `**README.md**` に含まれるハイパーリンクから、 `**tutorials**` ディレクトリの `**README.md**` にジャンプする
-. `**tutorials**` ディレクトリの `**README.md**` に含まれるハイパーリンクから、prepare datasetディレクトリにジャンプする
-. prepare datasetディレクトリの `**README.md**` に含まれるハイパーリンクから、download imagesディレクトリにジャンプする
-. download imagesディレクトリの各ファイルから各機能に遷移する
+. `**tutorials**` ディレクトリの `**README.md**` に含まれるハイパーリンクから、`**2_prepare_dataset**` ディレクトリにジャンプする
+. `**2_prepare_dataset**` ディレクトリの `**README.md**` に含まれるハイパーリンクから、`**download_images**` ディレクトリにジャンプする
+. `**download_images**` ディレクトリの各ファイルから各機能に遷移する
 
 
 === Notebook実行向けセットアップ
-. prepare datasetディレクトリの `**README.md**` に記載の手順・リンクから<<anchor-ref, 関連資料: COCO Annotations ファイル>>をBrowserでDownloadする
+. `**download_images**` ディレクトリの `**README.md**` に記載の手順・リンクから<<anchor-ref, 関連資料: COCO Annotations ファイル>>をBrowserでDownloadする
 . Downloadした<<anchor-ref, 関連資料: COCO Annotations ファイル>> zipを解凍し、設定ファイルで指定のパスに展開する
 
 [mermaid]
@@ -113,7 +116,7 @@ flowchart TD
 sequenceDiagram
     Title Notebook実行向けセットアップ
     participant user as User
-    participant readme as prepare dataset<br/>ディレクトリの<br/>README.md
+    participant readme as download_images<br/>ディレクトリの<br/>README.md
     participant browser as Browser
     participant coco as COCO Web Site
 
@@ -126,18 +129,18 @@ sequenceDiagram
 ----
 
 
-=== Notebook実行向け設定ファイル編集
-. prepare datasetディレクトリの設定ファイル(`**configuration.json**`)を編集する
+=== Notebook実行向け設定ファイル作成・編集
+. `**download_images**` ディレクトリに設定ファイル(`**configuration.json**`)を作成し、編集する
+
+NOTE: 原則としてシンボリックリンクのフォルダパス、ファイルパスは使用不可。
 
 [[anchor-conf]]
 |===
-
-h|Configuration h|Meaning h|Range h|Initial h|Remarks
+|Configuration |Meaning |Range |Remarks
 
 |`**annotation_file**`
 |COCO Annotations ファイルパス
 |絶対パスまたはconfiguration.json/Notebook(*.ipynb)からの相対パス
-|./annotations/instances_val2017.json
 |・省略不可
 
 |`**category_names**`
@@ -147,7 +150,6 @@ h|Configuration h|Meaning h|Range h|Initial h|Remarks
 |["カテゴリ1", "カテゴリ2", ・・・] +
  + 
 カテゴリは<<anchor-category, category_names一覧>>参照
-|["cat", "dog"]
 |・省略可 +
 ・省略、またはカテゴリを指定しない(空リストを指定する)場合、全カテゴリがダウンロード対象となる
 
@@ -160,7 +162,6 @@ h|Configuration h|Meaning h|Range h|Initial h|Remarks
 ・・・ +
 全画像数: 全画像Download +
 全画像数+1: 全画像Download +
-|15
 |・省略可 +
 ・省略または0を指定した場合、条件に合致した画像すべてがダウンロード対象となる +
 ・category_namesを省略、またはカテゴリ指定しない(空リストを指定する)場合、本パラメータはカテゴリごとのdownload枚数ではなく全体のdownload枚数となる
@@ -172,7 +173,6 @@ h|Configuration h|Meaning h|Range h|Initial h|Remarks
 |[License1 ID, License2 ID, ・・・] +
  + 
 Licenseは<<anchor-license, License一覧>>参照
-|[4, 5, 6]
 |・省略可 +
 ・省略、またはライセンスを指定しない(空リストを指定する)場合、全ライセンスがダウンロード対象となる
 
@@ -183,14 +183,12 @@ Licenseは<<anchor-license, License一覧>>参照
 |["カテゴリ1", "カテゴリ2", ・・・] +
  + 
 カテゴリは<<anchor-category, category_names一覧>>参照
-|["person"]
 |・省略可 +
 ・省略、またはカテゴリを指定しない(空リストを指定する)場合、除外対象なしとなる
 
 |`**output_dir**`
 |Download画像出力ディレクトリパス
 |絶対パスまたはconfiguration.json/Notebook(*.ipynb)からの相対パス
-|./output
 |・省略不可
 
 |===
@@ -198,37 +196,223 @@ Licenseは<<anchor-license, License一覧>>参照
 [[anchor-category]]
 `**category_names**` 一覧
 |===
-h|type h|Person h|Vehicle h|Outdoor h|Animal h|Accessory h|Sports h|Kitchen h|Food h|Furniture h|Electronic h|Appliance h|Indoor
-|**category name**|person|bicycle|traffic light|bird|backpack|frisbee|bottle|banana|chair|tv|microwave|book
-|||car|fire hydrant|cat|umbrella|skis|wine glass|apple|couch|laptop|oven|clock
-|||motorcycle|stop sign|dog|handbag|snowboard|cup|sandwich|potted plant|mouse|toaster|vase
-|||airplane|parking meter|horse|tie|sports ball|fork|orange|bed|remote|sink|scissors
-|||bus|bench|sheep|suitcase|kite|knife|broccoli|dining table|keyboard|refrigerator|teddy bear
-|||train||cow||baseball bat|spoon|carrot|toilet|cell phone||hair drier
-|||truck||elephant||baseball glove|bowl|hot dog||||toothbrush
-|||boat||bear||skateboard||pizza||||
-|||||zebra||surfboard||donut||||
-|||||giraffe||tennis racket||cake||||
+|type 4+<|category name
+
+.2+<.^|Person
+|person
+|
+|
+|
+
+|
+|
+|
+|
+
+.2+<.^|Vehicle
+|bicycle
+|car
+|motorcycle
+|airplane
+
+|bus
+|train
+|truck
+|boat
+
+.2+<.^|Outdoor
+|traffic light
+|fire hydrant
+|stop sign
+|parking meter
+
+|bench
+|
+|
+|
+
+.4+<.^|Animal
+|bird
+|cat
+|dog
+|horse
+
+|sheep
+|cow
+|elephant
+|bear
+
+|zebra
+|giraffe
+|
+|
+
+|
+|
+|
+|
+
+.2+<.^|Accessory
+|backpack
+|umbrella
+|handbag
+|tie
+
+|suitcase
+|
+|
+|
+
+.4+<.^|Sports
+|frisbee
+|skis
+|snowboard
+|sports ball
+
+|kite
+|baseball bat
+|baseball glove
+|skateboard
+
+|surfboard
+|tennis racket
+|
+|
+
+|
+|
+|
+|
+
+.2+<.^|Kitchen
+|bottle
+|wine glass
+|cup
+|fork
+
+|knife
+|spoon
+|bowl
+|
+
+.4+<.^|Food
+|banana
+|apple
+|sandwich
+|orange
+
+|broccoli
+|carrot
+|hot dog
+|pizza
+
+|donut
+|cake
+|
+|
+
+|
+|
+|
+|
+
+.2+<.^|Furniture
+|chair
+|couch
+|potted plant
+|bed
+
+|dining table
+|toilet
+|
+|
+
+.2+<.^|Electronic
+|tv
+|laptop
+|mouse
+|remote
+
+|keyboard
+|cell phone
+|
+|
+
+.2+<.^|Appliance
+|microwave
+|oven
+|toaster
+|sink
+
+|refrigerator
+|
+|
+|
+
+.2+<.^|Indoor
+|book
+|clock
+|vase
+|scissors
+
+|teddy bear
+|hair drier
+|toothbrush
+|
+
 |===
 
 [[anchor-license]]
 License一覧
 |===
-h|License h|商用利用 h|再配布 h|ID
-|[Attribution-NonCommercial-ShareAlike License](https://creativecommons.org/licenses/by-nc-sa/2.0/) + 
-(CC BY-NC-SA 2.0)|No|Yes|1
-|[Attribution-NonCommercial License](https://creativecommons.org/licenses/by-nc/2.0/) + 
-(CC BY-NC 2.0)|No|Yes|2
-|[Attribution-NonCommercial-NoDerivs License](http://creativecommons.org/licenses/by-nc-nd/2.0/) + 
-(CC BY-NC-ND 2.0)|No|Yes|3
-|[Attribution License](http://creativecommons.org/licenses/by/2.0/) + 
-(CC BY 2.0)|Yes|Yes|4
-|[Attribution-ShareAlike License](http://creativecommons.org/licenses/by-sa/2.0/) + 
-(CC BY-SA 2.0)|Yes|Yes|5
-|[Attribution-NoDerivs License](http://creativecommons.org/licenses/by-nd/2.0/) + 
-(CC BY-ND 2.0)|Yes|Yes|6
-|[No known copyright restrictions](http://flickr.com/commons/usage/)|See <<anchor-note,NOTE>>|See <<anchor-note,NOTE>>|7
-|[United States Government Work](http://www.usa.gov/copyright.shtml)|Yes (例外あり)|Yes (例外あり)|8
+|License |商用利用 |再配布 |ID
+
+|https://creativecommons.org/licenses/by-nc-sa/2.0/[Attribution-NonCommercial-ShareAlike License] + 
+(CC BY-NC-SA 2.0)
+|No
+|Yes
+|1
+
+|https://creativecommons.org/licenses/by-nc/2.0/[Attribution-NonCommercial License] + 
+(CC BY-NC 2.0)
+|No
+|Yes
+|2
+
+|http://creativecommons.org/licenses/by-nc-nd/2.0/[Attribution-NonCommercial-NoDerivs License] + 
+(CC BY-NC-ND 2.0)
+|No
+|Yes
+|3
+
+|http://creativecommons.org/licenses/by/2.0/[Attribution License] + 
+(CC BY 2.0)
+|Yes
+|Yes
+|4
+
+|http://creativecommons.org/licenses/by-sa/2.0/[Attribution-ShareAlike License] + 
+(CC BY-SA 2.0)
+|Yes
+|Yes
+|5
+
+|http://creativecommons.org/licenses/by-nd/2.0/[Attribution-NoDerivs License] + 
+(CC BY-ND 2.0)
+|Yes
+|Yes
+|6
+
+|http://flickr.com/commons/usage/[No known copyright restrictions]
+|See <<anchor-note,NOTE>>
+|See <<anchor-note,NOTE>>
+|7
+
+|http://www.usa.gov/copyright.shtml[United States Government Work]
+|Yes (例外あり)
+|Yes (例外あり)
+|8
+
 |===
 
 [[anchor-note]]
@@ -243,31 +427,34 @@ h|License h|商用利用 h|再配布 h|ID
 ====
 
 === Notebook実行
-. prepare datasetディレクトリのNotebook(*.ipynb)を開き、その中のPythonスクリプトを実行する
+
+<<<
+
+. `**download_images**` ディレクトリのNotebook(*.ipynb)を開き、その中のPythonスクリプトを実行する
 ** その後下記の動作をする
-*** prepare datasetディレクトリの<<anchor-conf, `**configuration.json**`>>の存在をチェックする
+*** `**download_images**` ディレクトリの<<anchor-conf, configuration.json>>の存在をチェックする
 **** エラー発生時はその内容を表示し、中断する
-*** <<anchor-conf, `**configuration.json**`>>の内容をチェックする
+*** <<anchor-conf, configuration.json>>の内容をチェックする
 **** エラー発生時はその内容を表示し、中断する
-*** <<anchor-conf, `**configuration.json**`>> `**annotation_file**` (<<anchor-ref, 関連資料: COCO Annotations ファイル>>) の存在をチェックする
+*** <<anchor-conf, configuration.json>> `**annotation_file**` (<<anchor-ref, 関連資料: COCO Annotations ファイル>>) の存在をチェックする
 **** エラー発生時はその内容を表示し、中断する
-*** <<anchor-conf, `**configuration.json**`>> `**annotation_file**` のCOCO Annotationsファイルを読み取り、Pycocotoolsへ必要な設定を行う
+*** <<anchor-conf, configuration.json>> `**annotation_file**` のCOCO Annotationsファイルを読み取り、Pycocotoolsへ必要な設定を行う
 *** Pycocotoolsなどの外製ソフトでエラー発生時は、外製ソフトが出力するエラーを表示し、中断する
 *** 下記から決まる画像をDownloadする
-**** <<anchor-conf, `**configuration.json**`>> `**category_names**` に一致する画像
+**** <<anchor-conf, configuration.json>> `**category_names**` に一致する画像
 ***** `**category_names**` のリスト内に
 <<anchor-category, category_names一覧>>に存在しない値のみが設定された場合、エラー内容を表示し、中断する
 ***** `**category_names**` のリスト内に<<anchor-category, category_names一覧>>に存在する値と存在しない値の両方が設定された場合、category_names一覧に存在しない値についてWarningを表示し、category_names一覧に存在する値のみを使用して続行する
-**** <<anchor-conf, `**configuration.json**`>> `**max_download_count**` で決まるDownload画像数
+**** <<anchor-conf, configuration.json>> `**max_download_count**` で決まるDownload画像数
 ***** `**max_download_count**` に負の値が設定された場合、エラー内容を表示し、中断する
-**** <<anchor-conf, `**configuration.json**`>> `**licenses**` に一致する画像
+**** <<anchor-conf, configuration.json>> `**licenses**` に一致する画像
 ***** `**licenses**` のリスト内に<<anchor-license, License一覧>>に存在しない値のみが設定された場合、エラー内容を表示し、中断する
 ***** `**licenses**` のリスト内に<<anchor-license, License一覧>>に存在する値と存在しない値の両方が設定された場合、License一覧に存在しない値についてWarningを表示し、License一覧に存在する値のみを使用して続行する
-**** <<anchor-conf, `**configuration.json**`>> `**remove_categories**` に一致する画像を除外
+**** <<anchor-conf, configuration.json>> `**remove_categories**` に一致する画像を除外
 ***** `**remove_categories**` のリスト内に<<anchor-category, category_names一覧>>に存在しない値のみが設定された場合、エラー内容を表示し、中断する
 ***** `**remove_categories**` のリスト内に<<anchor-category, category_names一覧>>に存在する値と存在しない値の両方が設定された場合、category_names一覧に存在しない値についてWarningを表示し、category_names一覧に存在する値に一致する画像を除外する
 **** 上記の条件に合致する画像枚数が0枚になった場合は、Warningを表示する
-*** <<anchor-conf, `**configuration.json**`>> `**output_dir**` で指定するディレクトリがなければ作成し、そこにDownload画像を出力する
+*** <<anchor-conf, configuration.json>> `**output_dir**` で指定するディレクトリがなければ作成し、そこにDownload画像を出力する
 *** Download中は下記のような表示をする
 +
 ```
