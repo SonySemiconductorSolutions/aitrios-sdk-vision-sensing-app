@@ -1,0 +1,50 @@
+# cvat v2.3.0 docker compose configuration for devcontainer with docker in docker
+
+version: '3.3'
+
+services:
+  cvat_db:
+    restart: "no"
+    init: true
+
+  cvat_redis:
+    restart: "no"
+    init: true
+
+  cvat_server:
+    restart: "no"
+    init: true
+    labels:
+      - traefik.http.routers.cvat.rule=(Host(`${CVAT_HOST:-localhost}`) &&
+        PathPrefix(`/api/`, `/git/`, `/opencv/`, `/static/`, `/admin`, `/documentation/`, `/django-rq`)) ||
+        (Host(`127.0.0.1`) && PathPrefix(`/api/`, `/git/`, `/opencv/`, `/static/`, `/admin`, `/documentation/`, `/django-rq`))
+
+  cvat_utils:
+    restart: "no"
+    init: true
+
+  cvat_worker_default:
+    restart: "no"
+    init: true
+
+  cvat_worker_low:
+    restart: "no"
+    init: true
+
+  cvat_worker_webhooks:
+    restart: "no"
+    init: true
+
+  cvat_ui:
+    restart: "no"
+    init: true
+    labels:
+      - traefik.http.routers.cvat-ui.rule=Host(`${CVAT_HOST:-localhost}`) || Host(`127.0.0.1`)
+
+  traefik:
+    restart: "no"
+    init: true
+
+  cvat_opa:
+    restart: "no"
+    init: true

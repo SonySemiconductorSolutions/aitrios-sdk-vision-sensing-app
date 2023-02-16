@@ -1,0 +1,11 @@
+{
+    "header": {
+        "id": "00",
+        "version": "01.00.00"
+    },
+    "dnn_output_detections": 10,
+    "max_detections": 2,
+    "threshold": 0.3,
+    "input_width": 300,
+    "input_height": 300
+}

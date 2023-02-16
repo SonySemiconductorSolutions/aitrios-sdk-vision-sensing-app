@@ -1,12 +1,12 @@
 # Annotate Images
-This tutorial shows you how to tag images using the annotation tool [VoTT](https://github.com/microsoft/VoTT).
+This tutorial shows you how to tag images using the annotation tool.
 
-## Tag Images with VoTT
-Tag images using VoTT.
+## Tag Images with CVAT for Image Classification
+Tag images using [CVAT](https://github.com/opencv/cvat).
 
-See the [document](./tag_images_with_vott/tag_images_with_vott.md).
+See [README](./image_classification/README.md).
 
-## Convert Annotation from VoTT to COCO
-Convert an annotation file in VoTT format to COCO format.
+## Tag Images with CVAT for Object Detection
+Tag images using [CVAT](https://github.com/opencv/cvat).
 
-See [README](./convert_annotation_from_vott_to_coco/README.md).
+See [README](./object_detection/README.md).

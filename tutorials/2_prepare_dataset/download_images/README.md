@@ -6,8 +6,33 @@ This tutorial shows how to download images from [COCO](https://cocodataset.org/#
 1. Download [2017 Train/Val annotations [241MB]](http://images.cocodataset.org/annotations/annotations_trainval2017.zip) from [COCO](https://cocodataset.org/#download) and decompress it.
 2. Place **`instances_val2017.json`** in [annotations](./annotations/) folder.
 
-### 2. Edit settings
-Set the parameters in [configuration.json](./configuration.json).
+### 2. Create setting file
+Place setting file (**`./configuration.json`** file) for downloading images. 
+- configuration.json
+    ```json
+    {
+        "annotation_file": "./annotations/instances_val2017.json",
+        "category_names": ["cat", "dog"],
+        "max_download_count": 15,
+        "licenses": [4, 5, 6],
+        "remove_categories": ["person"],
+        "output_dir": "./output"
+    }
+    ```
+
+- configuration.json (example without optional parameters)
+    ```json
+    {
+        "annotation_file": "./annotations/instances_val2017.json",
+        "output_dir": "./output"
+    }
+    ```	
+
+> **NOTE**<br>
+> See [3. Edit settings](#3-edit-settings) for details on the parameter.
+
+### 3. Edit settings
+Edit the parameters in [configuration.json](./configuration.json).
 
 The parameters required to run this notebook are :
 
@@ -49,14 +74,14 @@ The parameters required to run this notebook are :
 |[No known copyright restrictions](http://flickr.com/commons/usage/)|7|
 |[United States Government Work](http://www.usa.gov/copyright.shtml)|8|
 
-### 3. Run the notebook
+### 4. Run the notebook
 Open [notebook](./get_dataset_images_from_coco.ipynb) and run the cells.
 
 If successful, images will be downloaded in **`output_dir`**.
 
 You can run all cells at once, or you can run the cells one by one.
 
-### 4. (Optional) Upload COCO images to Console for AITRIOS
+### 5. (Optional) Import COCO images to Console for AITRIOS
 
 If you want to use the downloaded COCO images to train or retrain AI model on Console for AITRIOS,
 

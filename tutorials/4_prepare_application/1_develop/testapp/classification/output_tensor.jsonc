@@ -1,0 +1,11 @@
+// Following list represents inference score per class.
+// When AI model's class num is 5, following list has 5 values.
+// And "dnn_output_classes" value in testapp/classification/ppl_parameter.json is also 5.
+[
+    // score
+    0.10,
+    0.81,
+    0.32,
+    0.63,
+    0.54
+]
