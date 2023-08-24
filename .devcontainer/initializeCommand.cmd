@@ -24,3 +24,10 @@ dir /b /a  %LIB% | findstr "." >nul && (set EMPTY=0) || (set EMPTY=1)
 if %EMPTY% EQU 1 (
     git submodule update --init --recursive .devcontainer\dependencies\aitrios-sdk-console-access-lib-python
 )
+
+SET LIB=%CMDDIR%dependencies\aitrios-sdk-zone-detection-webapp-cs
+
+dir /b /a  %LIB% | findstr "." >nul && (set EMPTY=0) || (set EMPTY=1)
+if %EMPTY% EQU 1 (
+    git submodule update --init --recursive .devcontainer\dependencies\aitrios-sdk-zone-detection-webapp-cs
+)

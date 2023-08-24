@@ -1,7 +1,7 @@
-= Vision and Sensing pass:[<br/>] Application SDK pass:[<br/>] Version Control pass:[<br/>] Functional Specifications pass:[<br/>]
+= Vision and Sensing Application SDK pass:[<br/>] Version Control pass:[<br/>] Functional Specifications pass:[<br/>]
 :sectnums:
 :sectnumlevels: 1
-:author: Copyright 2023 Sony Semiconductor Solutions Corporation
+:author: Copyright 2022-2023 Sony Semiconductor Solutions Corporation
 :version-label: Version 
 :revnumber: x.x.x
 :revdate: YYYY - MM - DD
@@ -19,13 +19,16 @@
 |Date |What/Why
 
 |2022/12/12
-|Initial draft
+|Initial draft.
 
 |2023/01/30
 |Directory structure change. +
 Added version control targets. + 
-Following the deletion of the secret information, description about configuration.json was removed. + 
+Following the deletion of the secret information, description about `**configuration.json**` was removed. + 
 Updated the PDF build environment.
+
+|2023/05/26
+|Fixed the notation of tool names and parentheses and parameters.
 |===
 
 
@@ -45,9 +48,9 @@ Updated the PDF build environment.
 *** https://docs.github.com/ja
 
 == Expected use case
-* You want to version Jupyter Notebook for downloading datasets
-* You want to version Jupyter Notebook for AI model quantization
-* You want to version post-processing source code
+* Version Jupyter Notebooks for downloading datasets
+* Version Jupyter Notebooks for AI model quantization
+* Version post-processing source code
 
 
 == Functional overview
@@ -94,7 +97,7 @@ Updated the PDF build environment.
 |prepare dataset
 |Notebooks, configuration files
 |Jupyter Notebooks to download image data for learning
-|Edit various settings according to your purpose. (Image category, number of images acquired, etc.)  
+|Edit various settings according to your purpose. (Image category, number of images acquired, etc.)
 |Record the parameters and settings specified at the time of image download,  +
 so that you can refer to them when you want to reproduce your learning 
 with the same image data. 
@@ -145,7 +148,7 @@ main
 ***** You can reference the settings from your commit history + 
 if you want to rerun your notebook with the same parameter settings as in the past
 
-. In addition, by tying information from the data used for input to the commit, you can reproduce a notebook execution under identical conditions (input data, parameters)
+. In addition, by tying information from the data used for input to the commit, you can reproduce the notebook execution under identical conditions (input data, parameters)
 ***** It's up to the user how to tie input data to a commit, but an example is to write it as a commit message
 ****** Sample commit message (for quantize model):
 +

@@ -1,7 +1,7 @@
-= Vision and Sensing pass:[<br/>] Application SDK pass:[<br/>] Model Quantization pass:[<br/>] Functional Specifications pass:[<br/>]
+= Vision and Sensing Application SDK pass:[<br/>] Model Quantization pass:[<br/>] Functional Specifications pass:[<br/>]
 :sectnums:
 :sectnumlevels: 1
-:author: Copyright 2023 Sony Semiconductor Solutions Corporation
+:author: Copyright 2022-2023 Sony Semiconductor Solutions Corporation
 :version-label: Version 
 :revnumber: x.x.x
 :revdate: YYYY - MM - DD
@@ -19,25 +19,33 @@
 |Date |What/Why
 
 |2022/11/16
-|Initial draft
+|Initial draft.
 
 |2023/01/30
 |Fixed how images are stored for quantization calibration and evaluation. + 
-Added how to store the label information file used during evaluation.  + 
-Removed the evaluate_ground_truth_file setting and added the evaluate_label_file setting. + 
-Fixed the default path for the dataset_image_dir, evaluate_image_dir settings. + 
+Added how to store the label information file used during evaluation. + 
+Removed the `**evaluate_ground_truth_file**` setting and added the `**evaluate_label_file**` setting. + 
+
+Fixed the default path for the `**dataset_image_dir**`, `**evaluate_image_dir**` settings. + 
 Added supported image formats. +
-Directory structure change.  + 
+Directory structure change. + 
 Added that symbolic links must not be used. + 
 Following the deletion of the secret information, Initial was removed from the configuration file entry and added about creating a configuration file. + 
 Updated the PDF build environment.
+
+|2023/05/26
+|Fixed the notation of tool names and parentheses and parameters. + 
+Made fixes associated with "**MCT**" upgrade. + 
+Added parameter specification for `**configuration.json**`. + 
+Some environments do not render AsciiDoc's Mermaid diagrams, so modified to rendered image references. + 
+Added alternate text to images.
 |===
 
 == Terms/Abbreviations
 |===
 |Terms/Abbreviations |Meaning 
 
-|<<mct, MCT>>
+|<<mct, "**MCT**">>
 |Open source software for quantizing neural network models
 
 |Keras
@@ -56,14 +64,14 @@ A _.tflite_ model is a type of neural network format
 
 [[anchor-ref]]
 * Reference/Related documents
-** [[mct]]Model Compression Toolkit (MCT)
+** [[mct]]"**Model Compression Toolkit (MCT)**"
 *** https://github.com/sony/model_optimization
 
 == Expected use case
 
-* You want to quantize the model + 
-You want to reduce the size of the model by quantization so that it can be deployed to the target edge AI device
-* You want to run inferences and confirm accuracy using pre- and post-quantization models
+* Quantize the model + 
+Reduce the size of the model by quantization so that it can be deployed to the target edge AI device
+* Run inferences and confirm accuracy using pre- and post-quantization models
 
 == Functional overview/Algorithm
 
@@ -73,13 +81,11 @@ You want to reduce the size of the model by quantization so that it can be deplo
 
 * The SDK runs inferences on pre- and post-quantization AI models to get statistics (Top1 accuracy) for the inference results
 
-* The AI models supported by the SDK conform to https://github.com/sony/model_optimization/tree/v1.7.1#supported-features[MCT supported features] 
+* The AI models supported by the SDK conform to https://github.com/sony/model_optimization/tree/v1.8.0#supported-features["**MCT**" supported features] 
 
 * The image format supported by the SDK is JPEG
 
-<<<
-
-[mermaid]
+[source,mermaid, target="Legend"]
 ----
 flowchart TD;
     %% definition
@@ -95,7 +101,7 @@ flowchart TD;
 
 * Flow overview
 +
-[mermaid]
+[source,mermaid, target="Flow overview"]
 ----
 flowchart TD
     start((Start)) --> id1(1.Prepare an AI model to quantize)
@@ -196,7 +202,7 @@ tutorials/
 {"daisy": 0, "dandelion": 1, "roses": 2, "sunflowers": 3, "tulips": 4}
 ----
 
-NOTE: See "Convert annotation information format" in the "CVAT Image Annotation Functional Specifications" for how to convert the format of annotation information to the preceding format when quantizing a user-prepared AI model.
+NOTE: See "Convert annotation information format" in the "**CVAT Image Annotation Functional Specifications**" for how to convert the format of annotation information to the preceding format when quantizing a user-prepared AI model.
 
 === Create and edit the configuration file for quantization
 . Create and edit the configuration file, `**configuration.json**`, in the execution directory.
@@ -214,55 +220,56 @@ NOTE: Do not use symbolic links to files and directories.
 |Configuration |Meaning |Range |Remarks
 
 |`**source_keras_model**`
-|Path to the AI model (Keras) to convert from.  + 
+|Path to the AI model (Keras) to convert from. + 
 Specify a directory in Keras SavedModel format, or a file in h5 format.
-|Absolute path or relative to notebook (*.ipynb)
-|
+|Absolute path or relative to the notebook (*.ipynb)
+|Don't abbreviate
 
 |`**dataset_image_dir**`
 |Directory containing dataset images for calibration during quantization
-|Absolute path or relative to notebook (*.ipynb)
-|
+|Absolute path or relative to the notebook (*.ipynb)
+|Don't abbreviate
 
 |`**batch_size**`
 |Number of sets of images to be calibrated during quantization to find features such as weights and biases
-|1 or more and less than or equal to the total number of images contained in `**dataset_image_dir**`
-|
+|An integer equal to or greater than 1 and less than or equal to the number of images contained in `**dataset_image_dir**`
+|Don't abbreviate
 
 |`**input_tensor_size**`
 |Size of the AI model input tensor (number of pixels on one side of image)
-|Comply with AI model input tensor
-|
+|Comply with AI model input tensor + 
+An integer greater than or equal to 1
+|Don't abbreviate
 
 |`**iteration_count**`
 |Number of iterations when quantizing
-|1 or more
-|
+|An integer greater than or equal to 1
+|Don't abbreviate
 
 |`**output_dir**`
 |Directory to store the quantized AI model
-|Absolute path or relative to notebook (*.ipynb)
-|
+|Absolute path or relative to the notebook (*.ipynb)
+|Don't abbreviate
 
 |`**evaluate_image_dir**`
 |Directory containing images to use as input during inference
-|Absolute path or relative to notebook (*.ipynb)
-|
+|Absolute path or relative to the notebook (*.ipynb)
+|Don't abbreviate
 
 |`**evaluate_image_extension**`
 |Extension of image files to use as input during inference
 |String
-|
+|Don't abbreviate
 
 |`**evaluate_label_file**`
 |Label information for AI models
-|Absolute path or relative to notebook (*.ipynb)
-|
+|Absolute path or relative to the notebook (*.ipynb)
+|Don't abbreviate
 
 |`**evaluate_result_dir**`
 |Directory to store statistics of inference results
-|Absolute path or relative to notebook (*.ipynb)
-|
+|Absolute path or relative to the notebook (*.ipynb)
+|Don't abbreviate
 
 |===
 
@@ -273,24 +280,24 @@ Specify a directory in Keras SavedModel format, or a file in h5 format.
 
 === Run quantization and evaluation
 
-<<<
-
 . Open the notebook for running quantization, _*.ipynb_, in the execution directory, and run the python scripts in it.
-* The script does the following:
+* The scripts do the following:
 ** Checks that <<anchor-conf, _configuration.json_>> exists in the execution directory.
+*** If an error occurs, the error description is displayed and running is interrupted.
+** Checks the contents of <<anchor-conf, _configuration.json_>>.
 *** If an error occurs, the error description is displayed and running is interrupted.
 ** Checks that <<anchor-conf, _configuration.json_>> includes values for `**source_keras_model**` and `**dataset_image_dir**`.
 *** If an error occurs, the error description is displayed and running is interrupted.
-** Reads the following values from <<anchor-conf, _configuration.json_>>, makes the necessary settings in MCT, and then quantizes and converts the AI model (Keras):
+** Reads the following values from <<anchor-conf, _configuration.json_>>, makes the necessary settings in "**MCT**", and then quantizes and converts the AI model (Keras):
 *** <<anchor-conf, _configuration.json_>> `**source_keras_model**`
 *** <<anchor-conf, _configuration.json_>> `**dataset_image_dir**`
 *** <<anchor-conf, _configuration.json_>> `**batch_size**`
 *** <<anchor-conf, _configuration.json_>> `**input_tensor_size**`
 *** <<anchor-conf, _configuration.json_>> `**iteration_count**`
-** If an error occurs in external software, for example, MCT, the error output by the external software is displayed and running is interrupted.
-** Outputs the AI model quantized by MCT (TFLite) `**model_quantized.tflite**` , and the AI model converted to TFLite by standard TensorFlow functionality (TFLite) `**model.tflite**` to the directory specified in <<anchor-conf, _configuration.json_>> `**output_dir**`.
+** If an error occurs in external software, for example, "**MCT**", the error output by the external software is displayed and running is interrupted.
+** Outputs the AI model quantized by "**MCT**" (TFLite) `**model_quantized.tflite**` , and the AI model converted to TFLite by standard TensorFlow functionality (TFLite) `**model.tflite**` to the directory specified in <<anchor-conf, _configuration.json_>> `**output_dir**`.
 *** If the directory specified by `**output_dir**` does not already exist, it is created at the same time.
-** During conversion, the notebook will display information as follows(when `**iteration_count**` is 10), for example:
+** During conversion, the notebook will display information as follows (when `**iteration_count**` is 10), for example:
 +
 ```
   0%|          | 0/10 [00:00<?, ?it/s]
@@ -308,7 +315,7 @@ Specify a directory in Keras SavedModel format, or a file in h5 format.
 *** <<anchor-conf, _configuration.json_>> `**evaluate_image_extension**`
 *** <<anchor-conf, _configuration.json_>> `**evaluate_labe_file**`
 *** <<anchor-conf, _configuration.json_>> `**evaluate_result_dir**`
-** Runs inference and displays statistics for three types of AI model: the original AI model (Keras), the AI model converted to TFLite by standard TensorFlow functionality (TFLite), and the AI model quantized by MCT (TFLite).
+** Runs inference and displays statistics for three types of AI model: the original AI model (Keras), the AI model converted to TFLite by standard TensorFlow functionality (TFLite), and the AI model quantized by "**MCT**" (TFLite).
 ** Saves statistics as the file `**results.json**` in the directory specified in `**evaluate_result_dir**`.
 ** If an error occurs in external software, for example, TensorFlow, the error output by the external software is displayed and running is interrupted.
 ** While the AI model (TFLite) is being inferred, information is displayed as follows (when the number of images is 10), for example:
@@ -320,19 +327,19 @@ Specify a directory in Keras SavedModel format, or a file in h5 format.
 ...
 100%|██████████| 10/10 [00:09<00:00,  1.08it/s]
 ```
-** While the AI model (Kera) is being inferred, logs from TensorFlow library are displayed.
+** While the AI model (Keras) is being inferred, logs from TensorFlow library are displayed.
 ** While processing, you can interrupt with the Stop Cell Execution of notebook cell function.
 
 == Target performances/Impact on performances
 ** When the SDK environment is built, AI models (Keras) can be quantized and converted to AI models (TFLite) without any additional installation steps
 ** UI response time of 1.2 seconds or less
-** If processing takes more than 5 seconds, then the display during processing can be updated sequentially
+** If processing takes more than 5 seconds, indicates that processing is in progress with successive updates
 
 == Assumption/Restriction
 * None
 
 == Remarks
-* To check the versions of Model Compression Toolkit (MCT) and TensorFlow
+* To check the versions of "**Model Compression Toolkit (MCT)**" and TensorFlow
 ** See _requirements.txt_ in the SDK environment root directory.
 
 == Unconfirmed items

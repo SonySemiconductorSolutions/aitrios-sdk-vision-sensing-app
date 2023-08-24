@@ -22,7 +22,8 @@
             "type": "string"
         },
         "network_type": {
-            "type": "string"
+            "type": "string",
+            "default":"0"
         },
         "labels": {
             "type": "array"

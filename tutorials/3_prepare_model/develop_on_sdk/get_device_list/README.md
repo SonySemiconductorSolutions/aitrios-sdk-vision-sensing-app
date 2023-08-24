@@ -1,10 +1,10 @@
 # Get device list
 
-This tutorial shows how to get a list of devices registered in Console for AITRIOS.
+This tutorial shows how to get a list of devices registered in "**Console for AITRIOS**".
 
 ## Get started
 
-### 1. Set up Console Access Library
+### 1. Set up "**Console Access Library**"
 Set up access library client to get a device list.
 
 See [README](../../../_common/set_up_console_client/README.md) to get started.

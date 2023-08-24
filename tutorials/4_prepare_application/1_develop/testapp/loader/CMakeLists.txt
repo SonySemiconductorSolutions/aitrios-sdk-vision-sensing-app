@@ -2,7 +2,7 @@
 #   https://github.com/bytecodealliance/wasm-micro-runtime/blob/main/samples/basic/CMakeLists.txt
 
 ############################################################################
-# Copyright 2022 Sony Semiconductor Solutions Corp. All rights reserved.
+# Copyright 2022-2023 Sony Semiconductor Solutions Corp. All rights reserved.
 # 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -114,13 +114,16 @@ endif ()
 set (WAMR_ROOT_DIR /opt/wasm-micro-runtime)
 include (${WAMR_ROOT_DIR}/build-scripts/runtime_lib.cmake)
 
-add_library(vmlib ${WAMR_RUNTIME_LIB_SOURCE})
+add_library(vmlib SHARED ${WAMR_RUNTIME_LIB_SOURCE})
+set_target_properties (vmlib PROPERTIES OUTPUT_NAME vmlib)
 
 ################  application related  ################
-include_directories(${CMAKE_CURRENT_LIST_DIR}/src ../../ppl_sdk/imx_app/include ../../ppl_sdk/lib/parson/include)
+include_directories(${CMAKE_CURRENT_LIST_DIR}/src ../../sdk/vision_app_sdk/include ../../sdk/third_party/include/parson)
 include (${SHARED_DIR}/utils/uncommon/shared_uncommon.cmake)
 
-add_executable (loader src/main.c src/loader.c src/analyzer.c src/ppl_if.c ../../ppl_sdk/lib/parson/parson.c ${UNCOMMON_SHARED_SOURCE})
+add_executable (loader src/main.c src/loader.c src/ppl_if.c ../../sdk/third_party/parson/parson.c ${UNCOMMON_SHARED_SOURCE})
+
+set_target_properties (loader PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
 if (APPLE)
   target_link_libraries (loader vmlib ${LLVM_AVAILABLE_LIBS} ${UV_A_LIBS} -lm -ldl -lpthread)
@@ -129,3 +132,5 @@ else ()
 endif ()
 
 target_include_directories(loader PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../include)
+
+add_library (dev_mock SHARED mock/dev_mock.c ../../sdk/third_party/parson/parson.c)

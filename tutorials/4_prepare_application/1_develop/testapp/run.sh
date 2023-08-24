@@ -1,5 +1,5 @@
 #!/bin/bash
-# Copyright 2022 Sony Semiconductor Solutions Corp. All rights reserved.
+# Copyright 2022-2023 Sony Semiconductor Solutions Corp. All rights reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ DEBUGGER=none
 
 # Parameter check
 
-while getopts :df:o:p:t: option
+while getopts :df:o:p:t:n: option
 do
   case $option in
     d)
@@ -30,6 +30,7 @@ do
     o);;
     p);;
     t);;
+    n);;
     ?);;
   esac
 done

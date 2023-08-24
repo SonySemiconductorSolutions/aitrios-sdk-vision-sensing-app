@@ -30,7 +30,12 @@ typedef enum {
     E_LOADER_FAIL
 } LOADER_RESULT_CODE;
 
-uint32_t Exec_Load(char **wasm_path, char **buffer, wasm_module_t *module, wasm_module_inst_t *module_inst, wasm_exec_env_t *exec_env, bool is_debug);
+uint32_t Exec_Load(char **wasm_path, char **buffer, wasm_module_t *module, wasm_module_inst_t *module_inst, wasm_exec_env_t *exec_env, bool is_debug,
+                   const char **native_lib_list,
+                   uint32 native_lib_count,
+                   void **native_handle_list);
+
+void Exec_Unload(void **native_handle_list);
 
 #ifdef __cplusplus
 }

@@ -13,14 +13,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-NAME_IMAGE='ppl_build_env';
+NAME_IMAGE='app_build_env:1.0.0';
 
 cd "$(dirname "$0")"
 
 if [ ! "$(docker image ls -q "$NAME_IMAGE")" ]; then
-    docker build . -f $PWD/Dockerfile -t $NAME_IMAGE --network host
+    docker build ./sdk -f $PWD/sdk/Dockerfile -t $NAME_IMAGE --network host
 fi
 docker run --rm \
-    -v $PWD/sample/schema/:/root/schema/ \
-    $NAME_IMAGE:latest \
+    -v $PWD/sdk/schema/:/root/schema/ \
+    $NAME_IMAGE \
     /bin/sh -c "cd /root/schema && flatc --cpp *.fbs"

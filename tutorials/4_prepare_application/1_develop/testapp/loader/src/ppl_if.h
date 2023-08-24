@@ -1,5 +1,5 @@
 /****************************************************************************
- * Copyright 2022 Sony Semiconductor Solutions Corp. All rights reserved.
+ * Copyright 2022-2023 Sony Semiconductor Solutions Corp. All rights reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -67,18 +67,16 @@ typedef struct {
     PPL_AnalyzeOutput_wasm_t wasm;
 } PPL_AnalyzeOutput_argv_t;
 
+/* wasm interface*/
+struct SetupWasm_struct_t{
+    wasm_module_inst_t ppl_wasm_module_inst;
+    wasm_exec_env_t ppl_wasm_exec_env;
+};
 /* -------------------------------------------------------- */
 /* API function                                             */
 /* -------------------------------------------------------- */
 
-EPPL_RESULT_CODE PPL_AnalyzeOutput(uint32_t p_data, uint32_t in_size, uint32_t pp_out_buf, uint32_t p_out_size, uint32_t p_upload_flag);
-EPPL_RESULT_CODE PPL_Initialize(uint32_t network_id);
-EPPL_RESULT_CODE PPL_ResultRelease(uint32_t result);
-EPPL_RESULT_CODE PPL_Finalize(void);
-const char* PPL_GetPplVersion(void);
-
-uint32_t SetupWasm(wasm_module_inst_t inst, wasm_exec_env_t exec_env);
-uint32_t SetupParam(const char *param, size_t size);
+int PPL_main(struct SetupWasm_struct_t *setup_wasm);
 
 #ifdef __cplusplus
 }

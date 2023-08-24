@@ -4,7 +4,7 @@ This tutorial shows how to deploy AI model to edge AI devices.
 
 ## Get started
 
-### 1. Set up Console Access Library
+### 1. Set up "**Console Access Library**"
 Set up access library client to deploy AI model.
 
 See [README](../../../../_common/set_up_console_client/README.md) for details.
@@ -12,12 +12,12 @@ See [README](../../../../_common/set_up_console_client/README.md) for details.
 ### 2-a. Get model list (optional)
 You need **`model_id`** and **`model_version_number`** of the model in case you create a new configuration for deploying to edge AI devices. 
 
-If you want to get information on an AI model imported to Console for AITRIOS, get the model list and check model ID and version number.
+If you want to get information on an AI model imported to "**Console for AITRIOS**", get the model list and check model ID and version number.
 
 See [README](../../get_model_list/README.md) for details.
 
 ### 2-b. Get deploy configuration list (optional)
-You need **`config_id`** of a deployment configuration registered in Console for AITRIOS in case you use an existing deploy configuration. 
+You need **`config_id`** of a deployment configuration registered in "**Console for AITRIOS**" in case you use an existing deploy configuration. 
 
 If you want to get information on deployment configuration IDs, get the configuration list and check the config ID.
 
@@ -70,17 +70,17 @@ The parameters required to run this notebook are :
 |Setting||Description|Range|Required/Optional|Remarks
 |:--|:--|:--|:--|:--|:--|
 |**`should_create_deploy_config`**||Whether to register a new deploy configuration.<br>If true, create a new configuration; if false, use an already registered configuration specified by **`config_id`**.|true or false|Required||
-|**`config_id`**||The ID of the deploy configuration you want to use for deployment.|String.<br>See NOTE.|Required|Used for Console Access Library API:<br>**`deployment.deployment.Deployment.create_deploy_configuration`**<br>**`deployment.deployment.Deployment.deploy_by_configuration`**|
-|**`create_config`**|**`comment`**|Description of the configuration.|String.See NOTE.|Optional|Used for Console Access Library API:<br>**`deployment.deployment.Deployment.create_deploy_configuration`**|
-||**`model_id`**|The ID of the model you want to deploy.|String.<br>See NOTE.|Optional<br> Required if **`should_create_deploy_config`** is true.|Used for Console Access Library API:<br>**`deployment.deployment.Deployment.create_deploy_configuration`**|
-||**`model_version_number`**|The version of the model you want to deploy.|String.<br>See NOTE.|Optional|Used for Console Access Library API:<br>**`deployment.deployment.Deployment.create_deploy_configuration`**|
-|**`device_ids`**||List of device ids on which you want to deploy your model.|List of string.<br>See NOTE.|Required|Used for Console Access Library API:<br>**`deployment.deployment.Deployment.deploy_by_configuration`**|
-|**`replace_model_id`**||The ID of the model you want to replace.|String.<br>See NOTE.|Optional|Used for Console Access Library API:<br>**`deployment.deployment.Deployment.deploy_by_configuration`**|
-|**`comment`**||Description of the deployment.|String.<br>See NOTE.|Optional|Used for Console Access Library API:<br>**`deployment.deployment.Deployment.deploy_by_configuration`**|
+|**`config_id`**||The ID of the deploy configuration you want to use for deployment.|String.<br>See NOTE.|Required|Used for "**Console Access Library**" API:<br>**`deployment.deployment.Deployment.create_deploy_configuration`**<br>**`deployment.deployment.Deployment.deploy_by_configuration`**|
+|**`create_config`**|**`comment`**|Description of the configuration.|String.See NOTE.|Optional|Used for "**Console Access Library**" API:<br>**`deployment.deployment.Deployment.create_deploy_configuration`**|
+||**`model_id`**|The ID of the model you want to deploy.|String.<br>See NOTE.|Optional<br> Required if **`should_create_deploy_config`** is true.|Used for "**Console Access Library**" API:<br>**`deployment.deployment.Deployment.create_deploy_configuration`**|
+||**`model_version_number`**|The version of the model you want to deploy.|String.<br>See NOTE.|Optional|Used for "**Console Access Library**" API:<br>**`deployment.deployment.Deployment.create_deploy_configuration`**|
+|**`device_ids`**||List of device ids on which you want to deploy your model.|List of string.|Required|Used for "**Console Access Library**" API:<br>**`deployment.deployment.Deployment.deploy_by_configuration`**|
+|**`replace_model_id`**||The ID of the model you want to replace.|String.<br>See NOTE.|Optional|Used for "**Console Access Library**" API:<br>**`deployment.deployment.Deployment.deploy_by_configuration`**|
+|**`comment`**||Description of the deployment.|String.<br>See NOTE.|Optional|Used for "**Console Access Library**" API:<br>**`deployment.deployment.Deployment.deploy_by_configuration`**|
 
 > **NOTE**
 >
-> See [API Reference](https://developer.aitrios.sony-semicon.com/development-guides/reference/api-references/) of Console Access Library for other restrictions.
+> See [API Reference](https://developer.aitrios.sony-semicon.com/development-guides/reference/api-references/) of "**Console Access Library**" for other restrictions.
 
 ### 6. Run the notebook
 Open the [notebook](./deploy_to_device.ipynb) and run the cells.

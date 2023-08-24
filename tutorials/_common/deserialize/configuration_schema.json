@@ -1,0 +1,29 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "required": [
+        "schema_file",
+        "serialized_file",
+        "input_type"
+    ],
+    "properties": {
+        "schema_file": {
+            "type": "string",
+            "minLength": 1
+        },
+        "serialized_file": {
+            "type": "string",
+            "minLength": 1
+        },
+        "input_type": {
+            "type": "string",
+            "enum":[
+                "binary",
+                "json"
+            ]
+        },
+        "output_dir": {
+            "type": "string"
+        }
+    }
+}
