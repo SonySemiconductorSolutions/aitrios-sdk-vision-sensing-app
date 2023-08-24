@@ -2,30 +2,12 @@
     "$schema": "http://json-schema.org/draft-07/schema#",
     "type": "object",
     "required": [
-        "cvat_username",
-        "cvat_password",
-        "cvat_project_id",
         "dataset_conversion_base_file",
         "dataset_conversion_dir",
         "dataset_conversion_validation_split",
         "dataset_conversion_seed"
     ],
     "properties": {
-        "cvat_username": {
-            "type": ["string"],
-            "default":["django"],
-            "minLength": 1
-        },
-        "cvat_password": {
-            "type": ["string"],
-            "default":[""],
-            "minLength": 1
-        },
-        "cvat_project_id": {
-            "type": ["integer"],
-            "default":[1],
-            "minLength": 1
-        },
         "dataset_conversion_base_file": {
             "type": ["string"],
             "default":["../../../_common/dataset/project_id_1.zip"],

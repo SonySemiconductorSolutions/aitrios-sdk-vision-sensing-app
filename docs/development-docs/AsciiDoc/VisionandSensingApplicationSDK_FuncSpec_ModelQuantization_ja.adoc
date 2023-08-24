@@ -1,7 +1,7 @@
-= Vision and Sensing pass:[<br/>] Application SDK pass:[<br/>] モデル量子化 pass:[<br/>] 機能仕様書 pass:[<br/>]
+= Vision and Sensing Application SDK pass:[<br/>] モデル量子化 pass:[<br/>] 機能仕様書 pass:[<br/>]
 :sectnums:
 :sectnumlevels: 1
-:author: Copyright 2023 Sony Semiconductor Solutions Corporation
+:author: Copyright 2022-2023 Sony Semiconductor Solutions Corporation
 :version-label: Version 
 :revnumber: x.x.x
 :revdate: YYYY - MM - DD
@@ -23,20 +23,27 @@
 |2023/01/30
 |量子化のキャリブレーションに使用する画像、評価時に使用する画像の格納方法について修正。 + 
 評価時に使用するlabel情報ファイルの格納方法について追加。 + 
-evaluate_ground_truth_file設定を削除しevaluate_label_file設定を追加。 + 
-dataset_image_dir, evaluate_image_dir設定のデフォルトのパスを修正。 + 
+`**evaluate_ground_truth_file**` 設定を削除し `**evaluate_label_file**` 設定を追加。 + 
+`**dataset_image_dir**`, `**evaluate_image_dir**` 設定のデフォルトのパスを修正。 + 
 サポートする画像フォーマットを記載。 +
 フォルダ構成変更。 + 
 シンボリックリンク対応の追加。 + 
 シークレット情報の削除に伴い、設定ファイルのInitial項目を削除、設定ファイルを作成する旨を追記。 + 
 PDFビルド環境更新。
+
+|2023/05/26
+|ツール名と括弧、パラメータの表記の修正 + 
+「**MCT**」バージョンアップに伴う修正 + 
+ `**configuration.json**` のパラメータ仕様を追記 + 
+一部環境でAsciiDocのMermaid図が表示されないため、レンダリング後の画像参照に修正 + 
+図の代替テキスト追加
 |===
 
 == 用語・略語
 |===
 |Terms/Abbreviations |Meaning 
 
-|<<mct, MCT>>
+|<<mct, 「**MCT**」>>
 |モデルを量子化するためのオープンソースソフトウェア
 
 |Keras
@@ -47,15 +54,15 @@ PDFビルド環境更新。
 AIモデルのフォーマットの一種
 
 |イテレーション
-|(1回あたりの)学習
+|(1回あたりの) 学習
 
 |===
 
 == 参照資料
 
 [[anchor-ref]]
-* Reference/Related documents（関連資料）
-** [[mct]]Model Compression Toolkit (MCT)
+* Reference/Related documents (関連資料)
+** [[mct]]「**Model Compression Toolkit (MCT)**」
 *** https://github.com/sony/model_optimization
 
 == 想定ユースケース
@@ -68,17 +75,15 @@ AIモデルのフォーマットの一種
 
 === Functional Overview
 
-* SDKにて下記のフローでImage ClassificationのAIモデル(Keras)を量子化しAIモデル(TFLite)に変換できる
+* SDKにて下記のフローでImage ClassificationのAIモデル (Keras) を量子化しAIモデル (TFLite) に変換できる
 
-* 量子化前と後のAIモデルで推論実行し、推論実行結果の統計値(Top1 accuracy)を取得できる
+* 量子化前と後のAIモデルで推論実行し、推論実行結果の統計値 (Top1 accuracy) を取得できる
 
-* SDKにてサポートするAIモデルは、MCTの https://github.com/sony/model_optimization/tree/v1.7.1#supported-features[supported-features] に準拠する
+* SDKにてサポートするAIモデルは、「**MCT**」の https://github.com/sony/model_optimization/tree/v1.8.0#supported-features[supported-features] に準拠する
 
 * SDKにてサポートする画像フォーマットはJPEGとする
 
-<<<
-
-[mermaid]
+[mermaid, target="凡例"]
 ----
 flowchart TD;
     %% definition
@@ -94,7 +99,7 @@ flowchart TD;
 
 * フロー概要
 +
-[mermaid]
+[mermaid, target="フロー概要"]
 ----
 flowchart TD
     start((Start)) --> id1(1.量子化するAIモデルを用意)
@@ -110,7 +115,7 @@ flowchart TD
 
 . 量子化するAIモデルを用意
 
-** 変換対象となるAIモデル(Keras)を用意する
+** 変換対象となるAIモデル (Keras) を用意する
 
 . 量子化用画像と評価用画像を用意
 
@@ -128,7 +133,7 @@ flowchart TD
 
 . 量子化と評価を実行
 
-*** AIモデル(Keras)を量子化しAIモデル(TFLite)に変換し、推論評価するNotebookを実行する
+*** AIモデル (Keras) を量子化しAIモデル (TFLite) に変換し、推論評価するNotebookを実行する
 
 == 操作性仕様、画面仕様
 === How to start each function
@@ -142,15 +147,15 @@ flowchart TD
 
 
 === 量子化するAIモデルを用意
-. 変換対象となるAIモデル(Keras)を用意する
+. 変換対象となるAIモデル (Keras) を用意する
 
-** 変換対象となるAIモデル(Keras)を、SDK実行環境に格納する
+** 変換対象となるAIモデル (Keras) を、SDK実行環境に格納する
 
 === 量子化用画像と評価用画像を用意
 
 . 量子化のキャリブレーションに使用するため、AIモデルのtrainingに使用した画像を用意する
 
-** AIモデルのtrainingに使用した画像(300ファイル程度)が含まれるフォルダを、SDK実行環境に格納する
+** AIモデルのtrainingに使用した画像 (300ファイル程度) が含まれるフォルダを、SDK実行環境に格納する
 
 *** tutorials/_common/datasetフォルダ内に格納する場合は、下記のように格納する
 +
@@ -198,7 +203,7 @@ tutorials/
 NOTE: ユーザー独自で用意したAIモデルをSDKで量子化する場合に、データセットを上記の形式に変換する方法は、 CVAT画像アノテーション 機能仕様書 の アノテーション情報をフォーマット変換 を参照。
 
 === 量子化実行向け設定ファイル作成・編集
-. 実行ディレクトリに設定ファイル(`**configuration.json**`)を作成し、編集する
+. 実行ディレクトリに設定ファイル (`**configuration.json**`) を作成し、編集する
 
 NOTE: 「実行ディレクトリ」について、image classificationを実行する場合は `**quantize_model/image_classification**` ディレクトリとなる。
 
@@ -213,82 +218,83 @@ NOTE: 原則としてシンボリックリンクのフォルダパス、ファ�
 |Configuration |Meaning |Range |Remarks
 
 |`**source_keras_model**`
-|変換元となるAIモデル(Keras) パス。KerasのSavedModel形式のフォルダまたはh5形式のファイルを指定する
-|絶対パスまたはNotebook(*.ipynb)からの相対パス
-|
+|変換元となるAIモデル (Keras)  パス。KerasのSavedModel形式のフォルダまたはh5形式のファイルを指定する
+|絶対パスまたはNotebook (*.ipynb) からの相対パス
+|省略不可
 
 |`**dataset_image_dir**`
 |量子化の際にキャリブレーションを行うためのデータセット画像を格納したディレクトリ
-|絶対パスまたはNotebook(*.ipynb)からの相対パス
-|
+|絶対パスまたはNotebook (*.ipynb) からの相対パス
+|省略不可
 
 |`**batch_size**`
 |量子化の際にキャリブレーションを行う画像を小分けにして重みやバイアスなどの特徴を見つけるセット枚数
-|1以上かつ、`**dataset_image_dir**` に含まれる画像枚数以下
-|
+|1以上 `**dataset_image_dir**` に含まれる画像枚数以下の整数
+|省略不可
 
 |`**input_tensor_size**`
-|AIモデルの入力テンソルのサイズ(画像の一辺のピクセル数)
-|AIモデルの入力テンソルに準拠
-|
+|AIモデルの入力テンソルのサイズ (画像の一辺のピクセル数)
+|AIモデルの入力テンソルに準拠 + 
+1以上の整数
+|省略不可
 
 |`**iteration_count**`
 |量子化時のイテレーション回数
-|1以上
-|
+|1以上の整数
+|省略不可
 
 |`**output_dir**`
 |変換結果AIモデルの出力先となるディレクトリ
-|絶対パスまたはNotebook(*.ipynb)からの相対パス
-|
+|絶対パスまたはNotebook (*.ipynb) からの相対パス
+|省略不可
 
 |`**evaluate_image_dir**`
 |推論実行時に入力する画像を含むディレクトリ
-|絶対パスまたはNotebook(*.ipynb)からの相対パス
-|
+|絶対パスまたはNotebook (*.ipynb) からの相対パス
+|省略不可
 
 |`**evaluate_image_extension**`
 |推論実行時に入力する画像の拡張子
 |文字列
-|
+|省略不可
 
 |`**evaluate_label_file**`
 |AIモデルのラベル情報
-|絶対パスまたはNotebook(*.ipynb)からの相対パス
-|
+|絶対パスまたはNotebook (*.ipynb) からの相対パス
+|省略不可
 
 |`**evaluate_result_dir**`
 |推論実行結果の統計情報を保存するディレクトリ
-|絶対パスまたはNotebook(*.ipynb)からの相対パス
-|
+|絶対パスまたはNotebook (*.ipynb) からの相対パス
+|省略不可
 
 |===
 
 === Notebook編集
-. 実行ディレクトリの量子化実行用Notebook(*.ipynb)を開く
+. 実行ディレクトリの量子化実行用Notebook (*.ipynb) を開く
 . Notebookの中のcalibration用preprocessing処理部 (`**FolderImageLoader**` の引数 `**preprocessing=[resize, normalization]**` ) を編集する
 ** 使用するAIモデルの学習時のpreprocessing処理に相当する処理となるよう、編集する
 
 === 量子化と評価を実行
 
-<<<
-
-. 実行ディレクトリの量子化実行用Notebook(*.ipynb)を開き、その中のPythonスクリプトを実行する
+. 実行ディレクトリの量子化実行用Notebook (*.ipynb) を開き、その中のPythonスクリプトを実行する
 * その後下記の動作をする
 ** 実行ディレクトリの<<anchor-conf, configuration.json>>存在をチェックする
 *** エラー発生時はその内容を表示し、中断する
+** 実行ディレクトリの<<anchor-conf, configuration.json>>の内容をチェックする
+*** エラー発生時はその内容を表示し、中断する
 ** <<anchor-conf, configuration.json>> `**source_keras_model**` 、`**dataset_image_dir**` の存在をチェックする
 *** エラー発生時はその内容を表示し、中断する
-** <<anchor-conf, configuration.json>> の下記の内容を読み取り、MCTへ必要な設定を行い、AIモデル(Keras)を量子化し変換する
+** <<anchor-conf, configuration.json>> の下記の内容を読み取り、「**MCT**」へ必要な設定を行い、AIモデル (Keras) を量子化し変換する
 *** <<anchor-conf, configuration.json>> `**source_keras_model**`
 *** <<anchor-conf, configuration.json>> `**dataset_image_dir**`
 *** <<anchor-conf, configuration.json>> `**batch_size**`
 *** <<anchor-conf, configuration.json>> `**input_tensor_size**`
 *** <<anchor-conf, configuration.json>> `**iteration_count**`
-** MCTなどの外製ソフトでエラー発生時は、外製ソフトが出力するエラーを表示し、中断する
-** <<anchor-conf, configuration.json>> `**output_dir**` に、MCTで量子化したAIモデル(TFLite)ファイル `**model_quantized.tflite**` と、TensorFlow標準機能でTFLiteに変換したAIモデル(TFLite)ファイル `**model.tflite**` を出力する
+** 「**MCT**」などの外製ソフトでエラー発生時は、外製ソフトが出力するエラーを表示し、中断する
+** <<anchor-conf, configuration.json>> `**output_dir**` に、「**MCT**」で量子化したAIモデル (TFLite) ファイル `**model_quantized.tflite**` と、TensorFlow標準機能でTFLiteに変換したAIモデル (TFLite) ファイル `**model.tflite**` を出力する
 *** `**output_dir**` で指定するディレクトリがなければ作成し、そこに出力する
-** 変換中はNotebookに下記のような表示をする(`**iteration_count**` が10の場合)
+** 変換中はNotebookに下記のような表示をする (`**iteration_count**` が10の場合)
 +
 ```
   0%|          | 0/10 [00:00<?, ?it/s]
@@ -306,10 +312,10 @@ NOTE: 原則としてシンボリックリンクのフォルダパス、ファ�
 *** <<anchor-conf, configuration.json>> `**evaluate_image_extension**`
 *** <<anchor-conf, configuration.json>> `**evaluate_labe_file**`
 *** <<anchor-conf, configuration.json>> `**evaluate_result_dir**`
-** 元のAIモデル(Keras)、TensorFlow標準機能でTFLiteに変換したAIモデル(TFLite)、MCTで量子化したAIモデル(TFLite)の3種のAIモデルで推論実行し、統計情報を表示する
+** 元のAIモデル (Keras)、TensorFlow標準機能でTFLiteに変換したAIモデル (TFLite)、「**MCT**」で量子化したAIモデル (TFLite) の3種のAIモデルで推論実行し、統計情報を表示する
 ** 統計情報を、`**evaluate_result_dir**` 配下に `**results.json**` ファイルとして保存する
 ** TensorFlowなどの外製ソフトでエラー発生時は、外製ソフトが出力するエラーを表示し、中断する
-** AIモデル(TFLite)の推論実行中は下記のような表示をする(画像数が10の場合)
+** AIモデル (TFLite) の推論実行中は下記のような表示をする (画像数が10の場合)
 +
 ```
   0%|          | 0/10 [00:00<?, ?it/s]
@@ -318,11 +324,11 @@ NOTE: 原則としてシンボリックリンクのフォルダパス、ファ�
 ...
 100%|██████████| 10/10 [00:09<00:00,  1.08it/s]
 ```
-** AIモデル(Keras)の推論実行中はTensorFlowライブラリによるログを表示する
+** AIモデル (Keras) の推論実行中はTensorFlowライブラリによるログを表示する
 ** 処理中でもNotebook Cell機能のStop Cell Executionで中断できる
 
 == 目標性能
-** SDKの環境構築完了後、追加のインストール手順なしに、AIモデル(Keras)を量子化しAIモデル(TFLite)に変換できること
+** SDKの環境構築完了後、追加のインストール手順なしに、AIモデル (Keras) を量子化しAIモデル (TFLite) に変換できること
 ** UIの応答時間が1.2秒以内であること
 ** 処理に5秒以上かかる場合は、処理中の表現を逐次更新表示できること
 
@@ -330,7 +336,7 @@ NOTE: 原則としてシンボリックリンクのフォルダパス、ファ�
 * なし
 
 == その他特記事項
-* MCT(model-compression-toolkit)、TensorFlowのバージョン確認方法について
+* 「**MCT**」 (model-compression-toolkit)、TensorFlowのバージョン確認方法について
 ** SDK環境のルートフォルダにある requirements.txt を参照する
 
 == 未決定事項

@@ -1,5 +1,5 @@
-// For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
-// https://github.com/microsoft/vscode-dev-containers/tree/v0.245.0/containers/python-3
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/python
 {
 	"name": "Vision and Sensing Application SDK",
 	"build": {
@@ -9,9 +9,7 @@
 			// Update 'VARIANT' to pick a Python version: 3, 3.10, 3.9, 3.8, 3.7, 3.6
 			// Append -bullseye or -buster to pin to an OS version.
 			// Use -bullseye variants on local on arm64/Apple Silicon.
-			"VARIANT": "3.8-bullseye",
-			// Options
-			"NODE_VERSION": "16"
+			"VARIANT": "3.8-bullseye"
 		}
 	},
 	"runArgs": ["--init", "--shm-size=256m"],
@@ -22,7 +20,6 @@
 		"vscode": {
 			// Set *default* container specific settings.json values on container create.
 			"settings": {
-				"terminal.integrated.defaultProfile.linux": "bash",
 				"python.pythonPath": "/usr/local/bin/python",
 				"python.languageServer": "Pylance",
 				"python.defaultInterpreterPath": "/usr/local/bin/python",
@@ -39,7 +36,7 @@
 				"python.linting.pydocstylePath": "/usr/local/py-utils/bin/pydocstyle",
 				"python.linting.pylintPath": "/usr/local/py-utils/bin/pylint",
 				"python.formatting.provider": "black",
-				"python.sortImports.args": [
+				"python.isort.args": [
 					"--profile",
 					"black"
 				],
@@ -57,7 +54,13 @@
 				],
 				"workbench.editorAssociations": {   
 					"*.md": "vscode.markdown.preview.editor"
-				}
+				},
+				"jupyter.kernels.filter": [
+					{
+						"path": "/usr/bin/python3",
+						"type": "pythonEnvironment"
+					}
+				]
 			},
 			
 			// Add the IDs of extensions you want installed when the container is created.
@@ -68,7 +71,6 @@
 				"ms-toolsai.jupyter-keymap",
 				"ms-vscode.cpptools",
 				"bierner.markdown-mermaid",
-				"tomoki1207.pdf",
 				"ms-vscode.cpptools"
 			]
 		},
@@ -76,7 +78,12 @@
 		// For git submodules: https://docs.github.com/ja/codespaces/managing-your-codespaces/managing-repository-access-for-your-codespaces
 		"codespaces": {
 			"repositories": {
-				"SonySemiconductorSolutions/aitrios-sdk-console-access-lib-python": {
+				"SonySemiconductorSolutions/-2SCS_cloudSDK_python": {
+					"permissions": {
+						"contents": "read"
+					}
+				},
+				"SonySemiconductorSolutions/aitrios-msft-solution-template-WebApp": {
 					"permissions": {
 						"contents": "read"
 					}
@@ -86,7 +93,7 @@
 	},
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	"forwardPorts": [6080, 5901, 8080],
+	"forwardPorts": [8080],
 	"portsAttributes": {
 		"8080": {
 			"label": "CVAT Web UI",
@@ -100,9 +107,11 @@
 	// Use 'postCreateCommand' to run commands after the container is created.
 	"postCreateCommand": ".devcontainer/postCreateCommand.sh",
 
-	// Comment out to connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
-	"remoteUser": "vscode",
+	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+	// "remoteUser": "root"
+
+	// Features to add to the dev container. More info: https://containers.dev/features.
 	"features": {
-		"docker-in-docker": "20.10"
+		"ghcr.io/devcontainers/features/docker-in-docker:2": {}
 	}
 }

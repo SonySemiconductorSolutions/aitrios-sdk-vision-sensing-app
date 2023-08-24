@@ -2,7 +2,7 @@
 
 This tutorial shows you how to annotate your images using [CVAT](https://github.com/opencv/cvat).
 
-You can generate object detection dataset used for transfer learning in Vision and Sensing Application SDK.
+You can generate object detection dataset used for transfer learning in "**Vision and Sensing Application SDK**".
 
 ## 1. Start up CVAT
 
@@ -50,7 +50,7 @@ You can generate object detection dataset used for transfer learning in Vision a
 
 The procedure is described below. See the [CVAT Documentation](https://opencv.github.io/cvat/docs/) for details.
 
-JPEG image format is supported in Vision and Sensing Application SDK.
+JPEG image format is supported in "**Vision and Sensing Application SDK**".
 
 A number of images each label is recommended at least 10 to use for training AI Model.
 
@@ -99,7 +99,7 @@ Please see details on [Getting started in CVAT](https://opencv.github.io/cvat/do
     |**`cvat_username`**|Username to sign in to the CVAT|string (typical: django)|Required|
     |**`cvat_password`**|Password to sign in to the CVAT|string|Required|
     |**`cvat_project_id`**|Project id to import images into CVAT|integer|Required|
-    |**`import_dir`**|Folder path for import files|Absolute path or relative path from configuration.json/Notebook(*.ipynb)|Required|
+    |**`import_dir`**|Folder path for import files|Absolute path or relative path from configuration.json/Notebook (*.ipynb)|Required|
     |**`import_image_extension`**|Extension of JPEG images for import files|string of extension (typical: jpg)|Required|
     |**`import_task_name`**|Task name of CVAT to be created by import files. Importing with the same task name more than once will create tasks with the same name (but different task IDs). |string|Required|
     
@@ -164,15 +164,15 @@ If you want to export dataset to Codespaces (devcontainer), please see following
     |**`cvat_password`**|Password to sign in to the CVAT|string|Required|
     |**`cvat_project_id`**|Project id to export|integer|Required|
     |**`export_format`**|CVAT Output Format|any format|Required|
-    |**`export_dir`**|Destination path to export annotation information from CVAT|Absolute path or relative path from configuration.json/Notebook(*.ipynb)|Required|
+    |**`export_dir`**|Destination path to export annotation information from CVAT|Absolute path or relative path from configuration.json/Notebook (*.ipynb)|Required|
 
 >**NOTE**
 >
->・**`cvat_project_id`** The project id is displayed in the CVAT Web UI project page like "Project #1 created by USERNAME on CREATED_DATE" (in this case the project id is 1).
+>- **`cvat_project_id`** The project id is displayed in the CVAT Web UI project page like "Project #1 created by USERNAME on CREATED_DATE" (in this case the project id is 1).
 >
->・**`export_format`** Cannot specify format without object detection dataset.
+>- **`export_format`** Cannot specify format without object detection dataset.
 >
->・**`export_dir`** If you specify a path that doesn't exist, a new folder will be created.
+>- **`export_dir`** If you specify a path that doesn't exist, a new folder will be created.
 
 2. Open [Notebook](./export_api.ipynb) and run all cells.
 

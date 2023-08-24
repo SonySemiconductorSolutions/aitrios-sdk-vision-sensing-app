@@ -1,7 +1,7 @@
-= Vision and Sensing pass:[<br/>] Application SDK pass:[<br/>] Console API Initialize pass:[<br/>] Functional Specifications pass:[<br/>]
+= Vision and Sensing Application SDK pass:[<br/>] Console API Initialize pass:[<br/>] Functional Specifications pass:[<br/>]
 :sectnums:
 :sectnumlevels: 1
-:author: Copyright 2023 Sony Semiconductor Solutions Corporation
+:author: Copyright 2022-2023 Sony Semiconductor Solutions Corporation
 :version-label: Version 
 :revnumber: x.x.x
 :revdate: YYYY - MM - DD
@@ -19,47 +19,49 @@
 |Date |What/Why
 
 |2023/01/30
-|Initial draft
+|Initial draft.
 
+|2023/05/26
+|Fixed the notation of tool names and parentheses. + 
+Some environments do not render AsciiDoc's Mermaid diagrams, so modified to rendered image references. + 
+Added alternate text to images.
 |===
 
 == Terms/Abbreviations
 |===
 |Terms/Abbreviations |Meaning 
 
-|Console REST API
-|REST API provided by Console for AITRIOS
+|"**Console REST API**"
+|REST API provided by "**Console for AITRIOS**"
 
-|Console Access Library
-|Libraries for using the features of the Console REST API. There is one for Python and another for TypeScript, but for the purposes of this document, it is meant for Python.
+|"**Console Access Library**"
+|Libraries for using the features of the "**Console REST API**". There is one for Python and another for TypeScript, but for the purposes of this document, it is meant for Python.
 
 |===
 
 == Reference materials
 
-* Portal User Manual +
-** https://developer.aitrios.sony-semicon.com/development-guides/documents/manuals/
+* "**Portal User Manual**" +
+** https://developer.aitrios.sony-semicon.com/documents/?page=portal_user_manual&lang=ja
 
 [[anchor-ref]]
 * API Reference
 ** https://developer.aitrios.sony-semicon.com/development-guides/reference/api-references/
 
-* Console Access Library Functional Specifications
+* "**Console Access Library**" Functional Specifications
 ** https://developer.aitrios.sony-semicon.com/development-guides/documents/specifications/
 
 == Expected use case
-* You want to use Console for AITRIOS through API
-** Example: Import AI models and post-process applications into Console for AITRIOS and deploy them to edge AI devices through API
-* You want to authenticate to use the API
+* Use "**Console for AITRIOS**" through API
+** Example: Import AI models and "**Vision and Sensing Application**" into "**Console for AITRIOS**" and deploy them to edge AI devices through API
+* Authenticate to use the API
 
 [[anchor-operation]]
 == Functional overview/Algorithm
 === Functional overview
-* SDK provides notebook for system client authentication to Console for AITRIOS
+* SDK provides the notebook for system client authentication to "**Console for AITRIOS**"
 
-<<<
-
-[mermaid]
+[mermaid, target="Legend"]
 ----
 flowchart TD;
     %% definition
@@ -75,7 +77,7 @@ flowchart TD;
 
 * Flow overview
 +
-[mermaid]
+[mermaid, target="Flow overview"]
 ----
 flowchart TD
     start((Start)) --> id1(1.Get connection information)
@@ -98,13 +100,13 @@ flowchart TD
 
 == User interface specifications
 === Prerequisite
-* You have registered as a user through Portal for AITRIOS and participated in the AITRIOS project
+* You have registered as a user through "**Portal for AITRIOS**" and participated in the AITRIOS project
 
 === How to start each function
-. Jump to the `**README.md**` in the `**set_up_console_client**` directory from the hyperlink in the `**README.md**` in the directory for each feature that uses the Console Access Library
+. Jump to the `**README.md**` in the `**set_up_console_client**` directory from the hyperlink in the `**README.md**` in the directory for each feature that uses the "**Console Access Library**"
 
 === Get connection information
-Get the following information to connect to Console for AITRIOS using the API: + 
+Get the following information to connect to "**Console for AITRIOS**" using the API: + 
 This information is used in <<anchor-edit, _Create and edit the configuration file_>> of the next section.
 
 * Server URL + 
@@ -113,8 +115,8 @@ Check the following from the documentation of this function (`**README.md**`) :
 ** Authentication server URL
 
 * Client app details + 
-Get from the list of client apps in Portal for AITRIOS: + 
-See https://developer.aitrios.sony-semicon.com/development-guides/documents/manuals[Portal User Manual] for details.
+Get from the list of client apps in "**Portal for AITRIOS**": + 
+See https://developer.aitrios.sony-semicon.com/documents/?page=portal_user_manual&lang=ja["**Portal User Manual**"] for details.
 
 ** Client ID
 ** Secret
@@ -125,49 +127,54 @@ Create the <<anchor-conf, _configuration file_>> in the `**set_up_console_client
 
 NOTE: All parameters are required.
 
-NOTE: The parameters passed to the Console Access Library API are as specified in the <<anchor-ref, _Console Access Library API_>>.
+NOTE: The parameters passed to the "**Console Access Library**" API are as specified in the <<anchor-ref, _"**Console Access Library**" API_>>.
 
 [[anchor-conf]]
+[cols="1,1,1,1a"]
 |===
 |Configuration |Meaning |Range |Remarks
 
 |`**console_endpoint**`
 |API server base URL
 |String +
-Details follow the Console Access Library API specification.
+Details follow the "**Console Access Library**" API specification.
 |Don't abbreviate +
-Used for the following Console Access Library API +
-・`**common.config.Config**`
+Used for the following "**Console Access Library**" API +
+
+* `**common.config.Config**`
 
 |`**portal_authorization_endpoint**`
 |Authentication server URL
 |String +
-Details follow the Console Access Library API specification.
+Details follow the "**Console Access Library**" API specification.
 |Don't abbreviate +
-Used for the following Console Access Library API +
-・`**common.config.Config**`
+Used for the following "**Console Access Library**" API +
+
+* `**common.config.Config**`
 
 |`**client_id**`
 |Client ID required for authentication
 |String +
-Details follow the Console Access Library API specification.
+Details follow the "**Console Access Library**" API specification.
 |Don't abbreviate +
-Used for the following Console Access Library API +
-・`**common.config.Config**`
+Used for the following "**Console Access Library**" API +
+
+* `**common.config.Config**`
 
 |`**client_secret**`
 |Secret required for authentication
 |String +
-Details follow the Console Access Library API specification.
+Details follow the "**Console Access Library**" API specification.
 |Don't abbreviate +
-Used for the following Console Access Library API +
-・`**common.config.Config**`
+Used for the following "**Console Access Library**" API +
+
+* `**common.config.Config**`
 
 |===
 
 === Run the notebook
 . Open the notebook, _*.ipynb_, in the directory for client authentication under the `**common**` directory, and run the python scripts in it
-** The script does the following:
+** The scripts do the following:
 *** Checks that <<anchor-conf, _configuration file_>> exists in the execution directory
 **** If an error occurs, the error description is displayed and running is interrupted.
 *** Checks that <<anchor-conf, _configuration file_>> includes each parameter
@@ -176,13 +183,11 @@ Used for the following Console Access Library API +
 **** If an error occurs, the error description is displayed and running is interrupted.
 **** If authentication succeeds and the client instance is created successfully, displays a successful message
 *** Saves the client instance for use by other notebooks in the SDK
-** See https://developer.aitrios.sony-semicon.com/development-guides/documents/specifications/[Cloud SDK Console Access Library(Python) Functional Specifications] for details on errors and response times
-
-<<<
+** See https://developer.aitrios.sony-semicon.com/development-guides/documents/specifications/["**Console Access Library**" Functional Specifications] for details on errors and response times
 
 === Sequence
 
-[mermaid]
+[mermaid, target="Sequence"]
 ----
 %%{init:{'themeVariables':{'fontSize':'24px'}, 'themeCSS':'text.actor {font-size:18px !important;} .messageText {font-size:18px !important;}'}}%%
 sequenceDiagram
@@ -202,17 +207,17 @@ sequenceDiagram
     access_lib->>auth_server: Authentication<br>request
     auth_server-->>access_lib: Response
     access_lib-->>container: Response
-    container->>user: Results<br>(Access token acquisition<br>success/failure)
+    container->>user: Results<br> (Access token acquisition<br>success/failure)
     container->>access_lib: Generate a<br>Client instance
     access_lib-->>container: Response<br>※In case of success<br>Client instance
-    container->>user: Results<br>(Client generation<br>success/failure)
+    container->>user: Results<br> (Client generation<br>success/failure)
 ----
 
 
 == Target performances/Impact on performances
-* Users can take advantage of each feature of the Console for AITRIOS API without being aware of its internal operation
+* Users can take advantage of each feature of the "**Console for AITRIOS**" API without being aware of its internal operation
 * UI response time of 1.2 seconds or less
-* If processing takes more than 5 seconds, then the display during processing can be updated sequentially
+* If processing takes more than 5 seconds, indicates that processing is in progress with successive updates
 * Provides users with documentation of usage tools and version information
 
 == Assumption/Restriction

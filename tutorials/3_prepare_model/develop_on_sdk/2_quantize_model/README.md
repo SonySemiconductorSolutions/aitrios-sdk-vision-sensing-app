@@ -1,6 +1,6 @@
 # Quantize model
 
-This tutorial shows you how to quantize your custom AI model using [Model Compression Toolkit (MCT)](https://github.com/sony/model_optimization).
+This tutorial shows you how to quantize your custom AI model using ["**Model Compression Toolkit (MCT)**"](https://github.com/sony/model_optimization).
 
 ## Image Classification Keras Model to TFLite Model
 

@@ -14,12 +14,12 @@ In the development environment,
 
 2. Place JPEG images for training (for example, **`../../../../_common/dataset/training`** folder). The folder structure format is Image Net v1.
 
-    JPEG image format is supported in Vision and Sensing Application SDK. Other formats depend on [TensorFlow](https://www.tensorflow.org/api_docs/python/tf/io/decode_jpeg).
+    JPEG image format is supported in "**Vision and Sensing Application SDK**". Other formats depend on [TensorFlow](https://www.tensorflow.org/api_docs/python/tf/io/decode_jpeg).
 
 
 3. Place JPEG images for validation after training (for example, **`../../../../_common/dataset/validation`** folder). The folder structure format is ImageNet v1.
 
-    JPEG image format is supported in Vision and Sensing Application SDK. Other formats depend on [TensorFlow](https://www.tensorflow.org/api_docs/python/tf/io/decode_jpeg).
+    JPEG image format is supported in "**Vision and Sensing Application SDK**". Other formats depend on [TensorFlow](https://www.tensorflow.org/api_docs/python/tf/io/decode_jpeg).
 
 4. Place label file for training and validation (for example, **`../../../../_common/dataset/labels.json`** file). Supported label file format is a dictionary with key as label name and value as class id.
 
@@ -59,15 +59,15 @@ Edit the parameters in [configuration.json](./configuration.json).
 
 |Setting|Description|Range|Required/Optional
 |:--|:--|:--|:--|
-|**`source_keras_model`**|Base AI model path to Keras h5 file or Keras SavedModel folder|Absolute path or relative path from configuration.json/Notebook(*.ipynb)|Required (If it is blank, Keras pre-installed MobileNetV2 model is used.)|
-|**`dataset_training_dir`**|Directory includes JPEG images for training|Absolute path or relative path from configuration.json/Notebook(*.ipynb)|Required|
-|**`dataset_validation_dir`**|Directory includes JPEG images for validation|Absolute path or relative path from configuration.json/Notebook(*.ipynb)|Required|
-|**`evaluate_label_file`**|Path to label file for evaluation after training|Absolute path or relative path from configuration.json/Notebook(*.ipynb)|Required|
+|**`source_keras_model`**|Base AI model path to Keras h5 file or Keras SavedModel folder|Absolute path or relative path from configuration.json/Notebook (*.ipynb)|Required (If it is blank, Keras pre-installed MobileNetV2 model is used.)|
+|**`dataset_training_dir`**|Directory includes JPEG images for training|Absolute path or relative path from configuration.json/Notebook (*.ipynb)|Required|
+|**`dataset_validation_dir`**|Directory includes JPEG images for validation|Absolute path or relative path from configuration.json/Notebook (*.ipynb)|Required|
+|**`evaluate_label_file`**|Path to label file for evaluation after training|Absolute path or relative path from configuration.json/Notebook (*.ipynb)|Required|
 |**`batch_size`**|batch size for training/validation dataset|1 or more. (typical: 32. power of 2 recommended.)|Required|
 |**`input_tensor_size`**|input tensor size|**Depends on your custom AI model.** (typical: 224)|Required|
 |**`epochs`**|training epoch count|1 or more. (typical: 10)|Required|
-|**`output_dir`**|Directory to output trained AI model|Absolute path or relative path from configuration.json/Notebook(*.ipynb)|Required|
-|**`evaluate_result_dir`**|Directory to output validation result file|Absolute path or relative path from configuration.json/Notebook(*.ipynb)|Required|
+|**`output_dir`**|Directory to output trained AI model|Absolute path or relative path from configuration.json/Notebook (*.ipynb)|Required|
+|**`evaluate_result_dir`**|Directory to output validation result file|Absolute path or relative path from configuration.json/Notebook (*.ipynb)|Required|
 
 ### 4. Edit the notebook (optional)
 

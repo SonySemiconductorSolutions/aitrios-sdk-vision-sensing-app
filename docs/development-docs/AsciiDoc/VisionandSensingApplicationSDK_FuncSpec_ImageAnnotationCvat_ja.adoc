@@ -1,7 +1,7 @@
-= Vision and Sensing pass:[<br/>] Application SDK pass:[<br/>] CVAT画像アノテーション pass:[<br/>] 機能仕様書 pass:[<br/>]
+= Vision and Sensing Application SDK pass:[<br/>] CVAT画像アノテーション pass:[<br/>] 機能仕様書 pass:[<br/>]
 :sectnums:
 :sectnumlevels: 1
-:author: Copyright 2023 Sony Semiconductor Solutions Corporation
+:author: Copyright 2022-2023 Sony Semiconductor Solutions Corporation
 :version-label: Version 
 :revnumber: x.x.x
 :revdate: YYYY - MM - DD
@@ -19,6 +19,11 @@
 
 |2023/01/30
 |初版作成
+
+|2023/05/26
+|括弧の表記の修正 + 
+一部環境でAsciiDocのMermaid図が表示されないため、レンダリング後の画像参照に修正 + 
+図の代替テキスト追加
 |===
 
 == 用語・略語
@@ -40,7 +45,7 @@
 |===
 
 == 参照資料
-* Reference/Related documents（関連資料）
+* Reference/Related documents (関連資料)
 ** [[portforward]]Codespaces port forwarding
 *** https://docs.github.com/en/codespaces/codespaces-reference/security-in-codespaces#port-forwarding
 
@@ -58,7 +63,7 @@
 
 == 機能概要、アルゴリズム
 === Functional Overview
-* SDKのDev Container(Local PCまたはCodespaces)において、CVATを起動する +
+* SDKのDev Container (Local PCまたはCodespaces) において、CVATを起動する +
 * CVATの機能でデータのアノテーション追加や編集、マニュアルでのアノテーションを実現できる
 * Local file systemやCodespacesからCVATへの画像データのインポートができる
 ** インポートが可能な画像の格納先は下記表の通り
@@ -154,7 +159,7 @@
 
 * フロー概要
 +
-[mermaid]
+[mermaid, target="凡例"]
 ----
 flowchart TD;
     %% definition
@@ -167,7 +172,7 @@ flowchart TD;
     end
 ----
 +
-[mermaid]
+[mermaid, target="フロー概要"]
 ----
 flowchart TD
     start((Start)) --> id1(1.CVATの起動)
@@ -197,7 +202,7 @@ NOTE: Notebookを実行する場合のみ
 ** CVATのWeb UIでインポートした画像にアノテーションをつける
 . データセットをCVATからエクスポート
 ** データセットのエクスポートを行うNotebook又はCVATのWeb UIを使ってデータセットをエクスポートする
-. アノテーション情報をフォーマット変換(Image Classificationの場合のみ)
+. アノテーション情報をフォーマット変換 (Image Classificationの場合のみ)
 ** CVATからエクスポートしたアノテーション情報をSDKでAI学習や量子化に使用するためのフォーマットに変換する
 
 == 操作性仕様、画面仕様
@@ -216,11 +221,11 @@ NOTE: Notebookを実行する場合のみ
 === アノテーションをつけたい画像を用意
 .  `**image_classification**` または `**object_detection**` フォルダ配下に `**images**` のフォルダを作成し、CVATにインポートしアノテーションしたい画像を格納する
 +
-NOTE: フォルダは任意の構成とする(子フォルダがある場合、子フォルダ内の画像もインポート対象となる)
+NOTE: フォルダは任意の構成とする (子フォルダがある場合、子フォルダ内の画像もインポート対象となる)
 
 === Notebook実行向け設定ファイル作成・編集
 
-. 「Dev Containerのローカルストレージから画像をインポートする場合」又は「Dev Containerのローカルストレージへアノテーション情報をエクスポートする場合」又は「アノテーション情報をフォーマット変換する場合」に、実行ディレクトリへ設定ファイル(`**configuration.json**`)を作成し、編集する
+. 「Dev Containerのローカルストレージから画像をインポートする場合」又は「Dev Containerのローカルストレージへアノテーション情報をエクスポートする場合」又は「アノテーション情報をフォーマット変換する場合」に、実行ディレクトリへ設定ファイル (`**configuration.json**`) を作成し、編集する
 +
 NOTE: 特別な記載がある場合を除き、原則として省略は不可。
 +
@@ -249,7 +254,7 @@ NOTE: 原則としてシンボリックリンクのフォルダパス、ファ�
 
 |`**import_dir**`
 |CVATにインポートしアノテーションを行う画像を格納するパス
-|絶対パスまたはNotebook(*.ipynb)からの相対パス
+|絶対パスまたはNotebook (*.ipynb) からの相対パス
 |インポートする際に指定する
 
 |`**import_image_extension**`
@@ -269,36 +274,36 @@ NOTE: 原則としてシンボリックリンクのフォルダパス、ファ�
 
 |`**export_dir**`
 |CVATからアノテーション情報をエクスポートする保存先のパス
-|絶対パスまたはNotebook(*.ipynb)からの相対パス
+|絶対パスまたはNotebook (*.ipynb) からの相対パス
 |エクスポートorフォーマット変換する際に指定する
 
 |`**dataset_conversion_base_file**`
 |フォーマット変換するファイルパス
-|絶対パスまたはNotebook(*.ipynb)からの相対パス
-|フォーマット変換する際に指定する(Image Classificationのみ)
+|絶対パスまたはNotebook (*.ipynb) からの相対パス
+|フォーマット変換する際に指定する (Image Classificationのみ)
 
 |`**dataset_conversion_dir**`
 |CVATからエクスポートしたアノテーション情報をSDKのAIモデル学習や量子化に使用するためにフォーマット変換する保存先のパス
-|絶対パスまたはNotebook(*.ipynb)からの相対パス
-|フォーマット変換する際に指定する(Image Classificationのみ)。フォルダ内に既存のデータセットが含まれている場合、エラーメッセージを表示し処理を中断する。
+|絶対パスまたはNotebook (*.ipynb) からの相対パス
+|フォーマット変換する際に指定する (Image Classificationのみ)。フォルダ内に既存のデータセットが含まれている場合、エラーメッセージを表示し処理を中断する。
 
 |`**dataset_conversion_validation_split**`
 |データセットをフォーマット変換する際に、データセット内の画像のうち、Trainingに使用せずValidation用に使用する画像の割合
 |0.0より大 - 1.0より小
-|フォーマット変換する際に指定する(Image Classificationのみ)
+|フォーマット変換する際に指定する (Image Classificationのみ)
 
 |`**dataset_conversion_seed**`
 |データセットをフォーマット変換する際に、データセット内の画像をシャッフルする際のランダムseed値
 |0 - 4294967295
-|フォーマット変換する際に指定する(Image Classificationのみ)
+|フォーマット変換する際に指定する (Image Classificationのみ)
 
 |===
 
 === 画像をCVATへインポート
 * Dev Containerのローカルストレージから画像をインポートする場合
-. (プロジェクトを未作成の場合のみ)CVATのWeb UIにてメニュー [**Project**] の [**+**] から [**Create a new project**] を選択し、プロジェクトを作成する
+. (プロジェクトを未作成の場合のみ) CVATのWeb UIにてメニュー [**Project**] の [**+**] から [**Create a new project**] を選択し、プロジェクトを作成する
 . 作成したプロジェクトから [**Constructor**] の [**Add label**] を選択しラベルを追加する
-.  `**image_classification**` または `**object_detection**` の `**import_api.ipynb**` を実行して、import_dir内の画像をインポートする(このときimport_task_nameで指定した名称でタスクが作成されプロジェクトに関連付けられる。なお同じタスク名を指定して複数回インポートを実行した場合、別タスクIDで同じタスク名のタスクが作成される。)
+.  `**image_classification**` または `**object_detection**` の `**import_api.ipynb**` を実行して、import_dir内の画像をインポートする (このときimport_task_nameで指定した名称でタスクが作成されプロジェクトに関連付けられる。なお同じタスク名を指定して複数回インポートを実行した場合、別タスクIDで同じタスク名のタスクが作成される。)
 ** その後下記の動作をする
 *** 実行ディレクトリの <<anchor-conf, 設定ファイル>> の存在をチェックする
 **** エラー発生時はその内容を表示し、中断する
@@ -318,7 +323,7 @@ NOTE: 原則としてシンボリックリンクのフォルダパス、ファ�
 *** CVATのWeb UIにてプロジェクトのタスク内に画像がインポートされていることを確認できる
 
 * Webブラウザを起動しているローカル環境から画像をインポートする場合
-. (プロジェクトを未作成の場合のみ)CVATのWeb UIにてメニュー [**Project**] の [**+**] から [**Create a new project**] を選択し、プロジェクトを作成する
+. (プロジェクトを未作成の場合のみ) CVATのWeb UIにてメニュー [**Project**] の [**+**] から [**Create a new project**] を選択し、プロジェクトを作成する
 . 作成したプロジェクトの下部にある [**+**] から [**Create a new task**] を選択しタスクを作成する
 . タスクの項目の [**Select files**] にある [**My computer**] タブの [**Click or drag files to this area**]を開き、画像ファイルを選択する
 . [**Submit & Open**] ボタンを押下してインポートする
@@ -376,9 +381,7 @@ Object Detectionの場合、フォルダ構成は各フォーマットによっ�
   ├ ・・・・
 ----
 
-=== アノテーション情報をフォーマット変換(Image Classificationの場合のみ)
-
-<<<
+=== アノテーション情報をフォーマット変換 (Image Classificationの場合のみ)
 
 . dataset_conversion_base_file にデータセットのzipファイルが存在する状態で、 `**image_classification**` の `**convert_dataset.ipynb**` を実行して、フォーマット変換を実行する
 ** dataset_conversion_dir が tutorials/_common/dataset の場合、tutorials/_common/datasetフォルダ内に下記のようにアノテーション情報が格納される
@@ -441,7 +444,7 @@ tutorials/
 ** UIの応答時間が1.2秒以内であること
 
 == 制限事項
-* CodespacesのMachine Typeが最小構成(2-core)だとCVATが起動失敗する場合があり、4-core以上のMachine Typeを選択することを推奨する
+* CodespacesのMachine Typeが最小構成 (2-core) だとCVATが起動失敗する場合があり、4-core以上のMachine Typeを選択することを推奨する
 * インポートやエクスポート処理を途中でキャンセルして再開する場合、途中からの再開ではなく各処理を最初から実行する
 
 == その他特記事項

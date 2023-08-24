@@ -1,7 +1,7 @@
-= Vision and Sensing pass:[<br/>] Application SDK pass:[<br/>] AIモデル・PPLデプロイ pass:[<br/>] 機能仕様書 pass:[<br/>]
+= Vision and Sensing Application SDK pass:[<br/>] AIモデル・PPLデプロイ pass:[<br/>] 機能仕様書 pass:[<br/>]
 :sectnums:
 :sectnumlevels: 1
-:author: Copyright 2023 Sony Semiconductor Solutions Corporation
+:author: Copyright 2022-2023 Sony Semiconductor Solutions Corporation
 :version-label: Version 
 :revnumber: x.x.x
 :revdate: YYYY - MM - DD
@@ -20,6 +20,10 @@
 |2023/01/30
 |初版作成
 
+|2023/05/26
+|ツール名と括弧の表記の修正 + 
+一部環境でAsciiDocのMermaid図が表示されないため、レンダリング後の画像参照に修正 + 
+図の代替テキスト追加
 |===
 
 == 用語・略語
@@ -27,58 +31,56 @@
 |Terms/Abbreviations |Meaning 
 
 |デプロイConfig
-|Console for AITRIOSに登録するデプロイ設定。 + 
+|「**Console for AITRIOS**」に登録するデプロイ設定。 + 
 デプロイするAIモデルなどを指定したもの。 AIモデルのデプロイ実行は、デプロイConfigを指定して実行する。 + 
 Notebook実行に使用する `**configuration.json**` とは別物であることに注意
 
-|PPL
-|エッジAIデバイスのAIモデルの出力(Output Tensor)を加工処理するモジュール
+|「**PPL**」
+|エッジAIデバイスのAIモデルの出力 (Output Tensor) を加工処理するモジュール
 
 |===
 
 == 参照資料
 
 [[anchor-ref]]
-* Reference/Related documents（関連資料）
+* Reference/Related documents (関連資料)
 ** APIリファレンス
 *** https://developer.aitrios.sony-semicon.com/development-guides/reference/api-references/
-** Consoleユーザーマニュアル
-*** https://developer.aitrios.sony-semicon.com/file/download/console-developer-edition-ui-manual
+** 「**Console ユーザーマニュアル**」
+*** https://developer.aitrios.sony-semicon.com/documents/?page=console_user_manual&lang=ja
 
 
 == 想定ユースケース
 
-* Console for AITRIOSにインポート済みのAIモデルをエッジAIデバイスにデプロイしたい
+* 「**Console for AITRIOS**」にインポート済みのAIモデルをエッジAIデバイスにデプロイしたい
 
-* Console for AITRIOSにインポート済みのPPLをエッジAIデバイスにデプロイしたい
+* 「**Console for AITRIOS**」にインポート済みの「**PPL**」をエッジAIデバイスにデプロイしたい
 
-* AIモデル、またはPPLのデプロイ状況を確認したい
+* AIモデル、または「**PPL**」のデプロイ状況を確認したい
 
 == 機能概要、アルゴリズム
 
 === Functional Overview
 
-* SDKのDev Container(Local PCまたはCodespaces)において、Console Access Libraryを扱うことができる
+* SDKのDev Container (Local PCまたはCodespaces) において、「**Console Access Library**」を扱うことができる
 
-** Console Access Library経由で実行できることは下記の通り
+** 「**Console Access Library**」経由で実行できることは下記の通り
 
 *** デプロイを行うためのデバイス情報を取得できる
 *** AIモデルのデプロイに必要なデプロイConfigの新規登録、登録済み一覧取得、削除ができる
 *** AIモデルをエッジAIデバイスにデプロイできる
-*** PPLをエッジAIデバイスにデプロイできる
+*** 「**PPL**」をエッジAIデバイスにデプロイできる
 
 [NOTE]
 ====
-AIモデルのデプロイ後、デプロイしたAIモデルを使って推論実行するためにはConsole for AITRIOSにて + 
+AIモデルのデプロイ後、デプロイしたAIモデルを使って推論実行するためには「**Console for AITRIOS**」にて + 
 Command ParameterにてモデルIDの設定が必要である。
-デプロイ完了後の推論実行、およびCommand Parameterの使用方法については本書の範囲外である。詳細は<<anchor-ref, Consoleユーザーマニュアル>>を参照。
+デプロイ完了後の推論実行、およびCommand Parameterの使用方法については本書の範囲外である。詳細は<<anchor-ref, 「**Console ユーザーマニュアル**」>>を参照。
 ====
-
-<<<
 
 === フロー
 
-[mermaid]
+[mermaid, target="凡例"]
 ----
 flowchart TD;
     %% definition
@@ -99,7 +101,7 @@ flowchart TD;
 
 * フロー
 
-[mermaid]
+[mermaid, target="AIモデルデプロイ フロー"]
 ----
 flowchart TD
     %% definition
@@ -129,11 +131,11 @@ flowchart TD
 
 . インポート済みAIモデル情報一覧取得用Notebook実行
 
-** デプロイするAIモデルの `**model_id**` を取得するため、Console for AITRIOSにインポート済みのAIモデル情報一覧取得用Notebookを実行する
+** デプロイするAIモデルの `**model_id**` を取得するため、「**Console for AITRIOS**」にインポート済みのAIモデル情報一覧取得用Notebookを実行する
 *** 取得した `**model_id**` は、後述の「AIモデルデプロイ用設定ファイル作成・編集」にて使用する
 
 . デバイス情報一覧取得用Notebook実行
-** AIモデルをデプロイするデバイスの `**device_id**` 、およびデプロイ済みAIモデルの `**model_id**` と `**model_version**` を取得するため、Console for AITRIOSに登録済みのデバイス情報一覧取得用Notebookを実行する
+** AIモデルをデプロイするデバイスの `**device_id**` 、およびデプロイ済みAIモデルの `**model_id**` と `**model_version**` を取得するため、「**Console for AITRIOS**」に登録済みのデバイス情報一覧取得用Notebookを実行する
 *** 取得した `**device_id**` は、後述の「AIモデルデプロイ用設定ファイル作成・編集」にて使用する
 *** 取得した `**model_id**` は、後述の「AIモデルデプロイ用設定ファイル作成・編集」にて入れ替え対象モデルIDの指定に使用する
 
@@ -160,7 +162,7 @@ AIモデルデプロイ後、デバイスがハングし、データベース上
 また、デバイス自体のハング状態を元に戻すことはできない。別途デバイスの再起動やリセットを行う必要がある
 ====
 
-[mermaid]
+[mermaid, target="AIモデルデプロイ状態キャンセル フロー"]
 ----
 flowchart TD
     %% definition
@@ -199,7 +201,7 @@ flowchart TD
 ==== デプロイConfig削除
 * フロー
 
-[mermaid]
+[mermaid, target="デプロイConfig削除 フロー"]
 ----
 flowchart TD
     %% definition
@@ -225,7 +227,7 @@ flowchart TD
 
 . デプロイConfig情報一覧取得用Notebook実行
 
-** デプロイConfig情報一覧取得用Notebookを実行して、Console for AITRIOSへ登録済みの `**config_id**` を取得する
+** デプロイConfig情報一覧取得用Notebookを実行して、「**Console for AITRIOS**」へ登録済みの `**config_id**` を取得する
 
 . デプロイConfig削除用Notebook実行向け設定ファイル作成・編集
 
@@ -233,14 +235,14 @@ flowchart TD
 
 . デプロイConfig削除用Notebook実行
 
-** デプロイConfig削除用をNotebook実行して、設定ファイルにて指定したデプロイConfigをConsole for AITRIOSから削除する
+** デプロイConfig削除用をNotebook実行して、設定ファイルにて指定したデプロイConfigを「**Console for AITRIOS**」から削除する
 
 
 
-==== PPLデプロイ
+==== 「**PPL**」デプロイ
 * フロー
 
-[mermaid]
+[mermaid, target="PPLデプロイ フロー"]
 ----
 flowchart TD
     %% definition
@@ -267,28 +269,26 @@ flowchart TD
 
 . システムクライアント認証用Notebook実行
 
-. インポート済みPPL情報一覧取得用Notebook実行
-** デプロイするPPLの `**app_name**` と `**version_number**` を取得するため、Console for AITRIOSにインポート済みのPPL情報一覧取得用Notebookを実行する
-*** 取得した `**app_name**` と `**version_number**` は、後述の「PPLデプロイ用Notebook実行向け設定ファイル作成・編集」にて使用する 
+. インポート済み「**PPL**」情報一覧取得用Notebook実行
+** デプロイする「**PPL**」の `**app_name**` と `**version_number**` を取得するため、「**Console for AITRIOS**」にインポート済みの「**PPL**」情報一覧取得用Notebookを実行する
+*** 取得した `**app_name**` と `**version_number**` は、後述の「「**PPL**」デプロイ用Notebook実行向け設定ファイル作成・編集」にて使用する 
 
 . デバイス情報一覧取得用Notebook実行
-** PPLをデプロイするデバイスの `**device_id**` を取得するため、Console for AITRIOSに登録済みのデバイス情報一覧取得用Notebookを実行する
-*** 取得した `**device_id**` は、後述の「PPLデプロイ用Notebook実行向け設定ファイル作成・編集」にて使用する
+** 「**PPL**」をデプロイするデバイスの `**device_id**` を取得するため、「**Console for AITRIOS**」に登録済みのデバイス情報一覧取得用Notebookを実行する
+*** 取得した `**device_id**` は、後述の「「**PPL**」デプロイ用Notebook実行向け設定ファイル作成・編集」にて使用する
 
-. PPLデプロイ用Notebook実行向け設定ファイル作成・編集
+. 「**PPL**」デプロイ用Notebook実行向け設定ファイル作成・編集
 ** 設定ファイル<<anchor-conf-ppl, configuration.json>>を作成、編集してNotebook実行時の設定を行う
 
-. PPLデプロイ用Notebook実行
-
-<<<
+. 「**PPL**」デプロイ用Notebook実行
 
 === シーケンス
 
 ==== AIモデルデプロイ
 
-[mermaid]
+[mermaid, target="AIモデルデプロイ シーケンス"]
 ----
-%%{init:{'themeCSS':'text.actor {font-size:18px !important;} .messageText {font-size:18px !important;} .loopText {font-size:18px !important;} .noteText {font-size:18px !important;}'}}%%
+%%{init:{'themeCSS':'text.actor {font-size:18px !important;} .messageText {font-size:18px !important;} .labelText {font-size:18px !important;} .loopText {font-size:18px !important;} .noteText {font-size:18px !important;}'}}%%
 sequenceDiagram
   participant User
   participant Dev Container
@@ -310,21 +310,6 @@ sequenceDiagram
     Dev Container-->>User: デプロイConfig情報一覧表示    
   end
 
-  Note over User, Console: Continued on the next page
-----
-
-<<<
-
-[mermaid]
-----
-%%{init:{'themeCSS':'text.actor {font-size:18px !important;} .messageText {font-size:18px !important;} .labelText {font-size:18px !important;} .loopText {font-size:18px !important;} .noteText {font-size:18px !important;}'}}%%
-sequenceDiagram
-  participant User
-  participant Dev Container
-  participant Console as Console <br> for AITRIOS
-
-  Note over User, Console: Continued from the previous page
-
   User->>Dev Container: AIモデルデプロイ用 <br> 設定ファイル作成・編集
   User->>Dev Container: AIモデルデプロイ用 <br> Notebook実行
   opt デプロイConfigを新規登録する場合 <br> (設定ファイルにてtrue/falseで指定)
@@ -339,21 +324,6 @@ sequenceDiagram
   Console-->>Dev Container: レスポンス
   Dev Container-->>User: 結果表示
 
-  Note over User, Console: Continued on the next page
-----
-
-<<<
-
-[mermaid]
-----
-%%{init:{'themeCSS':'text.actor {font-size:18px !important;} .messageText {font-size:18px !important;} .labelText {font-size:18px !important;} .loopText {font-size:18px !important;} .noteText {font-size:18px !important;}'}}%%
-sequenceDiagram
-  participant User
-  participant Dev Container
-  participant Console as Console <br> for AITRIOS
-
-  Note over User, Console: Continued from the previous page
-
   Note over User, Console: AIモデルデプロイAPIは非同期APIであるため、<br> デプロイが完了するより前にレスポンスが返る。 <br> 個別にデプロイ結果取得セルを実行することで <br> デプロイ成否を確認することができる。
 
   opt デプロイ状況を確認するため、<br> 任意で複数回実行する
@@ -364,11 +334,9 @@ sequenceDiagram
   end
 ----
 
-<<<
-
 ==== AIモデルデプロイ状態キャンセル
 
-[mermaid]
+[mermaid, target="AIモデルデプロイ状態キャンセル シーケンス"]
 ----
 %%{init:{'themeCSS':'text.actor {font-size:18px !important;} .messageText {font-size:18px !important;} .labelText {font-size:18px !important;} .loopText {font-size:18px !important;} .noteText {font-size:18px !important;}'}}%%
 sequenceDiagram
@@ -391,11 +359,9 @@ sequenceDiagram
   Dev Container-->>User: 結果表示
 ----
 
-<<<
-
 ==== デプロイConfig削除
 
-[mermaid]
+[mermaid, target="デプロイConfig削除 シーケンス"]
 ----
 %%{init:{'themeCSS':'text.actor {font-size:18px !important;} .messageText {font-size:18px !important;} .labelText {font-size:18px !important;} .loopText {font-size:18px !important;} .noteText {font-size:18px !important;}'}}%%
 sequenceDiagram
@@ -418,11 +384,9 @@ sequenceDiagram
   Dev Container-->>User: 結果表示
 ----
 
-<<<
+==== 「**PPL**」デプロイ
 
-==== PPLデプロイ
-
-[mermaid]
+[mermaid, target="PPLデプロイ シーケンス"]
 ----
 %%{init:{'themeCSS':'text.actor {font-size:18px !important;} .messageText {font-size:18px !important;} .labelText {font-size:18px !important;} .loopText {font-size:18px !important;} .noteText {font-size:18px !important;}'}}%%
 sequenceDiagram
@@ -443,21 +407,6 @@ sequenceDiagram
     Dev Container-->>User: デバイス情報一覧表示
   end
 
-  Note over User, Console: Continued on the next page
-----
-
-<<<
-
-[mermaid]
-----
-%%{init:{'themeCSS':'text.actor {font-size:18px !important;} .messageText {font-size:18px !important;} .labelText {font-size:18px !important;} .loopText {font-size:18px !important;} .noteText {font-size:18px !important;}'}}%%
-sequenceDiagram
-  participant User
-  participant Dev Container
-  participant Console as Console <br> for AITRIOS
-
-  Note over User, Console: Continued from the previous page
-
   User->>Dev Container: PPLデプロイ用Notebook実行向け <br> 設定ファイル作成・編集
   User->>Dev Container: PPLデプロイ用Notebook実行
   Dev Container->>Console: PPLデプロイAPI実行
@@ -469,18 +418,18 @@ sequenceDiagram
       Note over User, Console: PPLデプロイAPIは非同期APIであるため、<br> デプロイが完了するより前にレスポンスが返る。 <br> 個別にデプロイ結果取得セルを実行することで<br>デプロイ成否を確認することができる。
   
   opt デプロイ状況を確認するため、<br> 任意で複数回実行する
-    User->>Dev Container: PPLデプロイ用Notebook実行<br>(デプロイ結果取得セルのみ)
+    User->>Dev Container: PPLデプロイ用Notebook実行 <br> (デプロイ結果取得セルのみ)
     Dev Container->>Console: デプロイ結果取得API実行
     Console-->>Dev Container: レスポンス
     Dev Container-->>User: 結果表示
   end
 ----
 
-== 操作性仕様、画面仕様（AIモデルデプロイ）
+== 操作性仕様、画面仕様 (AIモデルデプロイ)
 === 前提条件
-* Portal for AITRIOSからユーザー登録し、AITRIOSのプロジェクトに参加していること
+* 「**Portal for AITRIOS**」からユーザー登録し、AITRIOSのプロジェクトに参加していること
 
-* AIモデルをConsole for AITRIOSにアップロード済みであること
+* AIモデルを「**Console for AITRIOS**」にアップロード済みであること
 
 === How to start each function
 . SDK環境を立ち上げ、Topの `**README.md**` をプレビュー表示する
@@ -494,118 +443,137 @@ sequenceDiagram
 
 === システムクライアント認証用Notebook実行
 . `**deploy_to_device**` ディレクトリの `**README.md**` に含まれるハイパーリンクから、`**set_up_console_client**` ディレクトリの `**README.md**` にジャンプする
-. `**set_up_console_client**` ディレクトリのシステムクライアント認証用Notebook(*.ipynb)を開き、その中のPythonスクリプトを実行する
+. `**set_up_console_client**` ディレクトリのシステムクライアント認証用Notebook (*.ipynb) を開き、その中のPythonスクリプトを実行する
 
 === インポート済みAIモデル情報一覧取得用Notebook実行
 . `**deploy_to_device**` ディレクトリの `**README.md**` に含まれるハイパーリンクから、`**get_model_list**` ディレクトリの `**README.md**` にジャンプする
-. `**get_model_list**` ディレクトリのAIモデル情報一覧取得用Notebook(*.ipynb)を開き、その中のPythonスクリプトを実行する
-** 実行に成功した場合、Console for AITRIOSにインポートされているAIモデルの情報 (モデルID、バージョンなど) がNotebook内の出力に表示される
+. `**get_model_list**` ディレクトリのAIモデル情報一覧取得用Notebook (*.ipynb) を開き、その中のPythonスクリプトを実行する
+** 実行に成功した場合、「**Console for AITRIOS**」にインポートされているAIモデルの情報 (モデルID、バージョンなど) がNotebook内の出力に表示される
 
 === デバイス情報一覧取得用Notebook実行
 . `**deploy_to_device**` ディレクトリの `**README.md**` に含まれるハイパーリンクから、`**get_device_list**` ディレクトリの `**README.md**` にジャンプする
-. `**get_device_list**` ディレクトリのデバイス情報一覧取得用Notebook(*.ipynb)を開き、その中のPythonスクリプトを実行する
-** 実行に成功した場合、Console for AITRIOSに登録されているデバイスの情報 (デバイスID、デプロイ済みモデルIDなど) がNotebook内の出力に表示される
+. `**get_device_list**` ディレクトリのデバイス情報一覧取得用Notebook (*.ipynb) を開き、その中のPythonスクリプトを実行する
+** 実行に成功した場合、「**Console for AITRIOS**」に登録されているデバイスの情報 (デバイスID、デプロイ済みモデルIDなど) がNotebook内の出力に表示される
 
 === デプロイConfig情報一覧取得用Notebook実行
 . `**deploy_to_device**` ディレクトリの `**README.md**` に含まれるハイパーリンクから、`**get_deploy_config**` ディレクトリの `**README.md**` にジャンプする
-. `**get_deploy_config**` ディレクトリのデプロイConfig情報一覧取得用Notebook(*.ipynb)を開き、その中のPythonスクリプトを実行する
-** 実行に成功した場合、Console for AITRIOSに登録されているデプロイConfigの情報 (Config IDなど) がNotebook内の出力に表示される
+. `**get_deploy_config**` ディレクトリのデプロイConfig情報一覧取得用Notebook (*.ipynb) を開き、その中のPythonスクリプトを実行する
+** 実行に成功した場合、「**Console for AITRIOS**」に登録されているデプロイConfigの情報 (Config IDなど) がNotebook内の出力に表示される
 
 === AIモデルデプロイ用設定ファイル作成・編集
 NOTE: 特別な記載がある場合を除き、原則として省略は不可。
 
 NOTE: 特別な記載がある場合を除き、原則として大文字小文字を区別する。
 
-NOTE: Console Access Library APIに渡されるパラメータについては、<<anchor-ref, Console Access Library API>>の仕様に従う。
+NOTE:「**Console Access Library**」APIに渡されるパラメータについては、<<anchor-ref, 「**Console Access Library**」API>>の仕様に従う。
 
-. `**deploy_to_device**` ディレクトリに設定ファイル(`**configuration.json**`)を作成し、編集する
+. `**deploy_to_device**` ディレクトリに設定ファイル (`**configuration.json**`) を作成し、編集する
 
 [[anchor-conf]]
-[cols="2,2,3,3,4"]
+[cols="2,2,3a,3a,4a"]
 |===
-2+<|Configuration |Meaning |Range |Remarks
+|Configuration | |Meaning |Range |Remarks
 
-2+<|`**should_create_deploy_config**`
+|`**should_create_deploy_config**`
+|
 |デプロイConfigを新規登録するかどうか
 |true or false +
 true:デプロイConfig新規登録 +
 false:登録済みデプロイConfigを使用
 |省略不可
 
-2+<|`**config_id**`
-|デプロイConfigのID + 
-・デプロイConfigを新規登録する場合は任意の文字列を指定する +
-・登録済みデプロイConfigを使用する場合は使用するデプロイConfigのconfig_idを指定する
+|`**config_id**`
+|
+|デプロイConfigのID
+
+* デプロイConfigを新規登録する場合は任意の文字列を指定する +
+* 登録済みデプロイConfigを使用する場合は使用するデプロイConfigのconfig_idを指定する
+
 |文字列 +
-詳細はConsole Access Library APIの仕様に従う。
+詳細は「**Console Access Library**」APIの仕様に従う。
 |省略不可
 
-下記のConsole Access Library APIに使用される。 +
-・`**deployment.deployment.Deployment.create_deploy_configuration**` +
-・`**deployment.deployment.Deployment.deploy_by_configuration**`
+下記の「**Console Access Library**」APIに使用される。
 
-.3+<.<|`**create_config**`
+* `**deployment.deployment.Deployment.create_deploy_configuration**`
+* `**deployment.deployment.Deployment.deploy_by_configuration**`
+
+|`**create_config**`
 |`**comment**`
 |新規登録するデプロイConfigの説明
 |文字列 +
-詳細はConsole Access Library APIの仕様に従う。
-|省略可 + 
-・デプロイConfig新規登録の場合のみ使用される。
+詳細は「**Console Access Library**」APIの仕様に従う。
+|省略可
 
-下記のConsole Access Library APIに使用される。 +
-・`**deployment.deployment.Deployment.create_deploy_configuration**`
+* デプロイConfig新規登録の場合のみ使用される。
 
+下記の「**Console Access Library**」APIに使用される。
+
+* `**deployment.deployment.Deployment.create_deploy_configuration**`
+
+|
 |`**model_id**`
 |デプロイするAIモデルのID +
 インポート済みAIモデルのIDを指定する
 |文字列 +
-詳細はConsole Access Library APIの仕様に従う。
-|省略可。ただし、デプロイConfig新規登録の場合は省略不可。 +
-・デプロイConfig新規登録の場合のみ使用される。 +
+詳細は「**Console Access Library**」APIの仕様に従う。
+|省略可。ただし、デプロイConfig新規登録の場合は省略不可。
+
+* デプロイConfig新規登録の場合のみ使用される。
 
 
-下記のConsole Access Library APIに使用される。 +
-・`**deployment.deployment.Deployment.create_deploy_configuration**`
+下記の「**Console Access Library**」APIに使用される。
 
+* `**deployment.deployment.Deployment.create_deploy_configuration**`
+
+|
 |`**model_version_number**`
 |デプロイするAIモデルのバージョン +
 インポート済みAIモデルのバージョンを指定する
 |文字列 +
-詳細はConsole Access Library APIの仕様に従う。
-|省略可 +
-・デプロイConfig新規登録の場合のみ使用される。
+詳細は「**Console Access Library**」APIの仕様に従う。
+|省略可
 
-下記のConsole Access Library APIに使用される。 +
-・`**deployment.deployment.Deployment.create_deploy_configuration**`
+* デプロイConfig新規登録の場合のみ使用される。
 
-2+<|`**device_ids**`
+下記の「**Console Access Library**」APIに使用される。
+
+* `**deployment.deployment.Deployment.create_deploy_configuration**`
+
+|`**device_ids**`
+|
 |モデルをデプロイするデバイスのID
 |文字列のリスト
 |省略不可
 
-下記のConsole Access Library APIに使用される。 +
-・`**deployment.deployment.Deployment.deploy_by_configuration**`
+下記の「**Console Access Library**」APIに使用される。
 
-2+<|`**replace_model_id**`
+* `**deployment.deployment.Deployment.deploy_by_configuration**`
+
+|`**replace_model_id**`
+|
 |入れ替え対象モデルID + 
-デバイスにデプロイ済みのモデルのうち、デプロイ時に入れ替え(上書き)するモデルのIDを指定する
+デバイスにデプロイ済みのモデルのうち、デプロイ時に入れ替え (上書き) するモデルのIDを指定する
 |文字列 +
-詳細はConsole Access Library APIの仕様に従う。
+詳細は「**Console Access Library**」APIの仕様に従う。
 |省略可 +
 モデルを入れ替えない場合は省略可。ただし、デバイスにデプロイされたモデルの数が上限の場合、本パラメータで入れ替えるモデルIDを指定する必要がある。 + 
 (デプロイ済みモデルが上限に達しており、かつreplace_model_idの指定がない場合、デプロイ実行がエラーとなる)
 
-下記のConsole Access Library APIに使用される。 +
-・`**deployment.deployment.Deployment.deploy_by_configuration**`
+下記の「**Console Access Library**」APIに使用される。
 
-2+<|`**comment**`
+* `**deployment.deployment.Deployment.deploy_by_configuration**`
+
+|`**comment**`
+|
 |デプロイの説明
 |文字列 +
-詳細はConsole Access Library APIの仕様に従う。
+詳細は「**Console Access Library**」APIの仕様に従う。
 |省略可
 
-下記のConsole Access Library APIに使用される。 +
-・`**deployment.deployment.Deployment.deploy_by_configuration**`
+下記の「**Console Access Library**」APIに使用される。
+
+* `**deployment.deployment.Deployment.deploy_by_configuration**`
 
 |===
 
@@ -634,9 +602,9 @@ false:登録済みデプロイConfigを使用
 **** 結果取得に成功した場合、 `**deploy_to_device.ipynb**` に成功した旨のメッセージとデプロイ結果を表示する
 **** エラー発生時はその内容を表示し、中断する
 
-**** エラーや応答時間の詳細については、 https://developer.aitrios.sony-semicon.com/development-guides/documents/specifications/[Cloud SDK Console Access Library(Python) 機能仕様書] 参照
+**** エラーや応答時間の詳細については、 https://developer.aitrios.sony-semicon.com/development-guides/documents/specifications/[「**Cloud SDK Console Access Library(Python) 機能仕様書**」] 参照
 
-== 操作性仕様、画面仕様（AIモデルデプロイ状態キャンセル）
+== 操作性仕様、画面仕様 (AIモデルデプロイ状態キャンセル)
 
 [NOTE]
 ====
@@ -646,7 +614,7 @@ false:登録済みデプロイConfigを使用
 
 
 === 前提条件
-* Portal for AITRIOSからユーザー登録し、AITRIOSのプロジェクトに参加していること
+* 「**Portal for AITRIOS**」からユーザー登録し、AITRIOSのプロジェクトに参加していること
 
 * AIモデルデプロイを実行済みであり、デプロイ状態を確認した結果、デプロイ状態のキャンセルが必要と判断されること
 
@@ -664,32 +632,34 @@ false:登録済みデプロイConfigを使用
 
 NOTE: 特別な記載がある場合を除き、原則として省略は不可。
 
-NOTE: Console Access Library APIに渡されるパラメータについては、<<anchor-ref, Console Access Library API>>の仕様に従う。
+NOTE:「**Console Access Library**」APIに渡されるパラメータについては、<<anchor-ref, 「**Console Access Library**」API>>の仕様に従う。
 
-. `**cancel_deploy_state**` ディレクトリに設定ファイル(`**configuration.json**`)を作成し、編集する
+. `**cancel_deploy_state**` ディレクトリに設定ファイル (`**configuration.json**`) を作成し、編集する
 
 [[anchor-conf-cancel]]
-[cols="2,2,2,3"]
+[cols="2,2,2,3a"]
 |===
 |Configuration |Meaning |Range |Remarks
 
 |`**device_id**`
 |デプロイ状態をキャンセルするデバイスのID
 |文字列 +
-詳細はConsole Access Library APIの仕様に従う。
+詳細は「**Console Access Library**」APIの仕様に従う。
 |省略不可
 
-下記のConsole Access Library APIに使用される。 +
-・`**deployment.deployment.Deployment.cancel_deployment**`
+下記の「**Console Access Library**」APIに使用される。
+
+* `**deployment.deployment.Deployment.cancel_deployment**`
 
 |`**deploy_id**`
 |デプロイ状態をキャンセルするデプロイID
 |文字列 +
-詳細はConsole Access Library APIの仕様に従う。
+詳細は「**Console Access Library**」APIの仕様に従う。
 |省略不可
 
-下記のConsole Access Library APIに使用される。 +
-・`**deployment.deployment.Deployment.cancel_deployment**`
+下記の「**Console Access Library**」APIに使用される。
+
+* `**deployment.deployment.Deployment.cancel_deployment**`
 
 |===
 
@@ -714,14 +684,14 @@ NOTE: Console Access Library APIに渡されるパラメータについては、
 **** API実行に成功した場合、 `**cancel_deploy_state.ipynb**` に成功した旨のメッセージを表示する
 **** エラー発生時はその内容を表示し、中断する
 
-NOTE: AIモデルデプロイ状態キャンセルAPIを実行すると、Console上のデプロイステータスが「実行中」から「キャンセル」に移行する。
+NOTE: AIモデルデプロイ状態キャンセルAPIを実行すると、「**Console**」上のデプロイステータスが「実行中」から「キャンセル」に移行する。
 
 
-== 操作性仕様、画面仕様（デプロイConfig削除）
+== 操作性仕様、画面仕様 (デプロイConfig削除)
 === 前提条件
-* Portal for AITRIOSからユーザー登録し、AITRIOSのプロジェクトに参加していること
+* 「**Portal for AITRIOS**」からユーザー登録し、AITRIOSのプロジェクトに参加していること
 
-* デプロイConfigをConsole for AITRIOSに登録していること
+* デプロイConfigを「**Console for AITRIOS**」に登録していること
 
 
 === How to start each function
@@ -735,34 +705,35 @@ NOTE: AIモデルデプロイ状態キャンセルAPIを実行すると、Consol
 
 === システムクライアント認証用Notebook実行
 . `**delete_deploy_config**` ディレクトリの `**README.md**` に含まれるハイパーリンクから、`**set_up_console_client**` ディレクトリの `**README.md**` にジャンプする
-. `**set_up_console_client**` ディレクトリのシステムクライアント認証用Notebook(*.ipynb)を開き、その中のPythonスクリプトを実行する
+. `**set_up_console_client**` ディレクトリのシステムクライアント認証用Notebook (*.ipynb) を開き、その中のPythonスクリプトを実行する
 
 
 === デプロイConfig情報一覧取得用Notebook実行
 . `**delete_deploy_config**` ディレクトリの `**README.md**` に含まれるハイパーリンクから、`**get_deploy_config**` ディレクトリの `**README.md**` にジャンプする
-. `**get_deploy_config**` ディレクトリのデプロイConfig情報一覧取得用Notebook(*.ipynb)を開き、その中のPythonスクリプトを実行する
-** 実行に成功した場合、Console for AITRIOSに登録されているデプロイConfigの情報 (Config IDなど) がNotebook内の出力に表示される
+. `**get_deploy_config**` ディレクトリのデプロイConfig情報一覧取得用Notebook (*.ipynb) を開き、その中のPythonスクリプトを実行する
+** 実行に成功した場合、「**Console for AITRIOS**」に登録されているデプロイConfigの情報 (Config IDなど) がNotebook内の出力に表示される
 
 === デプロイConfig削除用Notebook実行向け設定ファイル作成・編集
 NOTE: 特別な記載がある場合を除き、原則として省略は不可。
 
-NOTE: Console Access Library APIに渡されるパラメータについては、<<anchor-ref, Console Access Library API>>の仕様に従う。
+NOTE:「**Console Access Library**」APIに渡されるパラメータについては、<<anchor-ref, 「**Console Access Library**」API>>の仕様に従う。
 
-. `**delete_deploy_config**` ディレクトリに設定ファイル( `**configuration.json**`)を作成し、編集する
+. `**delete_deploy_config**` ディレクトリに設定ファイル ( `**configuration.json**`) を作成し、編集する
 
 [[anchor-conf-del]]
-[cols="2,2,2,3"]
+[cols="2,2,2,3a"]
 |===
 |Configuration |Meaning |Range |Remarks
 
 |`**config_id**`
 |削除するデプロイConfigのID
 |文字列 +
-詳細はConsole Access Library APIの仕様に従う。
+詳細は「**Console Access Library**」APIの仕様に従う。
 |省略不可
 
-下記のConsole Access Library APIに使用される。 +
-・`**deployment.deployment.Deployment.delete_deploy_configuration**`
+下記の「**Console Access Library**」APIに使用される。
+
+* `**deployment.deployment.Deployment.delete_deploy_configuration**`
 
 |===
 
@@ -786,17 +757,17 @@ NOTE: Console Access Library APIに渡されるパラメータについては、
 
 ** エラー発生時は `**delete_deploy_config.ipynb**` 内の出力にエラー内容を表示し、中断する
 
-*** エラーや応答時間の詳細については、 https://developer.aitrios.sony-semicon.com/development-guides/documents/specifications/[Cloud SDK Console Access Library(Python) 機能仕様書] 参照
+*** エラーや応答時間の詳細については、 https://developer.aitrios.sony-semicon.com/development-guides/documents/specifications/[「**Cloud SDK Console Access Library(Python) 機能仕様書**」] 参照
 
 
 
 
 
-== 操作性仕様、画面仕様（PPLデプロイ）
+== 操作性仕様、画面仕様 (「**PPL**」デプロイ)
 === 前提条件
-* Portal for AITRIOSからユーザー登録し、AITRIOSのプロジェクトに参加していること
+* 「**Portal for AITRIOS**」からユーザー登録し、AITRIOSのプロジェクトに参加していること
 
-* PPLをConsole for AITRIOSにアップロード済みであること
+* 「**PPL**」を「**Console for AITRIOS**」にアップロード済みであること
 
 === How to start each function
 . SDK環境を立ち上げ、Topの `**README.md**` をプレビュー表示する
@@ -808,72 +779,76 @@ NOTE: Console Access Library APIに渡されるパラメータについては、
 
 === システムクライアント認証用Notebook実行
 . `**3_deploy_to_device**` ディレクトリの `**README.md**` に含まれるハイパーリンクから、`**set_up_console_client**` ディレクトリの `**README.md**` にジャンプする
-. `**set_up_console_client**` ディレクトリのシステムクライアント認証用Notebook(*.ipynb)を開き、その中のPythonスクリプトを実行する
+. `**set_up_console_client**` ディレクトリのシステムクライアント認証用Notebook (*.ipynb) を開き、その中のPythonスクリプトを実行する
 
-=== インポート済みPPL情報一覧取得用Notebook実行
+=== インポート済み「**PPL**」情報一覧取得用Notebook実行
 . `**3_deploy_to_device**` ディレクトリの `**README.md**` に含まれるハイパーリンクから、`**get_application_list**` ディレクトリの `**README.md**` にジャンプする
-. `**get_application_list**` ディレクトリのPPL情報一覧取得用Notebook(*.ipynb)を開き、その中のPythonスクリプトを実行する
-** 実行に成功した場合、Console for AITRIOSにインポートされているPPLの情報 (アプリケーション名、バージョンなど) がNotebook内の出力に表示される
+. `**get_application_list**` ディレクトリの「**PPL**」情報一覧取得用Notebook (*.ipynb) を開き、その中のPythonスクリプトを実行する
+** 実行に成功した場合、「**Console for AITRIOS**」にインポートされている「**PPL**」の情報 (アプリケーション名、バージョンなど) がNotebook内の出力に表示される
 
 === デバイス情報一覧取得用Notebook実行
 . `**3_deploy_to_device**` ディレクトリの `**README.md**` に含まれるハイパーリンクから、`**get_device_list**` ディレクトリの `**README.md**` にジャンプする
-. `**get_device_list**` ディレクトリのデバイス情報一覧取得用Notebook(*.ipynb)を開き、その中のPythonスクリプトを実行する
-** 実行に成功した場合、Console for AITRIOSに登録されているデバイスの情報 (デバイスIDなど) がNotebook内の出力に表示される
+. `**get_device_list**` ディレクトリのデバイス情報一覧取得用Notebook (*.ipynb) を開き、その中のPythonスクリプトを実行する
+** 実行に成功した場合、「**Console for AITRIOS**」に登録されているデバイスの情報 (デバイスIDなど) がNotebook内の出力に表示される
 
 
-=== PPLデプロイ用Notebook実行向け設定ファイル作成・編集
+=== 「**PPL**」デプロイ用Notebook実行向け設定ファイル作成・編集
 NOTE: 特別な記載がある場合を除き、原則として省略は不可。
 
-NOTE: Console Access Library APIに渡されるパラメータについては、<<anchor-ref, Console Access Library API>>の仕様に従う。
+NOTE:「**Console Access Library**」APIに渡されるパラメータについては、<<anchor-ref, 「**Console Access Library**」API>>の仕様に従う。
 
-. `**3_deploy_to_device**` ディレクトリに設定ファイル(`**configuration.json**`)を作成し、編集する
+. `**3_deploy_to_device**` ディレクトリに設定ファイル (`**configuration.json**`) を作成し、編集する
 
 [[anchor-conf-ppl]]
-[cols="2,2,2,3"]
+[cols="2,2,2,3a"]
 |===
 |Configuration |Meaning |Range |Remarks
 
 |`**app_name**`
-|デプロイするPPL名
+|デプロイする「**PPL**」名
 |文字列 +
-詳細はConsole Access Library APIの仕様に従う。
+詳細は「**Console Access Library**」APIの仕様に従う。
 |省略不可
 
-下記のConsole Access Library APIに使用される。 +
-・`**deployment.deployment.Deployment.deploy_device_app**` +
-・`**deployment.deployment.Deployment.get_device_app_deploys**`
+下記の「**Console Access Library**」APIに使用される。
+
+* `**deployment.deployment.Deployment.deploy_device_app**`
+* `**deployment.deployment.Deployment.get_device_app_deploys**`
 
 |`**version_number**`
-|デプロイするPPLのバージョン
+|デプロイする「**PPL**」のバージョン
 |文字列 +
-詳細はConsole Access Library APIの仕様に従う。
+詳細は「**Console Access Library**」APIの仕様に従う。
 |省略不可
 
-下記のConsole Access Library APIに使用される。 +
-・`**deployment.deployment.Deployment.deploy_device_app**` +
-・`**deployment.deployment.Deployment.get_device_app_deploys**`
+下記の「**Console Access Library**」APIに使用される。
+
+* `**deployment.deployment.Deployment.deploy_device_app**`
+* `**deployment.deployment.Deployment.get_device_app_deploys**`
 
 |`**device_ids**`
-|PPLをデプロイするデバイスのID
+|「**PPL**」をデプロイするデバイスのID
 |文字列のリスト
 |省略不可
 
-下記のConsole Access Library APIに使用される。 +
-・`**deployment.deployment.Deployment.deploy_device_app**`
+下記の「**Console Access Library**」APIに使用される。
+
+* `**deployment.deployment.Deployment.deploy_device_app**`
 
 |`**comment**`
-|PPLデプロイの説明
+|「**PPL**」デプロイの説明
 |文字列 +
-詳細はConsole Access Library APIの仕様に従う。
+詳細は「**Console Access Library**」APIの仕様に従う。
 |省略可
 
-下記のConsole Access Library APIに使用される。 +
-・`**deployment.deployment.Deployment.deploy_device_app**`
+下記の「**Console Access Library**」APIに使用される。
+
+* `**deployment.deployment.Deployment.deploy_device_app**`
 
 |===
 
 
-=== PPLデプロイ用Notebook実行
+=== 「**PPL**」デプロイ用Notebook実行
 
 . `**3_deploy_to_device**` の `**deploy_to_device.ipynb**` を開き、その中のPythonスクリプトを実行する
 
@@ -885,22 +860,22 @@ NOTE: Console Access Library APIに渡されるパラメータについては、
 *** <<anchor-conf-ppl, configuration.json>>の内容をチェックする
 **** エラー発生時はその内容を表示し、中断する
 
-*** PPLデプロイAPIを実行する
+*** 「**PPL**」デプロイAPIを実行する
 **** API実行に成功した場合、 `**deploy_to_device.ipynb**` に成功した旨のメッセージを表示する
 **** エラー発生時はその内容を表示し、中断する
 
-*** PPLデプロイ結果確認APIを実行する
+*** 「**PPL**」デプロイ結果確認APIを実行する
 **** 結果取得に成功した場合、 `**deploy_to_device.ipynb**` に成功した旨のメッセージとデプロイ結果を表示する
 **** エラー発生時はその内容を表示し、中断する
 
-**** エラーや応答時間の詳細については、 https://developer.aitrios.sony-semicon.com/development-guides/documents/specifications/[Cloud SDK Console Access Library(Python) 機能仕様書] 参照
+**** エラーや応答時間の詳細については、 https://developer.aitrios.sony-semicon.com/development-guides/documents/specifications/[「**Cloud SDK Console Access Library(Python) 機能仕様書**」] 参照
 
 
 
 == 目標性能
 * ユーザビリティ
 
-** SDKの環境構築完了後、追加のインストール手順なしに、AIモデル、PPLのConsole for AITRIOSへのデプロイができること
+** SDKの環境構築完了後、追加のインストール手順なしに、AIモデル、「**PPL**」の「**Console for AITRIOS**」へのデプロイができること
 
 ** UIの応答時間が1.2秒以内であること
 ** 処理に5秒以上かかる場合は、処理中の表現を逐次更新表示できること

@@ -1,7 +1,7 @@
-= Vision and Sensing pass:[<br/>] Application SDK pass:[<br/>] 画像ダウンロード pass:[<br/>] 機能仕様書 pass:[<br/>]
+= Vision and Sensing Application SDK pass:[<br/>] 画像ダウンロード pass:[<br/>] 機能仕様書 pass:[<br/>]
 :sectnums:
 :sectnumlevels: 1
-:author: Copyright 2023 Sony Semiconductor Solutions Corporation
+:author: Copyright 2022-2023 Sony Semiconductor Solutions Corporation
 :version-label: Version 
 :revnumber: x.x.x
 :revdate: YYYY - MM - DD
@@ -25,6 +25,11 @@
 シンボリックリンク対応の追加。 + 
 シークレット情報の削除に伴い、設定ファイルのInitial項目を削除、設定ファイルを作成する旨を追記。 + 
 PDFビルド環境更新。
+
+|2023/05/26
+|ツール名と括弧の表記の修正 + 
+一部環境でAsciiDocのMermaid図が表示されないため、レンダリング後の画像参照に修正 + 
+図の代替テキスト追加
 |===
 
 == 用語・略語
@@ -40,7 +45,7 @@ PDFビルド環境更新。
 == 参照資料
 
 [[anchor-ref]]
-* Reference/Related documents（関連資料）
+* Reference/Related documents (関連資料)
 ** COCO Download
 *** https://cocodataset.org/#download
 ** COCO Annotations ファイル
@@ -49,7 +54,7 @@ PDFビルド環境更新。
 
 == 想定ユースケース
 
-* Console for AITRIOSへインポートしてアノテーションするためのサンプル画像をCOCOからDownloadしたい
+* 「**Console for AITRIOS**」へインポートしてアノテーションするためのサンプル画像をCOCOからDownloadしたい
 
 
 == 機能概要、アルゴリズム
@@ -58,7 +63,7 @@ PDFビルド環境更新。
 
 SDKにて下記のフローでCOCOからサンプル画像をDownloadできる
 
-[mermaid]
+[mermaid, target="凡例"]
 ----
 flowchart TD;
     %% definition
@@ -74,7 +79,7 @@ flowchart TD;
 
 * フロー概要
 
-[mermaid]
+[mermaid, target="フロー概要"]
 ----
 flowchart TD
     start((Start)) --> id1(1.Notebook実行向けセットアップ)
@@ -91,7 +96,7 @@ flowchart TD
 
 . Notebook実行向け設定ファイル作成・編集
 
-** 設定ファイルconfiguration.jsonを作成、編集してNotebook実行時の設定を行う
+** 設定ファイル `**configuration.json**` を作成、編集してNotebook実行時の設定を行う
 
 . Notebook実行
 
@@ -110,7 +115,7 @@ flowchart TD
 . `**download_images**` ディレクトリの `**README.md**` に記載の手順・リンクから<<anchor-ref, 関連資料: COCO Annotations ファイル>>をBrowserでDownloadする
 . Downloadした<<anchor-ref, 関連資料: COCO Annotations ファイル>> zipを解凍し、設定ファイルで指定のパスに展開する
 
-[mermaid]
+[mermaid, target="Notebook実行向けセットアップ"]
 ----
 %%{init:{'themeVariables':{'fontSize':'20px'}, 'themeCSS':'text.actor {font-size:18px !important;} .messageText {font-size:18px !important;}'}}%%
 sequenceDiagram
@@ -130,18 +135,19 @@ sequenceDiagram
 
 
 === Notebook実行向け設定ファイル作成・編集
-. `**download_images**` ディレクトリに設定ファイル(`**configuration.json**`)を作成し、編集する
+. `**download_images**` ディレクトリに設定ファイル (`**configuration.json**`) を作成し、編集する
 
 NOTE: 原則としてシンボリックリンクのフォルダパス、ファイルパスは使用不可。
 
 [[anchor-conf]]
+[cols="1,1,1,1a"]
 |===
 |Configuration |Meaning |Range |Remarks
 
 |`**annotation_file**`
 |COCO Annotations ファイルパス
-|絶対パスまたはconfiguration.json/Notebook(*.ipynb)からの相対パス
-|・省略不可
+|絶対パスまたは `**configuration.json**` /Notebook (*.ipynb) からの相対パス
+|* 省略不可
 
 |`**category_names**`
 |画像カテゴリ名 +
@@ -150,8 +156,8 @@ NOTE: 原則としてシンボリックリンクのフォルダパス、ファ�
 |["カテゴリ1", "カテゴリ2", ・・・] +
  + 
 カテゴリは<<anchor-category, category_names一覧>>参照
-|・省略可 +
-・省略、またはカテゴリを指定しない(空リストを指定する)場合、全カテゴリがダウンロード対象となる
+|* 省略可 +
+* 省略、またはカテゴリを指定しない (空リストを指定する) 場合、全カテゴリがダウンロード対象となる
 
 |`**max_download_count**`
 |各カテゴリ最大Download画像数
@@ -162,9 +168,9 @@ NOTE: 原則としてシンボリックリンクのフォルダパス、ファ�
 ・・・ +
 全画像数: 全画像Download +
 全画像数+1: 全画像Download +
-|・省略可 +
-・省略または0を指定した場合、条件に合致した画像すべてがダウンロード対象となる +
-・category_namesを省略、またはカテゴリ指定しない(空リストを指定する)場合、本パラメータはカテゴリごとのdownload枚数ではなく全体のdownload枚数となる
+|* 省略可 +
+* 省略または0を指定した場合、条件に合致した画像すべてがダウンロード対象となる +
+* `**category_names**` を省略、またはカテゴリ指定しない (空リストを指定する) 場合、本パラメータはカテゴリごとのdownload枚数ではなく全体のdownload枚数となる
 
 |`**licenses**`
 |画像License + 
@@ -172,9 +178,9 @@ NOTE: 原則としてシンボリックリンクのフォルダパス、ファ�
 本Licenseに該当する画像のみDownload
 |[License1 ID, License2 ID, ・・・] +
  + 
-Licenseは<<anchor-license, License一覧>>参照
-|・省略可 +
-・省略、またはライセンスを指定しない(空リストを指定する)場合、全ライセンスがダウンロード対象となる
+Licenseは<<anchor-license, license 一覧>>参照
+|* 省略可 +
+* 省略、またはライセンスを指定しない (空リストを指定する) 場合、全ライセンスがダウンロード対象となる
 
 |`**remove_categories**`
 |除外するカテゴリ名 +
@@ -183,187 +189,36 @@ Licenseは<<anchor-license, License一覧>>参照
 |["カテゴリ1", "カテゴリ2", ・・・] +
  + 
 カテゴリは<<anchor-category, category_names一覧>>参照
-|・省略可 +
-・省略、またはカテゴリを指定しない(空リストを指定する)場合、除外対象なしとなる
+|* 省略可 +
+* 省略、またはカテゴリを指定しない (空リストを指定する) 場合、除外対象なしとなる
 
 |`**output_dir**`
 |Download画像出力ディレクトリパス
-|絶対パスまたはconfiguration.json/Notebook(*.ipynb)からの相対パス
-|・省略不可
+|絶対パスまたは `**configuration.json**`/Notebook (*.ipynb) からの相対パス
+|* 省略不可
 
 |===
 
 [[anchor-category]]
 `**category_names**` 一覧
+[cols="h,d,d,d,d,d,d,d,d,d,d,d,d"]
 |===
-|type 4+<|category name
+|type: |Person |Veicle |Outdoor |Animal |Accessory |Sports |Kitcen |Food |Furniture |Electronic |Appliance |Indoor
 
-.2+<.^|Person
-|person
-|
-|
-|
-
-|
-|
-|
-|
-
-.2+<.^|Vehicle
-|bicycle
-|car
-|motorcycle
-|airplane
-
-|bus
-|train
-|truck
-|boat
-
-.2+<.^|Outdoor
-|traffic light
-|fire hydrant
-|stop sign
-|parking meter
-
-|bench
-|
-|
-|
-
-.4+<.^|Animal
-|bird
-|cat
-|dog
-|horse
-
-|sheep
-|cow
-|elephant
-|bear
-
-|zebra
-|giraffe
-|
-|
-
-|
-|
-|
-|
-
-.2+<.^|Accessory
-|backpack
-|umbrella
-|handbag
-|tie
-
-|suitcase
-|
-|
-|
-
-.4+<.^|Sports
-|frisbee
-|skis
-|snowboard
-|sports ball
-
-|kite
-|baseball bat
-|baseball glove
-|skateboard
-
-|surfboard
-|tennis racket
-|
-|
-
-|
-|
-|
-|
-
-.2+<.^|Kitchen
-|bottle
-|wine glass
-|cup
-|fork
-
-|knife
-|spoon
-|bowl
-|
-
-.4+<.^|Food
-|banana
-|apple
-|sandwich
-|orange
-
-|broccoli
-|carrot
-|hot dog
-|pizza
-
-|donut
-|cake
-|
-|
-
-|
-|
-|
-|
-
-.2+<.^|Furniture
-|chair
-|couch
-|potted plant
-|bed
-
-|dining table
-|toilet
-|
-|
-
-.2+<.^|Electronic
-|tv
-|laptop
-|mouse
-|remote
-
-|keyboard
-|cell phone
-|
-|
-
-.2+<.^|Appliance
-|microwave
-|oven
-|toaster
-|sink
-
-|refrigerator
-|
-|
-|
-
-.2+<.^|Indoor
-|book
-|clock
-|vase
-|scissors
-
-|teddy bear
-|hair drier
-|toothbrush
-|
-
+|category name|person|bicycle|traffic light|bird|backpack|frisbee|bottle|banana|chair|tv|microwave|book
+|||car|fire hydrant|cat|umbrella|skis|wine glass|apple|couch|laptop|oven|clock
+|||motorcycle|stop sign|dog|handbag|snowboard|cup|sandwich|potted plant|mouse|toaster|vase
+|||airplane|parking meter|horse|tie|sports ball|fork|orange|bed|remote|sink|scissors
+|||bus|bench|sheep|suitcase|kite|knife|broccoli|dining table|keyboard|refrigerator|teddy bear
+|||train||cow||baseball bat|spoon|carrot|toilet|cell phone||hair drier
+|||truck||elephant||baseball glove|bowl|hot dog||||toothbrush
+|||boat||bear||skateboard||pizza||||
+|||||zebra||surfboard||donut||||
+|||||giraffe||tennis racket||cake||||
 |===
 
 [[anchor-license]]
-License一覧
+`**license**` 一覧
 |===
 |License |商用利用 |再配布 |ID
 
@@ -428,9 +283,7 @@ License一覧
 
 === Notebook実行
 
-<<<
-
-. `**download_images**` ディレクトリのNotebook(*.ipynb)を開き、その中のPythonスクリプトを実行する
+. `**download_images**` ディレクトリのNotebook (*.ipynb) を開き、その中のPythonスクリプトを実行する
 ** その後下記の動作をする
 *** `**download_images**` ディレクトリの<<anchor-conf, configuration.json>>の存在をチェックする
 **** エラー発生時はその内容を表示し、中断する
@@ -444,15 +297,15 @@ License一覧
 **** <<anchor-conf, configuration.json>> `**category_names**` に一致する画像
 ***** `**category_names**` のリスト内に
 <<anchor-category, category_names一覧>>に存在しない値のみが設定された場合、エラー内容を表示し、中断する
-***** `**category_names**` のリスト内に<<anchor-category, category_names一覧>>に存在する値と存在しない値の両方が設定された場合、category_names一覧に存在しない値についてWarningを表示し、category_names一覧に存在する値のみを使用して続行する
+***** `**category_names**` のリスト内に<<anchor-category, category_names一覧>>に存在する値と存在しない値の両方が設定された場合、`**category_names**` 一覧に存在しない値についてWarningを表示し、`**category_names**` 一覧に存在する値のみを使用して続行する
 **** <<anchor-conf, configuration.json>> `**max_download_count**` で決まるDownload画像数
 ***** `**max_download_count**` に負の値が設定された場合、エラー内容を表示し、中断する
 **** <<anchor-conf, configuration.json>> `**licenses**` に一致する画像
-***** `**licenses**` のリスト内に<<anchor-license, License一覧>>に存在しない値のみが設定された場合、エラー内容を表示し、中断する
-***** `**licenses**` のリスト内に<<anchor-license, License一覧>>に存在する値と存在しない値の両方が設定された場合、License一覧に存在しない値についてWarningを表示し、License一覧に存在する値のみを使用して続行する
+***** `**licenses**` のリスト内に<<anchor-license, license 一覧>>に存在しない値のみが設定された場合、エラー内容を表示し、中断する
+***** `**licenses**` のリスト内に<<anchor-license, license 一覧>>に存在する値と存在しない値の両方が設定された場合、`**license**` 一覧に存在しない値についてWarningを表示し、`**license**` 一覧に存在する値のみを使用して続行する
 **** <<anchor-conf, configuration.json>> `**remove_categories**` に一致する画像を除外
 ***** `**remove_categories**` のリスト内に<<anchor-category, category_names一覧>>に存在しない値のみが設定された場合、エラー内容を表示し、中断する
-***** `**remove_categories**` のリスト内に<<anchor-category, category_names一覧>>に存在する値と存在しない値の両方が設定された場合、category_names一覧に存在しない値についてWarningを表示し、category_names一覧に存在する値に一致する画像を除外する
+***** `**remove_categories**` のリスト内に<<anchor-category, category_names一覧>>に存在する値と存在しない値の両方が設定された場合、`**category_names**` 一覧に存在しない値についてWarningを表示し、`**category_names**` 一覧に存在する値に一致する画像を除外する
 **** 上記の条件に合致する画像枚数が0枚になった場合は、Warningを表示する
 *** <<anchor-conf, configuration.json>> `**output_dir**` で指定するディレクトリがなければ作成し、そこにDownload画像を出力する
 *** Download中は下記のような表示をする

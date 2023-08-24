@@ -1,5 +1,5 @@
 #!/bin/bash
-# Copyright 2022 Sony Semiconductor Solutions Corp. All rights reserved.
+# Copyright 2022-2023 Sony Semiconductor Solutions Corp. All rights reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-NAME_IMAGE='ppl_build_env';
+NAME_IMAGE='app_build_env:1.0.0';
 
 cd "$(dirname "$0")"
 
@@ -21,7 +21,7 @@ usage_exit() {
     echo "usage	: ./build.sh <Options>"
     echo ""
     echo " <Options>"
-    echo "    -t : (optional) specify build Wasm type. value is [ic|od|param_debug]."
+    echo "    -t : (optional) specify build Wasm type. value is [ic|od|semseg]."
     echo "    -d : (optional) build for debugging."
     echo "    -c : (optional) clean all Wasm object."
     echo "    -C : (optional) clean all Wasm object and Docker image."
@@ -40,11 +40,10 @@ PPL_PARAMETER_FILE=
 
 clean() {
     echo "clean"
-            docker run --rm \
-                -v $PWD/sample/:$PWD/sample/ \
-                -v $PWD/ppl_sdk/:$PWD/ppl_sdk/ \
-                $NAME_IMAGE:latest \
-                /bin/sh -c "cd ${PWD}/sample/classification && make clean && cd ${PWD}/sample/objectdetection && make clean && cd ${PWD}/sample/param_debug && make clean"
+    docker run --rm \
+        -v $PWD/sdk/:$PWD/sdk/ \
+        $NAME_IMAGE \
+        /bin/sh -c "cd ${PWD}/sdk/sample && make clean"
 }
 
 cleanall() {
@@ -56,48 +55,44 @@ cleanall() {
 builddockerimage() {
     if [ ! "$(docker image ls -q "$NAME_IMAGE")" ]; then
         echo "builddockerimage"
-        docker build . -f $PWD/Dockerfile -t $NAME_IMAGE --network host
+        docker build ./sdk -f $PWD/sdk/Dockerfile -t $NAME_IMAGE --network host
     fi
 }
 
-build_ic_od() {
-    echo "build_ic_od"
+build_ic_od_semseg() {
+    echo "build_ic_od_semseg"
     builddockerimage
     docker run --rm \
-        -v $PWD/sample/:$PWD/sample/ \
-        -v $PWD/ppl_sdk/:$PWD/ppl_sdk/ \
-        $NAME_IMAGE:latest \
-        /bin/sh -c "cd ${PWD}/sample/classification && make ${BUILD_TYPE} && cd ${PWD}/sample/objectdetection && make ${BUILD_TYPE}"
-}
-
-build_param_debug() {
-    echo "build_param_debug"
-    builddockerimage
-    docker run --rm \
-        -v $PWD/sample/param_debug:$PWD/sample/param_debug \
-        -v $PWD/ppl_sdk/:$PWD/ppl_sdk/ \
-        $NAME_IMAGE:latest \
-        /bin/sh -c "cd ${PWD}/sample/param_debug && make ${BUILD_TYPE}"
+        -v $PWD/sdk/:$PWD/sdk/ \
+        $NAME_IMAGE \
+        /bin/sh -c "cd ${PWD}/sdk/sample && make ${BUILD_TYPE}"
 }
 
 build_ic() {
     echo "build_ic"
     builddockerimage
     docker run --rm \
-        -v $PWD/sample/classification:$PWD/sample/classification \
-        -v $PWD/ppl_sdk/:$PWD/ppl_sdk/ \
-        $NAME_IMAGE:latest \
-        /bin/sh -c "cd ${PWD}/sample/classification && make ${BUILD_TYPE}"
+        -v $PWD/sdk/:$PWD/sdk/ \
+        $NAME_IMAGE \
+        /bin/sh -c "cd ${PWD}/sdk/sample && make ${BUILD_TYPE} APPTYPE=ic"
 }
 
 build_od() {
     echo "build_od"
     builddockerimage
     docker run --rm \
-        -v $PWD/sample/objectdetection:$PWD/sample/objectdetection \
-        -v $PWD/ppl_sdk/:$PWD/ppl_sdk/ \
-        $NAME_IMAGE:latest \
-        /bin/sh -c "cd ${PWD}/sample/objectdetection && make ${BUILD_TYPE}"
+        -v $PWD/sdk/:$PWD/sdk/ \
+        $NAME_IMAGE \
+        /bin/sh -c "cd ${PWD}/sdk/sample && make ${BUILD_TYPE} APPTYPE=od"
+}
+
+build_semseg() {
+    echo "build_semseg"
+    builddockerimage
+    docker run --rm \
+        -v $PWD/sdk/:$PWD/sdk/ \
+        $NAME_IMAGE \
+        /bin/sh -c "cd ${PWD}/sdk/sample && make ${BUILD_TYPE} APPTYPE=semseg"
 }
 
 # while getopts ":AaCcdhlnpsvu-:" OPT
@@ -116,10 +111,10 @@ do
                 APP_TYPE=$OPTARG
             elif [ "$OPTARG" = "od" ]; then
                 APP_TYPE=$OPTARG
-            elif [ "$OPTARG" = "param_debug" ]; then
+            elif [ "$OPTARG" = "semseg" ]; then
                 APP_TYPE=$OPTARG
             else
-                echo "-t options must be ic or od or param_debug."
+                echo "-t options must be ic or od or semseg."
                 exit 0
             fi;
             ;;
@@ -136,8 +131,8 @@ if [ "$APP_TYPE" = "od" ]; then
     build_od
 elif [ "$APP_TYPE" = "ic" ]; then
     build_ic
-elif [ "$APP_TYPE" = "param_debug" ]; then
-    build_param_debug
+elif [ "$APP_TYPE" = "semseg" ]; then
+    build_semseg
 else
-    build_ic_od
+    build_ic_od_semseg
 fi;

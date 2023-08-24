@@ -1,17 +1,17 @@
 # Delete deploy configuration
 
-This tutorial shows how to delete a deploy configuration in Console for AITRIOS.
+This tutorial shows how to delete a deploy configuration in "**Console for AITRIOS**".
 
 ## Get started
 
-### 1. Set up Console Access Library
+### 1. Set up "**Console Access Library**"
 Set up access library client to delete a deploy configuration.
 
 See [README](../../../_common/set_up_console_client/README.md) for details.
 
 ### 2. Get deploy configuration list (optional)
 You need **`config_id`** of the deploy configuration that you want to delete.
-If you want to get information for deployment configurations registerd in Console for AITRIOS, get the configuration list and check the config ID.
+If you want to get information for deployment configurations registered in "**Console for AITRIOS**", get the configuration list and check the config ID.
 
 See [README](../get_deploy_config/README.md) for details.
 
@@ -33,11 +33,11 @@ The parameters required to run this notebook are :
 
 |Setting|Description|Range|Required/Optional|Remarks
 |:--|:--|:--|:--|:--|
-|**`config_id`**|The ID of the deploy configuration you want to delete.|String.<br>See NOTE.|Required|Used for Console Access Library API:<br>**`deployment.deployment.Deployment.delete_deploy_configuration`**|
+|**`config_id`**|The ID of the deploy configuration you want to delete.|String.<br>See NOTE.|Required|Used for "**Console Access Library**" API:<br>**`deployment.deployment.Deployment.delete_deploy_configuration`**|
 
 > **NOTE**
 >
-> See [API Reference](https://developer.aitrios.sony-semicon.com/development-guides/reference/api-references/) of Console Access Library for other restrictions.
+> See [API Reference](https://developer.aitrios.sony-semicon.com/development-guides/reference/api-references/) of "**Console Access Library**" for other restrictions.
 
 
 ### 5. Run the notebook

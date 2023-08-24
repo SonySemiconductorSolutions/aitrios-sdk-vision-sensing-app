@@ -38,12 +38,12 @@ The parameters required to run this notebook are :
 
 |Setting|Description|Range|Required/Optional
 |:--|:--|:--|:--|
-|**`annotation_file`**|Path to COCO annotation file|Absolute path or relative path from configuration.json/Notebook(*.ipynb)|Required|
+|**`annotation_file`**|Path to COCO annotation file|Absolute path or relative path from configuration.json/Notebook (*.ipynb) |Required|
 |**`category_names`**|Image categories to download|["Category1", "Category2", ...] *1 |Optional<br> If omitted or given an empty list, all categories will be downloaded.
 |**`max_download_count`**|Max number of downloads for each category|0: unlimited (as many as possible)<br> 1 - Total number of images: Up to the specified number for each category<br><br>*If category_names is omitted or empty, this parameter will be a number of total downloads, not per category.|Optional<br> If omitted, the number of downloads is unlimited (as many as possible) |
 |**`licenses`**|Licenses of images to download|[License1 ID, License2 ID, ・・・] *2|Optional<br>If omitted or given an empty list, images for all licenses will be downloaded.|
 |**`remove_categories`**|Image categories to exclude|["Category1", "Category2", ...] *1 |Optional<br>If omitted or given an empty list, no categories will be excluded.|
-|**`output_dir`**|Path to output downloaded images (a new directory will be created if it does not exist)|Absolute path or relative path from configuration.json/Notebook(*.ipynb)|Required|
+|**`output_dir`**|Path to output downloaded images (a new directory will be created if it does not exist)|Absolute path or relative path from configuration.json/Notebook (*.ipynb)|Required|
 
 
 *1 Select category name(s) from the following table.
@@ -81,11 +81,11 @@ If successful, images will be downloaded in **`output_dir`**.
 
 You can run all cells at once, or you can run the cells one by one.
 
-### 5. (Optional) Import COCO images to Console for AITRIOS
+### 5. (Optional) Import COCO images to "**Console for AITRIOS**"
 
-If you want to use the downloaded COCO images to train or retrain AI model on Console for AITRIOS,
+If you want to use the downloaded COCO images to train or retrain AI model on "**Console for AITRIOS**",
 
-see [Console Manual](https://developer.aitrios.sony-semicon.com/development-guides/documents/manuals/) for details.
+see ["**Console Manual**"](https://developer.aitrios.sony-semicon.com/documents/?page=console_user_manual&lang=ja) for details.
 
 - Create model
 - Train model

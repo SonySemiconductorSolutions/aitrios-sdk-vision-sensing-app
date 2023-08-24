@@ -1,7 +1,7 @@
-= Vision and Sensing pass:[<br/>] Application SDK pass:[<br/>] モデル学習 pass:[<br/>] 機能仕様書 pass:[<br/>]
+= Vision and Sensing Application SDK pass:[<br/>] モデル学習 pass:[<br/>] 機能仕様書 pass:[<br/>]
 :sectnums:
 :sectnumlevels: 1
-:author: Copyright 2023 Sony Semiconductor Solutions Corporation
+:author: Copyright 2022-2023 Sony Semiconductor Solutions Corporation
 :version-label: Version 
 :revnumber: x.x.x
 :revdate: YYYY - MM - DD
@@ -19,13 +19,19 @@
 
 |2023/01/30
 |初版作成
+
+|2023/05/26
+|ツール名と括弧の表記の修正 + 
+「**MCT**」バージョンアップに伴う修正 + 
+一部環境でAsciiDocのMermaid図が表示されないため、レンダリング後の画像参照に修正 + 
+図の代替テキスト追加
 |===
 
 == 用語・略語
 |===
 |Terms/Abbreviations |Meaning 
 
-|<<mct, MCT>>
+|<<mct, 「**MCT**」>>
 |モデルを量子化するためのオープンソースソフトウェア
 
 |Keras
@@ -36,15 +42,15 @@
 AIモデルのフォーマットの一種
 
 |イテレーション
-|(1回あたりの)学習
+|(1回あたりの) 学習
 
 |===
 
 == 参照資料
 
 [[anchor-ref]]
-* Reference/Related documents（関連資料）
-** [[mct]]Model Compression Toolkit (MCT)
+* Reference/Related documents (関連資料)
+** [[mct]]「**Model Compression Toolkit (MCT)**」
 *** https://github.com/sony/model_optimization
 
 == 想定ユースケース
@@ -56,17 +62,17 @@ AIモデルのフォーマットの一種
 
 === Functional Overview
 
-* SDKにて下記のフローでImage ClassificationのAIモデル(Keras)を転移学習できる
+* SDKにて下記のフローでImage ClassificationのAIモデル (Keras) を転移学習できる
 
-* 転移学習したAIモデルで推論実行し、推論実行結果の統計値(Top1 accuracy)を取得できる
+* 転移学習したAIモデルで推論実行し、推論実行結果の統計値 (Top1 accuracy) を取得できる
 
-* SDKにてサポートするAIモデルは、MCTの https://github.com/sony/model_optimization/tree/v1.7.1#supported-features[supported-features] に準拠する
+* SDKにてサポートするAIモデルは、「**MCT**」の https://github.com/sony/model_optimization/tree/v1.8.0#supported-features[supported-features] に準拠する
 
 * SDKにてサポートする画像フォーマットはJPEGとする
 
 * フロー概要
 
-[mermaid]
+[mermaid, target="凡例"]
 ----
 flowchart TD;
     %% definition
@@ -79,7 +85,7 @@ flowchart TD;
     end
 ----
 
-[mermaid]
+[mermaid, target="フロー概要"]
 ----
 flowchart TD
     start((Start)) --> id1(1.転移学習のベースとなるAIモデルを用意)
@@ -94,7 +100,7 @@ flowchart TD
 
 . 転移学習のベースとなるAIモデルを用意
 
-** 転移学習のベースとなるAIモデル(Keras)を用意する
+** 転移学習のベースとなるAIモデル (Keras) を用意する
 
 . 転移学習のデータセットを用意
 
@@ -106,7 +112,7 @@ flowchart TD
 
 . Notebook編集
 
-** ベースとなるAIモデルがTop(output)レイヤーを含んでいる場合は、Notebook内のremove_top_layer_if_needed()の実装を修正する
+** ベースとなるAIモデルがTop (output) レイヤーを含んでいる場合は、Notebook内のremove_top_layer_if_needed()の実装を修正する
 
 . 転移学習と評価を実行
 
@@ -123,9 +129,9 @@ flowchart TD
 . `**image_classification**` ディレクトリの各ファイルから各機能に遷移する
 
 === 転移学習のベースとなるAIモデルを用意
-. 転移学習のベースとなるAIモデル(Keras)を用意する
+. 転移学習のベースとなるAIモデル (Keras) を用意する
 
-** 転移学習のベースとなるAIモデル(Keras)を、SDK実行環境に格納する
+** 転移学習のベースとなるAIモデル (Keras) を、SDK実行環境に格納する
 
 === 転移学習のデータセットを用意
 
@@ -168,7 +174,7 @@ tutorials/
 NOTE: CVATでアノテーションを行ったデータセットをエクスポートしSDK実行環境に格納する方法は、CVAT画像アノテーション 機能仕様書 を参照。
 
 === 転移学習実行向け設定ファイル作成・編集
-. 実行ディレクトリに設定ファイル(`**configuration.json**`)を作成し、編集する
+. 実行ディレクトリに設定ファイル (`**configuration.json**`) を作成し、編集する
 
 NOTE: 特別な記載がある場合を除き、原則として省略は不可。
 
@@ -181,27 +187,27 @@ NOTE: 原則としてシンボリックリンクのフォルダパス、ファ�
 |Configuration |Meaning |Range |Remarks
 
 |`**source_keras_model**`
-|転移学習のベースとなるAIモデル(Keras) パス。KerasのSavedModel形式のフォルダまたはh5形式のファイルを指定する
-|絶対パスまたはNotebook(*.ipynb)からの相対パス
+|転移学習のベースとなるAIモデル (Keras) パス。KerasのSavedModel形式のフォルダまたはh5形式のファイルを指定する
+|絶対パスまたはNotebook (*.ipynb) からの相対パス
 |未指定の場合、Keras標準のMobileNetV2のAIモデルを使用する動作となる
 
 |`**dataset_training_dir**`
 |転移学習の入力用データセット画像パス。 https://opencv.github.io/cvat/docs/manual/advanced/formats/format-imagenet/[ImageNet 1.0形式のフォルダ] を指定する
-|絶対パスまたはNotebook(*.ipynb)からの相対パス
+|絶対パスまたはNotebook (*.ipynb) からの相対パス
 |
 
 |`**dataset_validation_dir**`
 |転移学習後の評価用データセット画像パス。 https://opencv.github.io/cvat/docs/manual/advanced/formats/format-imagenet/[ImageNet 1.0形式のフォルダ] を指定する
-|絶対パスまたはNotebook(*.ipynb)からの相対パス
+|絶対パスまたはNotebook (*.ipynb) からの相対パス
 |
 
 |`**batch_size**`
 |転移学習の入力用データセットと評価用データセットのバッチサイズ
-|1以上(2のn乗を推奨)
+|1以上 (2のn乗を推奨)
 |
 
 |`**input_tensor_size**`
-|AIモデルの入力テンソルのサイズ(画像の一辺のピクセル数)
+|AIモデルの入力テンソルのサイズ (画像の一辺のピクセル数)
 |AIモデルの入力テンソルに準拠
 |
 
@@ -212,25 +218,23 @@ NOTE: 原則としてシンボリックリンクのフォルダパス、ファ�
 
 |`**output_dir**`
 |転移学習したAIモデルの出力先となるディレクトリ
-|絶対パスまたはNotebook(*.ipynb)からの相対パス
+|絶対パスまたはNotebook (*.ipynb) からの相対パス
 |
 
 |`**evaluate_result_dir**`
 |推論実行結果の統計情報を保存するディレクトリ
-|絶対パスまたはNotebook(*.ipynb)からの相対パス
+|絶対パスまたはNotebook (*.ipynb) からの相対パス
 |
 
 |===
 
 === Notebook編集
-. 実行ディレクトリの転移学習実行用Notebook(*.ipynb)を開く
-. ベースとなるAIモデルがTop(output)レイヤーを含んでいる場合は、Notebook内のremove_top_layer_if_needed()の実装を修正する
+. 実行ディレクトリの転移学習実行用Notebook (*.ipynb) を開く
+. ベースとなるAIモデルがTop (output) レイヤーを含んでいる場合は、Notebook内のremove_top_layer_if_needed()の実装を修正する
 
 === 転移学習と評価を実行
 
-<<<
-
-. 実行ディレクトリの転移学習実行用Notebook(*.ipynb)を開き、その中のPythonスクリプトを実行する
+. 実行ディレクトリの転移学習実行用Notebook (*.ipynb) を開き、その中のPythonスクリプトを実行する
 * その後下記の動作をする
 ** 実行ディレクトリの<<anchor-conf, configuration.json>>存在をチェックする
 *** エラー発生時はその内容を表示し、中断する
@@ -244,7 +248,7 @@ NOTE: 原則としてシンボリックリンクのフォルダパス、ファ�
 ** TensorFlowなどの外製ソフトでエラー発生時は、外製ソフトが出力するエラーを表示し、中断する
 ** <<anchor-conf, configuration.json>> `**output_dir**` に、KerasのSavedModel形式のAIモデルを出力する
 *** `**output_dir**` で指定するディレクトリがなければ作成し、そこに出力する
-** 学習中はNotebookに下記のような表示をする(`**epochs**` が10の場合)
+** 学習中はNotebookに下記のような表示をする (`**epochs**` が10の場合)
 +
 ```
 Epoch 1/10
@@ -278,7 +282,7 @@ Epoch 10/10
 * データセットのサイズによってはCodespacesのMachine Typeが4-coreでも転移学習時にメモリ不足でエラーになるため、その場合は8-core以上のMachine Typeを選択する必要がある
 
 == その他特記事項
-* MCT(model-compression-toolkit)、TensorFlowのバージョン確認方法について
+* 「**MCT**」(model-compression-toolkit)、TensorFlowのバージョン確認方法について
 ** SDK環境のルートフォルダにある requirements.txt を参照する
 
 == 未決定事項

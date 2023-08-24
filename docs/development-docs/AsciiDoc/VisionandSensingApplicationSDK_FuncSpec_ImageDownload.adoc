@@ -1,7 +1,7 @@
-= Vision and Sensing pass:[<br/>] Application SDK pass:[<br/>] Image Download pass:[<br/>] Functional Specifications pass:[<br/>]
+= Vision and Sensing Application SDK pass:[<br/>] Image Download pass:[<br/>] Functional Specifications pass:[<br/>]
 :sectnums:
 :sectnumlevels: 1
-:author: Copyright 2023 Sony Semiconductor Solutions Corporation
+:author: Copyright 2022-2023 Sony Semiconductor Solutions Corporation
 :version-label: Version 
 :revnumber: x.x.x
 :revdate: YYYY - MM - DD
@@ -19,13 +19,18 @@
 |Date |What/Why
 
 |2022/12/12
-|Initial draft
+|Initial draft.
 
 |2023/01/30
 |Directory structure change. + 
 Added that symbolic links must not be used. + 
 Following the deletion of the secret information, Initial was removed from the configuration file entry and added about creating a configuration file. + 
 Updated the PDF build environment.
+
+|2023/05/26
+|Fixed the notation of tool names and parentheses. + 
+Some environments do not render AsciiDoc's Mermaid diagrams, so modified to rendered image references. + 
+Added alternate text to images.
 |===
 
 == Terms/Abbreviations
@@ -50,7 +55,7 @@ Large-scale object detection, segmentation, caption dataset
 
 == Expected use case
 
-* You want to download sample images from COCO for importing and annotating in Console for AITRIOS
+* Download sample images from COCO for importing and annotating in "**Console for AITRIOS**"
 
 
 == Functional overview/Algorithm
@@ -59,7 +64,7 @@ Large-scale object detection, segmentation, caption dataset
 
 The SDK downloads sample images from COCO in the following flow
 
-[mermaid]
+[mermaid, target="Legend"]
 ----
 flowchart TD;
     %% definition
@@ -75,24 +80,24 @@ flowchart TD;
 
 * Flow overview
 
-[mermaid]
+[mermaid, target="Flow overview"]
 ----
 flowchart TD
-    start((Start)) --> id1(1.Setup for running notebook)
-    id1 --> id2(2.Create and edit the configuration file for running notebook)
+    start((Start)) --> id1(1.Setup for running the notebook)
+    id1 --> id2(2.Create and edit the configuration file for running the notebook)
     id2 --> id3(3.Run the notebook)
     id3 --> finish(((Finish)))
 ----
 
 * Flow details
 
-. Setup for running notebook
+. Setup for running the notebook
 
 ** Get <<anchor-ref, _COCO annotations file_>>
 
-. Create and edit the configuration file for running notebook
+. Create and edit the configuration file for running the notebook
 
-** Create and edit the configuration file <<anchor-conf, _configuration.json_>> to configure notebook runtime settings
+** Create and edit the configuration file, `**configuration.json**`, to configure notebook runtime settings
 
 . Run the notebook
 
@@ -107,15 +112,15 @@ flowchart TD
 . Jump to each feature from each file in the `**download_images**` directory
 
 
-=== Setup for running notebook
+=== Setup for running the notebook
 . Download <<anchor-ref, _COCO annotations file_>> in your browser from the procedure and link provided in `**README.md**` in the `**download_images**` directory
 . Extract the downloaded <<anchor-ref, _COCO annotations file_>> zip to the path specified in the configuration file
 
-[mermaid]
+[mermaid, target="Setup for running the notebook"]
 ----
 %%{init:{'themeVariables':{'fontSize':'24px'}, 'themeCSS':'text.actor {font-size:18px !important;} .messageText {font-size:18px !important;}'}}%%
 sequenceDiagram
-    Title Setup for running notebook
+    Title Setup for running the notebook
     participant user as User
     participant readme as README.md<br/>in the<br/>download_images<br/>directory
     participant browser as Browser
@@ -130,30 +135,30 @@ sequenceDiagram
 ----
 
 
-=== Create and edit the configuration file for running notebook
+=== Create and edit the configuration file for running the notebook
 . Create and edit the configuration file, `**configuration.json**`, in the `**download_images**` directory
 
 NOTE: Do not use symbolic links to files and directories.
 
 [[anchor-conf]]
-[cols="2,2,3,3"]
+[cols="1,1,1,1a"]
 |===
 |Configuration |Meaning |Range |Remarks
 
 |`**annotation_file**`
 |COCO annotations file path
-|Absolute path or relative to configuration.json/Notebook (*.ipynb)
-|・Don't abbreviate
+|Absolute path or relative to the `**configuration.json**`/Notebook (*.ipynb)
+|* Don't abbreviate
 
 |`**category_names**`
 |Image category names +
  +
 Downloads only images matching this category
 |["Category1", "Category2", ・・・] +
-
-See <<anchor-category, _category names list_>> for categories
-|・Optional +
-・If omitted or no category is specified (an empty list is specified), all categories will be downloaded
+ + 
+See <<anchor-category, _category_names list_>> for categories
+|* Optional +
+* If omitted or no category is specified (an empty list is specified), all categories will be downloaded
 
 |`**max_download_count**`
 |Maximum number of images downloaded per category
@@ -164,19 +169,19 @@ See <<anchor-category, _category names list_>> for categories
 ・・・ +
 All images: Downloads all images +
 All images+1: Downloads all images +
-|・Optional +
-・If omitted or 0 is specified, all images matching the conditions will be downloaded +
-・If category_names is omitted or category is not specified (an empty list is specified), this parameter is the total number of downloads, not the number of downloads per category
+|* Optional +
+* If omitted or 0 is specified, all images matching the conditions will be downloaded +
+* If `**category_names**` is omitted or category is not specified (an empty list is specified), this parameter is the total number of downloads, not the number of downloads per category
 
 |`**licenses**`
 |Image license + 
  +
 Downloads only images applicable to this license
 |[License1 ID, License2 ID, ・・・] +
-
+ + 
 See <<anchor-license, _license list_>> for license
-|・Optional +
-・If omitted or no license is specified (an empty list is specified), all licenses are applicable for download
+|* Optional +
+* If omitted or no license is specified (an empty list is specified), all licenses are applicable for download
 
 |`**remove_categories**`
 |Category names to exclude +
@@ -184,188 +189,37 @@ See <<anchor-license, _license list_>> for license
 Images matching this category will not be downloaded
 |["Category1", "Category2", ・・・] +
 
-See <<anchor-category, _category names list_>> for categories
-|・Optional +
-・If omitted or no category is specified (an empty list is specified), no exclusion will occur
+See <<anchor-category, _category_names list_>> for categories
+|* Optional +
+* If omitted or no category is specified (an empty list is specified), no exclusion will occur
 
 |`**output_dir**`
 |Directory to store download images
-|Absolute path or relative to configuration.json/Notebook (*.ipynb)
-|・Don't abbreviate
+|Absolute path or relative to the `**configuration.json**`/Notebook (*.ipynb)
+|* Don't abbreviate
 
 |===
 
 [[anchor-category]]
-Category names list
+`**category_names**` list
+[cols="h,d,d,d,d,d,d,d,d,d,d,d,d"]
 |===
-|type 4+<|category name
+|type: |Person |Veicle |Outdoor |Animal |Accessory |Sports |Kitcen |Food |Furniture |Electronic |Appliance |Indoor
 
-.2+<.^|Person
-|person
-|
-|
-|
-
-|
-|
-|
-|
-
-.2+<.^|Vehicle
-|bicycle
-|car
-|motorcycle
-|airplane
-
-|bus
-|train
-|truck
-|boat
-
-.2+<.^|Outdoor
-|traffic light
-|fire hydrant
-|stop sign
-|parking meter
-
-|bench
-|
-|
-|
-
-.4+<.^|Animal
-|bird
-|cat
-|dog
-|horse
-
-|sheep
-|cow
-|elephant
-|bear
-
-|zebra
-|giraffe
-|
-|
-
-|
-|
-|
-|
-
-.2+<.^|Accessory
-|backpack
-|umbrella
-|handbag
-|tie
-
-|suitcase
-|
-|
-|
-
-.4+<.^|Sports
-|frisbee
-|skis
-|snowboard
-|sports ball
-
-|kite
-|baseball bat
-|baseball glove
-|skateboard
-
-|surfboard
-|tennis racket
-|
-|
-
-|
-|
-|
-|
-
-.2+<.^|Kitchen
-|bottle
-|wine glass
-|cup
-|fork
-
-|knife
-|spoon
-|bowl
-|
-
-.4+<.^|Food
-|banana
-|apple
-|sandwich
-|orange
-
-|broccoli
-|carrot
-|hot dog
-|pizza
-
-|donut
-|cake
-|
-|
-
-|
-|
-|
-|
-
-.2+<.^|Furniture
-|chair
-|couch
-|potted plant
-|bed
-
-|dining table
-|toilet
-|
-|
-
-.2+<.^|Electronic
-|tv
-|laptop
-|mouse
-|remote
-
-|keyboard
-|cell phone
-|
-|
-
-.2+<.^|Appliance
-|microwave
-|oven
-|toaster
-|sink
-
-|refrigerator
-|
-|
-|
-
-.2+<.^|Indoor
-|book
-|clock
-|vase
-|scissors
-
-|teddy bear
-|hair drier
-|toothbrush
-|
-
+|category name|person|bicycle|traffic light|bird|backpack|frisbee|bottle|banana|chair|tv|microwave|book
+|||car|fire hydrant|cat|umbrella|skis|wine glass|apple|couch|laptop|oven|clock
+|||motorcycle|stop sign|dog|handbag|snowboard|cup|sandwich|potted plant|mouse|toaster|vase
+|||airplane|parking meter|horse|tie|sports ball|fork|orange|bed|remote|sink|scissors
+|||bus|bench|sheep|suitcase|kite|knife|broccoli|dining table|keyboard|refrigerator|teddy bear
+|||train||cow||baseball bat|spoon|carrot|toilet|cell phone||hair drier
+|||truck||elephant||baseball glove|bowl|hot dog||||toothbrush
+|||boat||bear||skateboard||pizza||||
+|||||zebra||surfboard||donut||||
+|||||giraffe||tennis racket||cake||||
 |===
 
 [[anchor-license]]
-License list
+`**license**` list
 |===
 |License |Commercial use |Redistribution |ID 
 
@@ -430,10 +284,8 @@ This means that the copyright of each work is not cleared. For details, you have
 
 === Run the notebook
 
-<<<
-
 . Open the notebook, _*.ipynb_, in the `**download_images**` directory, and run the python scripts in it
-** The script does the following:
+** The scripts do the following:
 *** Checks that <<anchor-conf, _configuration.json_>> exists in the `**download_images**` directory
 **** If an error occurs, the error description is displayed and running is interrupted.
 *** Checks the contents of <<anchor-conf, _configuration.json_>>
@@ -444,16 +296,16 @@ This means that the copyright of each work is not cleared. For details, you have
 *** If an error occurs in external software, for example, Pycocotools, the error output by the external software is displayed and running is interrupted
 *** Downloads images determined from following
 **** Images matching the category specified in <<anchor-conf, _configuration.json_>> for `**category_names**`
-***** if only values not present in the <<anchor-category, _category names list_>> are set to the `**category_names**`, error description is displayed and running is interrupted
-***** If both present and not present values in the <<anchor-category, _category names list_>> are set to the `**category_names**`, warns about values not present in the list and continues using only values present
+***** if only values not present in the <<anchor-category, _category_names list_>> are set to the `**category_names**`, error description is displayed and running is interrupted
+***** If both present and not present values in the <<anchor-category, _category_names list_>> are set to the `**category_names**`, warns about values not present in the list and continues using only values present
 **** Number of images downloaded specified in <<anchor-conf, _configuration.json_>> for `**max_download_count**` 
 ***** If negative value is set to the `**max_download_count**` error description is displayed and running is interrupted
 **** Images applicable to the license specified in <<anchor-conf, _configuration.json_>> for `**licenses**`
-***** if only values not present in the <<anchor-category, _license list_>> are set to the `**licenses**`, error description is displayed and running is interrupted
+***** if only values not present in the <<anchor-license, _license list_>> are set to the `**licenses**`, error description is displayed and running is interrupted
 ***** If both present and not present values in the <<anchor-license, _license list_>> are set to the `**licenses**`, warns about values not present in the list and continues using only values present
 **** Excludes images matching the category specified in <<anchor-conf, _configuration.json_>> for `**remove_categories**`
-***** if only values not present in the <<anchor-category, _category names list_>> are set to the `**remove_categories**`, error description is displayed and running is interrupted
-***** If both present and not present values in the <<anchor-category, _category names list_>> are set to the `**remove_categories**` list, warns about values not present in the list and continues using only values present
+***** if only values not present in the <<anchor-category, _category_names list_>> are set to the `**remove_categories**`, error description is displayed and running is interrupted
+***** If both present and not present values in the <<anchor-category, _category_names list_>> are set to the `**remove_categories**` list, warns about values not present in the list and continues using only values present
 **** If the number of images matching the preceding conditions reaches zero, a warning is displayed
 *** Outputs the downloaded images to the directory specified in <<anchor-conf, _configuration.json_>> for `**output_dir**`. if the directory does not already exist, it is created at the same time
 *** Displays the following while downloading:

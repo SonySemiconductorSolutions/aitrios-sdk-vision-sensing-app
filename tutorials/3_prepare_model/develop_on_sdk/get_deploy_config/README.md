@@ -1,10 +1,10 @@
 # Get deploy configurations
 
-This tutorial shows how to get deploy configurations registered in Console for AITRIOS.
+This tutorial shows how to get deploy configurations registered in "**Console for AITRIOS**".
 
 ## Get started
 
-### 1. Set up Console Access Library
+### 1. Set up "**Console Access Library**"
 Set up access library client to get deploy configurations.
 
 See [README](../../../_common/set_up_console_client/README.md) to get started.
