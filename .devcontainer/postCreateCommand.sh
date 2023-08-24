@@ -1,5 +1,5 @@
 #!/bin/sh
-# Copyright 2022 Sony Semiconductor Solutions Corp. All rights reserved.
+# Copyright 2022-2023 Sony Semiconductor Solutions Corp. All rights reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ if [ ! -d $CVAT_DIR ]
 then
   echo "downloading cvat."
   cd .devcontainer/cvat/
-  git clone --depth 1 https://github.com/opencv/cvat -b v2.3.0
+  git clone --depth 1 https://github.com/opencv/cvat -b v2.4.0
   echo "downloading cvat completed."
 else
   echo "cvat already downloaded."

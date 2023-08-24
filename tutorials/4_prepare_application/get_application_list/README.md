@@ -1,10 +1,10 @@
-# Get list of Post Vision App from Console for AITRIOS
-The SDK provides a Jupyter Notebook to get list of Post Vision App from Console for AITRIOS. <br>
-By running the [get_application_list.ipynb](./get_application_list.ipynb), you can get list of the Post Vision App.
+# Get list of "**Vision and Sensing Application**" from "**Console for AITRIOS**"
+The SDK provides a Jupyter Notebook to get list of "**Vision and Sensing Applications**" from "**Console for AITRIOS**". <br>
+By running the [get_application_list.ipynb](./get_application_list.ipynb), you can get list of the "**Vision and Sensing Applications**".
 
 ## Get started
-### 1. Setup Console Access Library
-To get list of the Post Vision App, setup access library client. 
+### 1. Setup "**Console Access Library**"
+To get list of the "**Vision and Sensing Applications**", setup access library client. 
 
 See [README](./../../_common/set_up_console_client/README.md) to get started.
 

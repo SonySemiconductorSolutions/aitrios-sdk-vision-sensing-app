@@ -1,7 +1,7 @@
-= Vision and Sensing pass:[<br/>] Application SDK pass:[<br/>] Development Container pass:[<br/>] 機能仕様書 pass:[<br/>]
+= Vision and Sensing Application SDK pass:[<br/>] Development Container pass:[<br/>] 機能仕様書 pass:[<br/>]
 :sectnums:
 :sectnumlevels: 1
-:author: Copyright 2023 Sony Semiconductor Solutions Corporation
+:author: Copyright 2022-2023 Sony Semiconductor Solutions Corporation
 :version-label: Version 
 :revnumber: x.x.x
 :revdate: YYYY - MM - DD
@@ -22,6 +22,11 @@
 
 |2023/01/30
 |フォルダ構成変更。SDKが提供する機能の追加・変更。PDFビルド環境更新。
+
+|2023/05/26
+|ツール名と括弧の表記の修正 + 
+一部環境でAsciiDocのMermaid図が表示されないため、レンダリング後の画像参照に修正 + 
+図の代替テキスト追加
 |===
 
 == 用語・略語
@@ -31,13 +36,13 @@
 |Dev Container
 |GitHub CodespacesやVS Codeで利用できる、ソフトウェア開発環境を備えたDockerコンテナ。本SDKはDev Containerをベースとして提供される
 
-|Cloud App
-|Post-processing applicationで処理したデータを入力とした、Cloudで動作するAIアプリケーション
+|「**Cloud App**」
+|「**Vision and Sensing Application**」で処理したデータを入力とした、Cloudで動作するAIアプリケーション
 
 |===
 
 == 参照資料
-* Reference/Related documents（関連資料）
+* Reference/Related documents (関連資料)
 ** Codespaces
 *** https://docs.github.com/ja/codespaces
 ** VS Code Remote Development
@@ -48,7 +53,7 @@
 *** https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.vscode-remote-extensionpack
 ** CVAT
 *** https://github.com/opencv/cvat
-** MCT
+** 「**MCT**」
 *** https://github.com/sony/model_optimization
 ** COCO
 *** https://cocodataset.org/#home
@@ -84,14 +89,12 @@ NOTE: コンテナに含まれる各機能の具体的内容に関しては、�
 === Others Exclusive conditions / specifications
 * Dockerイメージは提供しない
 * エッジAIデバイスのファームウェアのビルド環境は提供しない
-* サンプルのCloud Appは参照となるリンクを提供する
-
-<<<
+* サンプルの「**Cloud App**」は参照となるリンクを提供する
 
 [[workflow]]
 === AIアプリケーション開発ワークフローと提供する機能
 
-[mermaid]
+[source,mermaid, target="凡例"]
 ----
 flowchart TD;
     %% definition
@@ -106,7 +109,7 @@ flowchart TD;
 ----
 
 
-[mermaid]
+[source,mermaid, target="AIアプリケーション開発ワークフロー"]
 ----
 flowchart TB
     id0((Start))
@@ -132,17 +135,17 @@ flowchart TB
 
 [cols="1,2a,2a"]
 |===
-|ワークフロー |提供物(ドキュメント) |提供物(実行環境、サンプル)
+|ワークフロー |提供物 (ドキュメント) |提供物 (実行環境、サンプル)
 
 |プロジェクト初期処理
 |
-* Console for AITRIOS 手順
+* 「**Console for AITRIOS**」手順
 |-
 
 |データセット準備
 |
 * CVATを使用してアノテーションを実施する手順
-* Console for AITRIOS 手順
+* 「**Console for AITRIOS**」手順
 |
 * CVATを使用できる環境
 * COCOから画像をダウンロードするNotebook
@@ -151,54 +154,54 @@ flowchart TB
 
 |AIモデルの作成
 |
-* AIモデル（Image Classification）を転移学習する手順
-* Console for AITRIOS 手順
+* AIモデル (Image Classification) を転移学習する手順
+* 「**Console for AITRIOS**」手順
 |
-* AIモデル（Image Classification）を転移学習するサンプルNotebook
+* AIモデル (Image Classification) を転移学習するサンプルNotebook
 
 |AIモデル量子化
 |
-* ユーザーが作成したAIモデル（Image Classification）をMCTを使用して量子化する手順
-* ユーザーが作成したAIモデル（Image Classification）の量子化前後の精度評価する手順
+* ユーザーが作成したAIモデル (Image Classification) を「**MCT**」を使用して量子化する手順
+* ユーザーが作成したAIモデル (Image Classification) の量子化前後の精度評価する手順
 |
-* MCT量子化できる環境
+* 「**MCT**」を使用して量子化できる環境
 * AIモデルの評価環境
-* AIモデル（Image Classification）を量子化するサンプルNotebook
-* 下記のAIモデル（Image Classification）を評価するサンプルNotebook
+* AIモデル (Image Classification) を量子化するサンプルNotebook
+* 下記のAIモデル (Image Classification) を評価するサンプルNotebook
 ** Keras
 ** TFLite
-** TFLite（量子化済み）
+** TFLite (量子化済み)
 
 |後処理開発
 |
 * 後処理を実装、デバッグし、Wasmファイルにビルドする手順
 |
 * 後処理をWasmビルドする環境
-* 後処理のサンプルコード（C、C++）
+* 後処理のサンプルコード (C、C++)
 * 後処理コードをデバッグする環境
 
 
-|AIモデル・後処理をConsole for AITRIOSにインポート
+|AIモデル・後処理を「**Console for AITRIOS**」にインポート
 |
-* Notebookを使ってAIモデル・後処理をConsole for AITRIOSにインポートする手順
-* Console for AITRIOS 手順
-|* AIモデル・後処理をConsole for AITRIOSにインポートするNotebook
+* Notebookを使ってAIモデル・後処理を「**Console for AITRIOS**」にインポートする手順
+* 「**Console for AITRIOS**」手順
+|* AIモデル・後処理を「**Console for AITRIOS**」にインポートするNotebook
 
 |AIモデル・後処理をエッジAIデバイスにデプロイ
 |
 * Notebookを使ってAIモデル・後処理をエッジAIデバイスにデプロイする手順
-* Console for AITRIOS 手順
+* 「**Console for AITRIOS**」手順
 |* AIモデル・後処理をエッジAIデバイスにデプロイするNotebook
 
 |評価
 |
-* Console for AITRIOS 手順
+* 「**Console for AITRIOS**」手順
 |-
 |===
 
 [cols="1,2a,2a"]
 |===
-|その他機能 |提供物(ドキュメント) |提供物(実行環境、サンプル)
+|その他機能 |提供物 (ドキュメント) |提供物 (実行環境、サンプル)
 
 |バージョン管理
 |
@@ -224,15 +227,15 @@ flowchart TB
 == 操作性仕様、画面仕様
 === 前提条件
 * Codespacesの場合、Codespacesを使用できる状態になっていること
-** Codespaces（VS Code desktop）の場合、<<codespaces-extension, VS Code Codespaces extension>>をインストールしていること
+** Codespaces (VS Code desktop) の場合、<<codespaces-extension, VS Code Codespaces extension>>をインストールしていること
 * Local PCでVS Codeを利用する場合、<<remote-development, VS Code Remote Development Extension Pack>>をインストールしていること
 
 === コンテナの起動
 下記手順により、開発環境を起動する。
 
-* Codespaces（Browser）
+* Codespaces (Browser)
 . SDKのリポジトリにおいて [**Code**] の [**Codespaces**] タブから [**Create codespace on <ブランチ名>**] を押下する
-* Codespaces（VS Code desktop）
+* Codespaces (VS Code desktop)
 . SDKのリポジトリにおいて、 [**Code**] の [**Codespaces**] タブから[**Create codespace on <ブランチ名>**] を押下する
 . Codespace起動後、Codespaceのブラウザの左下にある [**Codespaces**] を押下する
 . ドロップダウンリストの中から [**VS Codeで開く**] を選択する
@@ -257,7 +260,7 @@ flowchart TB
 * Codespaces (Browser) の場合
 ** Codespacesのブラウザにおいて [**View logs**] が表示されたら押下する + 
 * Codespaces (VS Code desktop) の場合、またはLocal PCでVS Codeを利用する場合
-** VS Code画面右下のNotificationから [**Starting Dev Container（show log）**] を押下する
+** VS Code画面右下のNotificationから [**Starting Dev Container (show log) **] を押下する
 ====
 
 === AIアプリケーション開発に必要な情報の取得

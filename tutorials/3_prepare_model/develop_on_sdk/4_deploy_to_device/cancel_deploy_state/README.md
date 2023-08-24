@@ -8,7 +8,7 @@ This tutorial shows how to cancel deploying status.
 > The operation is not guaranteed if this function is executed during normal operation.
 
 ## Get started
-### 1. Set up Console Access Library
+### 1. Set up "**Console Access Library**"
 Set up access library client to cancel deploying status.
 
 See [README](../../../../_common/set_up_console_client/README.md) for details.
@@ -39,12 +39,12 @@ The parameters required to run this notebook are :
 
 |Setting|Description|Range|Required/Optional|Remarks
 |:--|:--|:--|:--|:--|
-|**`device_id`**|The ID of the device you want to cancel the deployment.|String.<br>See NOTE.|Required|Used for Console Access Library API:<br>**`deployment.deployment.Deployment.cancel_deployment`**|
-|**`deploy_id`**|The ID of the deployment you want to cancel.|String.<br>See NOTE.|Required|Used for Console Access Library API:<br>**`deployment.deployment.Deployment.cancel_deployment`**|
+|**`device_id`**|The ID of the device you want to cancel the deployment.|String.<br>See NOTE.|Required|Used for "**Console Access Library**" API:<br>**`deployment.deployment.Deployment.cancel_deployment`**|
+|**`deploy_id`**|The ID of the deployment you want to cancel.|String.<br>See NOTE.|Required|Used for "**Console Access Library**" API:<br>**`deployment.deployment.Deployment.cancel_deployment`**|
 
 > **NOTE**
 >
-> See [API Reference](https://developer.aitrios.sony-semicon.com/development-guides/reference/api-references/) of Console Access Library for other restrictions.
+> See [API Reference](https://developer.aitrios.sony-semicon.com/development-guides/reference/api-references/) of "**Console Access Library**" for other restrictions.
 
 ### 5. Run the notebook
 Open the [notebook](./cancel_deploy_state.ipynb) and run the cells.

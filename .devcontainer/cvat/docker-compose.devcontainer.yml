@@ -1,6 +1,4 @@
-# cvat v2.3.0 docker compose configuration for devcontainer with docker in docker
-
-version: '3.3'
+# cvat v2.4.0 docker compose configuration for devcontainer with docker in docker
 
 services:
   cvat_db:
@@ -23,11 +21,15 @@ services:
     restart: "no"
     init: true
 
-  cvat_worker_default:
+  cvat_worker_import:
     restart: "no"
     init: true
 
-  cvat_worker_low:
+  cvat_worker_export:
+    restart: "no"
+    init: true
+
+  cvat_worker_annotation:
     restart: "no"
     init: true
 
@@ -46,5 +48,17 @@ services:
     init: true
 
   cvat_opa:
+    restart: "no"
+    init: true
+
+  cvat_clickhouse:
+    restart: "no"
+    init: true
+
+  cvat_vector:
+    restart: "no"
+    init: true
+
+  cvat_grafana:
     restart: "no"
     init: true

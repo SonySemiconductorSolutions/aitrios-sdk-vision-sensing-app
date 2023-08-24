@@ -1,4 +1,10 @@
-# Running/Debugging Wasm in Vision and Sensing Application SDK
+# Running/Debugging Wasm in "**Vision and Sensing Application SDK**"
+
+You can run and debug Wasm in the VS Code UI using [LLDB](https://lldb.llvm.org/) and [WAMR-IDE](https://github.com/bytecodealliance/wasm-micro-runtime/tree/main/test-tools/wamr-ide).<br>
+The following APIs are mocked in the "**Vision and Sensing Application**" debugging :
+- "**EVP SDK API**"
+- "**SensCord SDK API**"
+- "**Data Pipeline API**"
 
 ## 1. Initialize (only the first time)
 
@@ -60,9 +66,9 @@
 
 ## 2. Prepare input parameters
 
-The Output Tensor and PPL command parameters are stored in the following location.
+The Output Tensor and PPL Parameter are stored in the following location.
 
-The data structure and value depend on the implementation of Post Vision App.
+The data structure and value depend on the implementation of "**Vision and Sensing Application**".
 
 Please edit the files to test if needed.
 
@@ -80,67 +86,64 @@ Please edit the files to test if needed.
 
     - **`./tutorials/4_prepare_application/1_develop/testapp/objectdetection/ppl_parameter.json`**
 
-> **NOTE**
-> 
-> `output_tensor.jsonc` and `ppl_parameter.json` are only used for running/debugging Wasm in Vision and Sensing Application SDK.
+- Semantic Segmentation
+
+    - **`./tutorials/4_prepare_application/1_develop/testapp/semanticsegmentation/output_tensor.jsonc`**
+
+    - **`./tutorials/4_prepare_application/1_develop/testapp/semanticsegmentation/ppl_parameter.json`**
 
 > **NOTE**
 > 
-> For running the Wasm in the device, please specify the same content as the `ppl_parameter.json` to the `PPLParameter` of the `StartUploadInferenceData` which is a command parameter of "Console for AITRIOS".
+> **`output_tensor.jsonc`** and **`ppl_parameter.json`** are only used for running/debugging Wasm in "**Vision and Sensing Application SDK**".
 
-## 3. Increase Wasm stack size for debugging
+> **NOTE**
+> 
+> For running the Wasm in the device, please specify the same content as the **`ppl_parameter.json`** to the **`PPLParameter`** of the **`StartUploadInferenceData`** which is a command parameter of "**Console for AITRIOS**".
 
-Please change following stack size for debugging.
 
-./sample/classification/Makefile
-
-./sample/objectdetection/Makefile
-
-Change from
-```
-USER_LDFLAGS   = -z stack-size=8192 \
-                 -Wl,--initial-memory=65536
-```
-to
-```
-USER_LDFLAGS   = -z stack-size=65536 \
-                 -Wl,--initial-memory=131072
-```
-
-## 4. Build and run test application with Wasm file for debugging
+## 3. Build and run test application with Wasm file for debugging
 
 Test application located in [testapp](./testapp) loads Wasm file, Output Tensor jsonc file and ppl parameter json file.
 
-And the test application calls Post Vision App interface (PPL_Initialize, PPL_GetPplVersion, PPL_Analyze, PPL_ResultRelease and PPL_Finalize).
+And the test application calls "**Vision and Sensing Application**" interface (**`main`**).
 
 To build and run test application, execute following command in TERMINAL.
 
-- Image Classification (default setting) 
+- Image Classification (default setting)
 
     ```bash
     $ ./tutorials/4_prepare_application/1_develop/start.sh -d -t ic
     ```
 
-    Or (specify input file setting)  
+    Or (specify input file setting)
     ```bash
     $ ./tutorials/4_prepare_application/1_develop/start.sh -d -t ic -o <file1> -p <file2>
     ```
 
-- Object Detection (default setting)  
+- Object Detection (default setting)
     ```bash
     $ ./tutorials/4_prepare_application/1_develop/start.sh -d -t od
     ```
 
-    Or (specify input file setting)  
+    Or (specify input file setting)
     ```bash
     $ ./tutorials/4_prepare_application/1_develop/start.sh -d -t od -o <file1> -p <file2>  
     ```
 
+- Semantic Segmentation (default setting)
+    ```bash
+    $ ./tutorials/4_prepare_application/1_develop/start.sh -d -t semseg
+    ```
+
+    Or (specify input file setting)  
+    ```bash
+    $ ./tutorials/4_prepare_application/1_develop/start.sh -d -t semseg -o <file1> -p <file2>  
+    ```
+
 > **NOTE**
 > 
-> `<file1>` Full path of the Output Tensor file　  
-> `<file2>` Full path of the PPL command parameter file  
-> The path must be in ./tutorials/4_prepare_application/1_develop/**/* .
+> **`<file1>`** Path of the Output Tensor file.　  
+> **`<file2>`** Path of the PPL Parameter file.   
 
 Then the following message is displayed in TERMINAL.
 
@@ -162,19 +165,20 @@ Debug port : 1234
 
 > **NOTE**
 > 
-> The script is for debugging the sample. Modify the Wasm file path in [start.sh](./start.sh) to match the location of the Post Vision App you created.  
+> The script is for debugging the sample. Modify the Wasm file path in [start.sh](./start.sh) to match the location of the "**Vision and Sensing Application**" you created.  
 > For example:
 > ```sh
-> WASM_FILE=${PWD}/sample/objectdetection/debug/ppl_objectdetection.wasm
+> WASM_FILE=${PWD}/sdk/sample/build/debug/vision_app_objectdetection.wasm
 > ```
-> And modify build command in [build.sh](./build.sh). Detail is described in [README.md](./README.md#2-build).
+> And modify build command in [build.sh](./build.sh). Detail is described in [README.md](./README.md#2-build).  
+> Source files and Wasm file must be in **`./tutorials/4_prepare_application/1_develop/**/*`** .
 
 > **NOTE**
 >
 > Internal information of [start.sh](./start.sh).  
-> The script has two sections. The one is building with  options, the other is running with options.
->
-> 1. building
+> The script has following sections.
+> 
+> 1. Build Wasm 
 >     ```sh
 >     ./build.sh -t $LOAD_PGM $DEBUGGER 
 >     ```
@@ -187,29 +191,53 @@ Debug port : 1234
 >     ./build.sh -t ic
 >     ```
 > 
-> 2. running
+> 2. Build test application 
 >     ```sh
->     docker run --rm -v $PWD:$PWD --network host -t -i $NAME_IMAGE /bin/sh -c "cd $PWD/testapp/ && ./build.sh && ./run.sh $PARM_ALL"
+>     docker run --rm -v $MOUNT_DIRECTORY:$MOUNT_DIRECTORY --network host $INTERACTIVE_OPTION -t $NAME_IMAGE /bin/sh -c "cd $MOUNT_DIRECTORY/testapp/ && ./build.sh"
+>     ```
+> 
+> 3. Copy files
+>     ```sh
+>     cp -f $PPL_PARAMETER_FILE $DST_PPL_PARAMETER_FILE
+>     ```
+>     ```sh
+>     cp -f $OUTPUT_TENSOR_FILE $DST_OUTPUT_TENSOR_FILE
+>     ```
+>
+>     Copy ppl_parameter.json and output_tensor.jsonc to the test application's folder ( **`./tutorials/4_prepare_application/1_develop/testapp/build/loader/`** ).
+> 
+> 4. Run test application with Wasm
+>     ```sh
+>     docker run --rm -v $MOUNT_DIRECTORY:$MOUNT_DIRECTORY --network host $INTERACTIVE_OPTION -t $NAME_IMAGE /bin/sh -c "cd $MOUNT_DIRECTORY/testapp/ && ./run.sh $PARM_ALL"
 >     ```
 >     For example, Wasm type is od and running with debugging:
 >     ```sh
->     docker run --rm -v $PWD:$PWD --network host -t -i $NAME_IMAGE /bin/sh -c "cd $PWD/testapp/ && ./build.sh && ./run.sh -t od -d -f FULL_PATH_OF_WASM_FILE -o FULL_PATH_OF_OUTPUT_TENSOR_FILE -p FULL_PATH_OF_PPL_PARAMETER_FILE"
+>     docker run --rm -v $MOUNT_DIRECTORY:$MOUNT_DIRECTORY --network host $INTERACTIVE_OPTION -t $NAME_IMAGE /bin/sh -c "cd $MOUNT_DIRECTORY/testapp/ && ./run.sh $NATIVE_LIBS_ARGS -t od -d -f <file3>"
 >     ```
 >     For example, Wasm type is ic and running without debugging:
 >     ```sh
->     docker run --rm -v $PWD:$PWD --network host -t -i $NAME_IMAGE /bin/sh -c "cd $PWD/testapp/ && ./build.sh && ./run.sh -t ic -f FULL_PATH_OF_WASM_FILE -o FULL_PATH_OF_OUTPUT_TENSOR_FILE -p FULL_PATH_OF_PPL_PARAMETER_FILE"
+>     docker run --rm -v $MOUNT_DIRECTORY:$MOUNT_DIRECTORY --network host $INTERACTIVE_OPTION -t $NAME_IMAGE /bin/sh -c "cd $MOUNT_DIRECTORY/testapp/ && ./run.sh $NATIVE_LIBS_ARGS -t ic -f <file3>"
 >     ```
+>     **`<file3>`** Absolute path of the Wasm file.  
 
-## 5. Debugging Wasm
+## 4. Debugging Wasm
 
-1. Press F5 key to attach the debugger. Then "Could not load source " 
+1. Press F5 key to attach the debugger. Then "Could not load source" 
  message will be displayed in the top pane, so remove the message tab.
 
 2. Set some breakpoints in following sample code.
 
-    [ppl_classification.cpp](./sample/classification/ppl_classification.cpp)
+- Classification
+  - [vision_app_classification.cpp](./sdk/sample/vision_app/single_dnn/classification/src/vision_app_classification.cpp)
+  - [analyzer_classification.cpp](./sdk/sample/post_process/classification/src/analyzer_classification.cpp)
 
-    [ppl_objectdetection.cpp](./sample/objectdetection/ppl_objectdetection.cpp)
+- Object Detection
+  - [vision_app_objectdetection.cpp](./sdk/sample/vision_app/single_dnn/objectdetection/src/vision_app_objectdetection.cpp)
+  - [analyzer_objectdetection.cpp](./sdk/sample/post_process/objectdetection/src/analyzer_objectdetection.cpp)
+
+- Semantic Segmentation
+  - [vision_app_semanticsegmentation.cpp](./sdk/sample/vision_app/single_dnn/semanticsegmentation/src/vision_app_semanticsegmentation.cpp)
+  - [analyzer_semanticsegmentation.cpp](./sdk/sample/post_process/semanticsegmentation/src/analyzer_semanticsegmentation.cpp)
 
 3. Press the F5 key, then the program continues and stops at the breakpoint.
 
@@ -217,6 +245,15 @@ Debug port : 1234
 
     see [Debugging in Visual Studio Code](https://code.visualstudio.com/Docs/editor/debugging) for details.  
 
-## 6. Stop the test application
+> **NOTE**
+> 
+> The mock implements following behavior.
+>
+> - Execute Wasm's **`ConfigurationCallback`** only once
+> - Execute Wasm's analyze method (for example, **`PPL_ObjectDetectionSsdAnalyze`**) only once
+> - After Wasm's **`SendDataDoneCallback`** called, Wasm application exits
+> - To achieve preceding behavior, **`senscord_stream_get_frame`** sometimes returns less than 0 and **`senscord_get_last_error`**'s status.cause is sometimes **`SENSCORD_ERROR_TIMEOUT`**
+
+## 5. Stop the test application
 
 Press [CTRL + C] keys in TERMINAL.

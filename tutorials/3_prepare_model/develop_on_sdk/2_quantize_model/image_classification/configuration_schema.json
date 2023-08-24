@@ -1,0 +1,68 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "required": [
+        "source_keras_model",
+        "dataset_image_dir",
+        "batch_size",
+        "input_tensor_size",
+        "iteration_count",
+        "output_dir",
+        "evaluate_image_dir",
+        "evaluate_image_extension",
+        "evaluate_label_file",
+        "evaluate_result_dir"
+    ],
+    "properties": {
+        "source_keras_model": {
+            "type": "string",
+            "minLength": 1
+        },
+        "dataset_image_dir": {
+            "type": "string",
+            "minLength": 1
+            },
+        "batch_size": {
+            "type": "integer",
+            "minimum":1,
+            "default":50
+        },
+        "input_tensor_size": {
+            "type": "integer",
+            "minimum":1,
+            "default":224
+        },
+        "iteration_count": {
+            "type": "integer",
+            "minimum":1,
+            "default":10
+        },
+        "output_dir": {
+            "type": "string",
+            "default":"./output",
+            "minLength": 1
+        },
+        "evaluate_image_dir": {
+            "type": "string",
+            "default":"../../../../_common/dataset/validation",
+            "minLength": 1
+        },
+        "evaluate_image_extension": {
+            "type": "string",
+            "default":"jpg",
+            "minLength": 1
+        },
+        "evaluate_label_file": {
+            "type": "string",
+            "default":"../../../../_common/dataset/labels.json",
+            "minLength": 1
+        },
+        "evaluate_result_dir": {
+            "type": "string",
+            "default":"./evaluate/results",
+            "minLength": 1
+        }
+        
+    }
+}
+

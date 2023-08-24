@@ -21,3 +21,7 @@ if [[ ! "$(ls -A $PWD/.devcontainer/dependencies/aitrios-sdk-console-access-lib-
 then
     git submodule update --init --recursive $PWD/.devcontainer/dependencies/aitrios-sdk-console-access-lib-python
 fi
+if [[ ! "$(ls -A $PWD/.devcontainer/dependencies/aitrios-sdk-zone-detection-webapp-cs)" ]]
+then
+    git submodule update --init --recursive $PWD/.devcontainer/dependencies/aitrios-sdk-zone-detection-webapp-cs
+fi

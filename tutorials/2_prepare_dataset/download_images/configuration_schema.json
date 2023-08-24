@@ -1,0 +1,42 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "required": [
+        "annotation_file",
+        "output_dir"
+    ],
+    "properties": {
+        "annotation_file": {
+            "type": "string",
+            "default":"./annotations/instances_val2017.json",
+            "minLength": 1
+        },
+        "category_names": {
+            "type": "array",
+            "items":{
+                "type":"string"
+            }
+        },
+        "max_download_count": {
+            "type": "number",
+            "minimum": 0
+        },
+        "licenses": {
+            "type": "array",
+            "items":{
+                "type":"number"
+            }
+        },
+        "remove_categories": {
+            "type": "array",
+            "items":{
+                "type":"string"
+            }
+        },
+        "output_dir": {
+            "type": "string",
+            "default":"./output",
+            "minLength": 1
+        }
+    }
+}

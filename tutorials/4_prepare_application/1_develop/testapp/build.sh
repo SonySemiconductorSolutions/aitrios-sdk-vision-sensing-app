@@ -1,5 +1,5 @@
 #!/bin/bash
-# Copyright 2022 Sony Semiconductor Solutions Corp. All rights reserved.
+# Copyright 2022-2023 Sony Semiconductor Solutions Corp. All rights reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -40,6 +40,7 @@ done
 
 rm -rf build/loader
 mkdir -p build/loader
+chmod 777 build/loader
 cd build/loader
 cmake ${LOADER_SRC} ${build_args[@]}
 make -j ${nproc}

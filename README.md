@@ -1,26 +1,37 @@
-# Vision and Sensing Application SDK for AITRIOS&trade;
+# "**Vision and Sensing Application SDK**" for AITRIOS&trade;
 
 ## Contents <!-- omit in toc -->
-- [Overview](#overview)
-  - [What you can do with the Vision and Sensing Application SDK](#what-you-can-do-with-the-vision-and-sensing-application-sdk)
-  - [Components](#components)
-  - [Restrictions](#restrictions)
-- [Installation Guide](#installation-guide)
-- [Tutorials](#tutorials)
-- [Documentation](#documentation)
-  - [SDK Functional Specifications](#sdk-functional-specifications)
-- [Get a support](#get-a-support)
-- [See also](#see-also)
-- [Trademark](#trademark)
-
+- ["**Vision and Sensing Application SDK**" for AITRIOS™](#vision-and-sensing-application-sdk-for-aitrios)
+  - [Overview](#overview)
+    - [What you can do with the "**Vision and Sensing Application SDK**"](#what-you-can-do-with-the-vision-and-sensing-application-sdk)
+    - [Components](#components)
+      - [Workflow for developing AI models](#workflow-for-developing-ai-models)
+      - [Workflow for developing Vision and Sensing Applications](#workflow-for-developing-vision-and-sensing-applications)
+    - [Restrictions](#restrictions)
+      - [About "**Vision and Sensing Application SDK**"](#about-vision-and-sensing-application-sdk)
+      - [About AITRIOS](#about-aitrios)
+      - [About GitHub Codespaces](#about-github-codespaces)
+  - [Installation Guide](#installation-guide)
+  - [Samples](#samples)
+  - [Tutorials](#tutorials)
+  - [Migration Guide](#migration-guide)
+  - [Documentation](#documentation)
+    - [SDK Functional Specifications](#sdk-functional-specifications)
+  - [Get support](#get-support)
+  - [See also](#see-also)
+  - [Trademark](#trademark)
+  - [Security](#security)
+  - [AI Ethics](#ai-ethics)
+  - [Versioning](#versioning)
+  - [Branch](#branch)
 
 ## Overview
-Vision and Sensing Application SDK for AITRIOS is a toolkit for developing AI models and  post-processing applications that can be installed on Edge AI Devices.
-The models and post-processing applications can be deployed to Edge AI Devices through Console for AITRIOS.
+"**Vision and Sensing Application SDK**" for AITRIOS is a toolkit for developing AI models and post-processing applications that can be installed on Edge AI Devices. Post-processing applications are called "**Vision and Sensing Applications**".
+The models and "**Vision and Sensing Applications**" can be deployed to Edge AI Devices through "**Console for AITRIOS**".
 
 ![overview](./Images_README/overview.png)
 
-### What you can do with the Vision and Sensing Application SDK
+### What you can do with the "**Vision and Sensing Application SDK**"
 - Use GitHub Codespaces (Dev Container) as development environment.
   - You don't need to install any additional tools in your environment.
 <br>
@@ -28,16 +39,16 @@ The models and post-processing applications can be deployed to Edge AI Devices t
 - Develop your AI models in the container.
 <br>
 
-- Develop post-processing applications using build environment and sample code included in the container.
+- Develop "**Vision and Sensing Applications**" using build environment and sample code included in the container.
 <br>
 
-- Import AI models and post-processing applications to Console for AITRIOS and deploy them to Edge AI Devices.
+- Import AI models and "**Vision and Sensing Applications**" to "**Console for AITRIOS**" and deploy them to Edge AI Devices.
 
 ### Components
-Vision and Sensing Application SDK is provided as Development Container (Dev Container) that runs on GitHub Codespaces or Docker environment on Local PC.
+"**Vision and Sensing Application SDK**" is provided as Development Container (Dev Container) that runs on GitHub Codespaces or Docker environment on Local PC.
 This container includes tools and jupyter notebooks that can be used for development.
 
-
+<!-- mermaid alt text: Legend -->
   ```mermaid
   graph TB;
     %% definition
@@ -59,6 +70,7 @@ This container includes tools and jupyter notebooks that can be used for develop
   ```
 
 #### Workflow for developing AI models
+<!-- mermaid alt text: Workflow for developing AI models -->
 ```mermaid
 %%{init: {'theme': 'default'}}%%
 graph TB;
@@ -135,7 +147,8 @@ graph TB;
 
 ```
 
-#### Workflow for developing post-processing applications
+#### Workflow for developing "**Vision and Sensing Applications**"
+<!-- mermaid alt text: Workflow for developing Vision and Sensing Applications -->
 ```mermaid
 %%{init: {'theme': 'default'}}%%
 graph TB;
@@ -153,7 +166,7 @@ graph TB;
     aot[Application<br>.aot]:::object
     eval_result[Evaluation<br>Result]:::object
 
-    develop(Develop post-processing Application)
+    develop(Develop Vision and Sensing Application)
     build_wasm(Build)
     debug_wasm(Run / Debug)
     compile_aot(Compile)
@@ -186,16 +199,16 @@ graph TB;
 
 
 - **Console for AITRIOS** <br>
-Following functions are available on Console for AITRIOS:
+Following functions are available on "**Console for AITRIOS**":
     - manage device
     - upload image from device
     - import image from your local PC or storages
     - import AI model
-    - import post-processing application
-    - deploy model and post-processing application to device
+    - import "**Vision and Sensing Application**"
+    - deploy model and "**Vision and Sensing Application**" to device
     - create model
-    - annotate image (for AI model created on Console for AITRIOS)
-    - train model (for AI model created on Console for AITRIOS)
+    - annotate image (for AI model created on "**Console for AITRIOS**")
+    - train model (for AI model created on "**Console for AITRIOS**")
 
 <br>
 
@@ -208,24 +221,24 @@ Following functions are available on Dev Container.
   - Prepare models:
     - Jupyter notebook for training models
     - Jupyter notebook for quantizing models
-    - Jupyter notebook for importing models to Console for AITRIOS
+    - Jupyter notebook for importing models to "**Console for AITRIOS**"
     - Jupyter notebook for deploying models to Edge AI Devices
   - Prepare applications:
-    - Tools for developing, building and debugging post-processing applications
-    - Jupyter notebook for importing applications to Console for AITRIOS
-    - Jupyter notebook for deploying applications to Edge AI Devices
+    - Tools for developing, building and debugging "**Vision and Sensing Applications**"
+    - Jupyter notebook for importing "**Vision and Sensing Applications**" to "**Console for AITRIOS**"
+    - Jupyter notebook for deploying "**Vision and Sensing Applications**" to Edge AI Devices
   - See [Tutorials](./tutorials/README.md) for details on each notebook and tool.
 
 ### Restrictions
 
-#### About Vision and Sensing Application SDK
+#### About "**Vision and Sensing Application SDK**"
 
 - AI model training
     - Datasets for Object Detection created on the Dev Container cannot be used for training base AI models (only for training user's custom AI models).
 <br>
 
 - AI model quantization on Dev Container
-    - Supported AI models are based on [Model Compression Toolkit (MCT)'s features](https://github.com/sony/model_optimization/tree/v1.7.1#supported-features).
+    - Supported AI models are based on ["**Model Compression Toolkit (MCT)**"'s features](https://github.com/sony/model_optimization/tree/v1.8.0#supported-features).
 <br>
 
 - Jupyter specification
@@ -234,15 +247,14 @@ Following functions are available on Dev Container.
 #### About AITRIOS
 
 - Evaluation of output results
-    - Images and inference results output from devices cannot be downloaded from Console for AITRIOS.
-    - Inference results displayed on Console for AITRIOS are serialized. 
-    - Images and inference results can be downloaded using API, but since the inference results are serialized, the deserializer is required. 
-        - See [Cloud SDK Deserialize Sample Tutorial](https://developer.aitrios.sony-semicon.com/development-guides/tutorials/cloud-sdk/) for details.
+    - Images and inference results output from devices cannot be downloaded from "**Console for AITRIOS**".
+    - Inference results displayed on "**Console for AITRIOS**" are serialized. 
+    - To deserialize inference results, see [README for deserializing](./tutorials/_common/deserialize/README.md).
     
 <br>
 
 - Device operation
-    - Edge AI Devices can only be operated through Console for AITRIOS.
+    - Edge AI Devices can only be operated through "**Console for AITRIOS**".
 <br>
 
 #### About GitHub Codespaces
@@ -253,56 +265,104 @@ Following functions are available on Dev Container.
 
 ## Installation Guide
 
-See [Development Environment Setup Guide](https://developer.aitrios.sony-semicon.com/development-guides/get-started/setup-dev/).
+See [Development Environment Setup Guide](https://developer.aitrios.sony-semicon.com/file/download/develop-env-setup/).
 <br>
 
 >**NOTE**
 >
 > - 4-core (8GB) or higher machine types are recommended when using the SDK on Codespaces.
->     - If 2-core is selected, an error may occur during dev container build.
+>     - If 2-core is selected, an error may occur during Dev Container build.
 > - To ensure security of connection for CVAT, do NOT make [Codespace's port forwarding sharing option](https://docs.github.com/en/codespaces/developing-in-codespaces/forwarding-ports-in-your-codespace) "Public".
+> - If Jupyter Kernels picker displayed when you try to run Jupyter notebook first time, please select "Python Environment" and select "Python 3.8".
+
+## Samples
+You can learn the development workflow using the samples in a day. <br>
+See ["**Vision and Sensing Application SDK**" samples](./samples/README.md).
+
+> **NOTE**
+>
+> To complete all steps, Azure Blob Storage is required when importing AI model to "**Console for AITRIOS**".
+This is because "**Console Access Library**" used in the sample notebook does not support importing AI model from a local environment.
+This sample is intended to execute all steps with python scripts.
 
 ## Tutorials
 You can start the development workflow using the tutorial. <br>
-See [Vision and Sensing Application SDK tutorials](./tutorials/README.md).
+See ["**Vision and Sensing Application SDK**" tutorials](./tutorials/README.md).
 
+>**NOTE**
+>
+> If you are unfamiliar with "**Vision and Sensing Application SDK**", it's recommended to learn with [Samples](#samples) first.
+
+## Migration Guide
+
+### From SDK v0.2 to v1.0
+
+If you have already developed the "**Vision and Sensing Application**" using SDK v0.2,
+you need to modify the "**Vision and Sensing Application**" source code to migrate to SDK v1.0.
+
+See ["**Vision and Sensing Application**" Migration Guide from SDK v0.2 to v1.0](./tutorials/4_prepare_application/1_develop/README_migration_0.2_1.0.md).
 
 ## Documentation
 ### SDK Functional Specifications
 - Prepare dataset
-    - [Image Download Functional Specifications](./docs/development-docs/PDF/VisionandSensingApplicationSDK_FuncSpec_ImageDownload.pdf)
-    - [Image Annotation CVAT Functional Specifications](./docs/development-docs/PDF/VisionandSensingApplicationSDK_FuncSpec_ImageAnnotationCvat.pdf)
+    - ["**Image Download Functional Specifications**"](./docs/development-docs/AsciiDoc/VisionandSensingApplicationSDK_FuncSpec_ImageDownload.adoc)
+    - ["**Image Annotation CVAT Functional Specifications**"](./docs/development-docs/AsciiDoc/VisionandSensingApplicationSDK_FuncSpec_ImageAnnotationCvat.adoc)
 
 - Prepare model
-    - [Model Training Functional Specifications](./docs/development-docs/PDF/VisionandSensingApplicationSDK_FuncSpec_ModelTraining.pdf)
-    - [Model Quantization Functional Specifications](./docs/development-docs/PDF/VisionandSensingApplicationSDK_FuncSpec_ModelQuantization.pdf)
+    - ["**Model Training Functional Specifications**"](./docs/development-docs/AsciiDoc/VisionandSensingApplicationSDK_FuncSpec_ModelTraining.adoc)
+    - ["**Model Quantization Functional Specifications**"](./docs/development-docs/AsciiDoc/VisionandSensingApplicationSDK_FuncSpec_ModelQuantization.adoc)
 
 - Prepare application
-    - [Post Vision App Functional Specifications](./docs/development-docs/PDF/VisionandSensingApplicationSDK_FuncSpec_PostVisionApp.pdf)
+    - ["**Application Development Functional Specifications**"](./docs/development-docs/AsciiDoc/VisionandSensingApplicationSDK_FuncSpec_ApplicationDevelopment.adoc)
 
-- Setup Console Access Library
-    - [Console API Initialize Functional Specifications](./docs/development-docs/PDF/VisionandSensingApplicationSDK_FuncSpec_APIInitialize.pdf) 
+- Setup "**Console Access Library**"
+    - ["**Console API Initialize Functional Specifications**"](./docs/development-docs/AsciiDoc/VisionandSensingApplicationSDK_FuncSpec_APIInitialize.adoc) 
 
-- Import AI model and application to Console for AITRIOS
-    - [AI model and application Import Functional Specifications](./docs/development-docs/PDF/VisionandSensingApplicationSDK_FuncSpec_ModelAndPPLImport.pdf)
+- Import AI model and "**Vision and Sensing Applications**" to "**Console for AITRIOS**"
+    - ["**AI model and application Import Functional Specifications**"](./docs/development-docs/AsciiDoc/VisionandSensingApplicationSDK_FuncSpec_ModelAndPPLImport.adoc)
 
-- Deploy AI model and application to Edge AI Device
-    - [AI model and application Deploy Functional Specifications](./docs/development-docs/PDF/VisionandSensingApplicationSDK_FuncSpec_ModelAndPPLDeploy.pdf)
+- Deploy AI model and "**Vision and Sensing Applications**" to Edge AI Device
+    - ["**AI model and application Deploy Functional Specifications**"](./docs/development-docs/AsciiDoc/VisionandSensingApplicationSDK_FuncSpec_ModelAndPPLDeploy.adoc)
 
 - Development container
-    - [Development Container Functional Specifications](./docs/development-docs/PDF/VisionandSensingApplicationSDK_FuncSpec_DevelopmentContainer.pdf)
+    - ["**Development Container Functional Specifications**"](./docs/development-docs/AsciiDoc/VisionandSensingApplicationSDK_FuncSpec_DevelopmentContainer.adoc)
 
 - Version control
-    - [Version Control Functional Specifications](./docs/development-docs/PDF/VisionandSensingApplicationSDK_FuncSpec_VersionControl.pdf)
+    - ["**Version Control Functional Specifications**"](./docs/development-docs/AsciiDoc/VisionandSensingApplicationSDK_FuncSpec_VersionControl.adoc)
+
+- Deserialize
+    - ["**Deserialize Functional Specifications**"](./docs/development-docs/AsciiDoc/VisionandSensingApplicationSDK_FuncSpec_Deserialize.adoc)
 
 ## Get support
 - [Contact us](https://developer.aitrios.sony-semicon.com/contact-us/)
 
 ## See also
-- [Console for AITRIOS](https://console.aitrios.sony-semicon.com/)
-- [Console Manual](https://developer.aitrios.sony-semicon.com/development-guides/documents/manuals/)
-- [Cloud SDK Visualization Tutorial](https://developer.aitrios.sony-semicon.com/development-guides/tutorials/cloud-sdk/)
+- ["**Console for AITRIOS**"](https://console.aitrios.sony-semicon.com/)
+- ["**Console Manual**"](https://developer.aitrios.sony-semicon.com/documents/?page=console_user_manual&lang=ja)
+- ["**Cloud SDK Visualization Tutorial**"](https://github.com/SonySemiconductorSolutions/aitrios-sdk-visualization-ts/tree/main/docs/development-docs/)
+- ["**Developer Site**"](https://developer.aitrios.sony-semicon.com/en)
 
 ## Trademark
-- [Read This First](https://developer.aitrios.sony-semicon.com/development-guides/documents/manuals/)
+- [Read This First](https://developer.aitrios.sony-semicon.com/documents/?page=read_this_first&lang=ja)
 
+## Security
+Before using Codespaces, please read the Site Policy of GitHub and understand the usage conditions. 
+
+## AI Ethics
+This SDK is optimized for use with Sony's AITRIOS™ (https://developer.aitrios.sony-semicon.com). If you are willing to take part in the AITRIOS and use services provided through AITRIOS, you must sign up with https://developer.aitrios.sony-semicon.com and comply with AITRIOS Terms of Use and other applicable terms of use in addition to the license terms of this SDK.
+
+AITRIOS is a one-stop platform that provides tools and environments to facilitate software and application development and system construction.
+
+Sony, with the aim of utilizing AI technology to enrich people's life styles and contribute to the development of society, Sony will pursue accountability and transparency while actively engaging in dialogue with stakeholders. Sony will continue to promote responsible AI in order to maintain the trust of products and services by stakeholders. 
+
+Users of this SDK should refer to and understand our thoughts and initiatives about AI. You can learn more here, including Sony Group AI Ethics Guidelines. https://www.sony.com/en/SonyInfo/sony_ai/responsible_ai.html
+
+## Versioning
+
+This repository aims to adhere to Semantic Versioning 2.0.0.
+
+## Branch
+
+See the "**Release Note**" from [**Releases**] for this repository.
+
+Each release is generated in the main branch. Pre-releases are generated in the develop branch. Releases will not be provided by other branches.

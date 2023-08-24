@@ -1,7 +1,7 @@
-= Vision and Sensing pass:[<br/>] Application SDK pass:[<br/>] バージョン管理 pass:[<br/>] 機能仕様書 pass:[<br/>]
+= Vision and Sensing Application SDK pass:[<br/>] バージョン管理 pass:[<br/>] 機能仕様書 pass:[<br/>]
 :sectnums:
 :sectnumlevels: 1
-:author: Copyright 2023 Sony Semiconductor Solutions Corporation
+:author: Copyright 2022-2023 Sony Semiconductor Solutions Corporation
 :version-label: Version 
 :revnumber: x.x.x
 :revdate: YYYY - MM - DD
@@ -23,8 +23,11 @@
 |2023/01/30
 |フォルダ構成変更。 +
 バージョン管理対象の追加。 + 
-シークレット情報の削除に伴い、configuration.jsonの記載を削除。 + 
+シークレット情報の削除に伴い、`**configuration.json**` の記載を削除。 + 
 PDFビルド環境更新。
+
+|2023/05/26
+|ツール名と括弧、パラメータの表記の修正
 |===
 
 
@@ -39,7 +42,7 @@ PDFビルド環境更新。
 
 == 参照資料
 
-* Reference/Related documents（関連資料）
+* Reference/Related documents (関連資料)
 ** GitHub Document
 *** https://docs.github.com/ja
 
@@ -52,7 +55,7 @@ PDFビルド環境更新。
 == 機能概要
 === Functional Overview
 * 本SDKは、GitHubリポジトリとしてユーザーに提供される
-* ユーザーはGitHubからSDKリポジトリをフォーク(またはクローン)して開発を行う
+* ユーザーはGitHubからSDKリポジトリをフォーク (またはクローン) して開発を行う
 * ユーザーはGitHubの機能を利用してバージョン管理を行う
 
 
@@ -86,14 +89,14 @@ PDFビルド環境更新。
 ----
 
 
-.ユーザーが編集するファイル(バージョン管理対象)
+.ユーザーが編集するファイル (バージョン管理対象)
 |===
-|機能種別 |管理対象|説明 |想定される修正 |バージョン管理の目的(例)
+|機能種別 |管理対象|説明 |想定される修正 |バージョン管理の目的 (例)
 
 |prepare dataset
 |Notebook、設定ファイル
 |学習用画像データをダウンロードするためのJupyter Notebook
-|目的に合わせて各種設定値を編集する。 (画像のカテゴリや取得枚数など) 
+|目的に合わせて各種設定値を編集する。 (画像のカテゴリや取得枚数など)
 |画像ダウンロード時に指定したパラメータや設定値を記録しておき、 +
 同じ画像データで学習を再現したい場合などに参照
 できるようにしておく。

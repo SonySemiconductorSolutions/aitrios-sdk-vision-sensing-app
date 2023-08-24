@@ -1,7 +1,7 @@
 {
     "header": {
         "id": "00",
-        "version": "01.00.00"
+        "version": "01.01.00"
     },
     "dnn_output_detections": 10,
     "max_detections": 2,

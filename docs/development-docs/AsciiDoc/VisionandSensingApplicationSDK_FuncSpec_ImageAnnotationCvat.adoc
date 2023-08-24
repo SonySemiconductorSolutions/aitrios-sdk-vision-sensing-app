@@ -1,7 +1,7 @@
-= Vision and Sensing pass:[<br/>] Application SDK pass:[<br/>] CVAT Image Annotation pass:[<br/>] Functional Specifications pass:[<br/>]
+= Vision and Sensing Application SDK pass:[<br/>] CVAT Image Annotation pass:[<br/>] Functional Specifications pass:[<br/>]
 :sectnums:
 :sectnumlevels: 1
-:author: Copyright 2023 Sony Semiconductor Solutions Corporation
+:author: Copyright 2022-2023 Sony Semiconductor Solutions Corporation
 :version-label: Version 
 :revnumber: x.x.x
 :revdate: YYYY - MM - DD
@@ -19,7 +19,12 @@
 |Date |What/Why
 
 |2023/01/30
-|Initial draft
+|Initial draft.
+
+|2023/05/26
+|Fixed the notation of parentheses. + 
+Some environments do not render AsciiDoc's Mermaid diagrams, so modified to rendered image references. + 
+Added alternate text to images.
 |===
 
 == Terms/Abbreviations
@@ -51,11 +56,11 @@
 == Expected use case
 * Create dataset
 ** Image classification task
-*** You want to output dataset from CVAT on Dev Container and create AI model of image classification seamlessly
+*** Output dataset from CVAT on Dev Container and create AI model of image classification seamlessly
 
 ** Object detection task
-*** You want to annotate your own image data
-*** You want to customize dataset by adding data, editing tags, etc.
+*** Annotate your own image data
+*** Customize dataset by adding data, editing tags, etc.
 
 == Functional overview/Algorithm
 === Functional overview
@@ -155,7 +160,7 @@
 
 * Flow overview
 +
-[mermaid]
+[source,mermaid, target="Legend"]
 ----
 flowchart TD;
     %% definition
@@ -168,12 +173,12 @@ flowchart TD;
     end
 ----
 +
-[mermaid]
+[source,mermaid, target="Flow overview"]
 ----
 flowchart TD
     start((Start)) --> id1(1.Start CVAT)
     id1 --> id2(2.Prepare images you want to annotate)
-    id2 --> id3(3.Create and edit the configuration file for running notebook)
+    id2 --> id3(3.Create and edit the configuration file for running the notebook)
     id3 --> id4(4.Import images into CVAT)
     id4 --> id5(5.Annotate with CVAT)
     id5 --> id6(6.Export dataset from CVAT)
@@ -188,7 +193,7 @@ flowchart TD
 ** Follow the procedures in the README to set up CVAT
 . Prepare images you want to annotate
 ** Prepare images to annotate
-. Create and edit the configuration file for running notebook
+. Create and edit the configuration file for running the notebook
 ** Create and edit the configuration file <<anchor-conf, _configuration.json_>> to configure notebook runtime settings
 +
 NOTE: Only when running the notebook
@@ -210,7 +215,7 @@ NOTE: Only when running the notebook
 . Run "Set up CVAT" and wait until the startup log stops
 . Open the 8080 port in your web browser in the [**Port Forwarding**] tab of VS Code
 ** Wait until startup is complete and the CVAT login screen appears
-** (First-time only)Run a command in the [**Terminal**] tab of VS Code to create an account with superuser privileges for CVAT + 
+** (First-time only) Run a command in the [**Terminal**] tab of VS Code to create an account with superuser privileges for CVAT + 
 The commands are in the `**README.md**` in the `**image_classification**` directory or `**object_detection**` directory
 ** Enter account information for CVAT superuser privileges at the CVAT login screen of your web browser
 ** When authentication is successful, you are taken to the CVAT initial screen
@@ -220,7 +225,7 @@ The commands are in the `**README.md**` in the `**image_classification**` direct
 +
 NOTE: Directories can have any structure (If there is a child directory, images in the child directory will also be imported)
 
-=== Create and edit the configuration file for running notebook
+=== Create and edit the configuration file for running the notebook
 
 . Create and edit the configuration file, `**configuration.json**`, of the execution directory in three cases: + 
 "When importing images from Dev Container local storage" or "When exporting annotation information to Dev Container local storage" or "When converting annotation information format"
@@ -252,7 +257,7 @@ NOTE: Do not use symbolic links to files and directories.
 
 |`**import_dir**`
 |Path to store images to import into CVAT and annotate
-|Absolute path or relative to notebook (*.ipynb)
+|Absolute path or relative to the notebook (*.ipynb)
 |Specify when importing
 
 |`**import_image_extension**`
@@ -272,17 +277,17 @@ NOTE: Do not use symbolic links to files and directories.
 
 |`**export_dir**`
 |Path to store annotation information to export from CVAT
-|Absolute path or relative to notebook (*.ipynb)
+|Absolute path or relative to the notebook (*.ipynb)
 |Specify when exporting or format converting
 
 |`**dataset_conversion_base_file**`
 |Path of file to convert format
-|Absolute path or relative to notebook (*.ipynb)
+|Absolute path or relative to the notebook (*.ipynb)
 |Specify when converting format (image classification only)
 
 |`**dataset_conversion_dir**`
 |Path to store annotation information to export from CVAT and convert for use in AI model learning and quantization of the SDK
-|Absolute path or relative to notebook (*.ipynb)
+|Absolute path or relative to the notebook (*.ipynb)
 |Specify when converting format (image classification only) + 
 If the directory contains an existing dataset, the error message is displayed and running is interrupted.
 
@@ -304,7 +309,7 @@ If the directory contains an existing dataset, the error message is displayed an
 . Add a label by selecting the [**Add label**] in the [**Constructor**] from the project you created
 .  Import images in the directory specified by `**import_dir**` by running the `**import_api.ipynb**` in the `**image_classification**` directory or `**object_detection**` directory. + 
 (At this time, a task is created with the name specified by the `**import_task_name**` and associated with the project. If you import multiple times with the same name specified, a task with the same task name is created with a different task ID.)
-** The script does the following:
+** The scripts do the following:
 *** Checks that <<anchor-conf, _configuration file_>> exists in the execution directory
 **** If an error occurs, the error description is displayed and running is interrupted.
 **** Pressing the stop button on a cell while the cell is running interrupts processing
@@ -342,7 +347,7 @@ NOTE: See https://opencv.github.io/cvat/docs/[documentation] for annotation proc
 === Export dataset from CVAT
 * Export dataset to Dev Container local storage
 .  Export dataset from the project specified by `**cvat_project_name**` by running the `**export_api.ipynb**` in the `**image_classification**` directory or `**object_detection**` directory
-** The script does the following:
+** The scripts do the following:
 *** Checks that <<anchor-conf, _configuration file_>> exists in the execution directory
 **** If an error occurs, the error description is displayed and running is interrupted.
 **** Pressing the stop button on a cell while the cell is running interrupts processing
@@ -383,8 +388,6 @@ Exported zip file
 ----
 
 === Convert annotation information format (for image classification only)
-
-<<<
 
 . Convert the format of a zip file of the dataset specified by `**dataset_conversion_base_file**` by running the `**convert_dataset.ipynb**` in the `**image_classification**` directory 
 ** If the directory specified by `**dataset_conversion_dir**` is `**tutorials/_common/dataset**`, annotation information is stored in the `**tutorials/_common/dataset**` directory as follows:
@@ -451,7 +454,7 @@ tutorials/
 * If you cancel and restart an import or export process, start each process from the beginning instead of resuming in the middle
 
 == Remarks
-* No error codes and messages defined in the SDK
+* No error codes and messages are defined in the SDK
 * [[novncpassword]]About putting the password in the document
 ** No security issues because <<portforward, _port forward_>> is set to private by default, which means only the creator of the Codespaces can access the port
 
