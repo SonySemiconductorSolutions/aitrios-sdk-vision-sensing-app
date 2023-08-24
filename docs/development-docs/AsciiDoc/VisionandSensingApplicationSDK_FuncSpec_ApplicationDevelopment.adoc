@@ -63,11 +63,11 @@ Added alternate text to images.
 ** WebAssembly
 *** https://webassembly.org/
 ** [[dplspec]]Data Pipeline API Specifications（for Vision and Sensing Applicaiton version 1.0.0）
-*** https://developer.aitrios.sony-semicon.com/file/download/data-pipeline-sdk-api-spec
+*** https://developer.aitrios.sony-semicon.com/en/file/download/aitrios-apispec-datapipeline-v1-0-0-en
 ** [[evpspec]]EVP SDK API Specifications（for Vision and Sensing Applicaiton version 1.0.0）
-*** https://developer.aitrios.sony-semicon.com/file/download/evp-api-spec
+*** https://developer.aitrios.sony-semicon.com/en/file/download/aitrios-apispec-evpsdk-v1-0-0-en
 ** [[senscordspec]]SensCord SDK API Specifications（for Vision and Sensing Applicaiton version 1.0.0）
-*** https://developer.aitrios.sony-semicon.com/file/download/sens-cord-sdk-api-spec
+*** https://developer.aitrios.sony-semicon.com/en/file/download/aitrios-apispec-senscordsdk-v1-0-0-en
 ** FlatBuffers
 *** https://google.github.io/flatbuffers/
 ** WebAssembly Micro Runtime (WAMR)
