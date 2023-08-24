@@ -1,6 +1,6 @@
-[submodule ".devcontainer/dependencies/aitrios-sdk-console-access-lib-python"]
-	path = .devcontainer/dependencies/aitrios-sdk-console-access-lib-python
-	url = https://github.com/SonySemiconductorSolutions/aitrios-sdk-console-access-lib-python
 [submodule ".devcontainer/dependencies/aitrios-sdk-zone-detection-webapp-cs"]
 	path = .devcontainer/dependencies/aitrios-sdk-zone-detection-webapp-cs
 	url = https://github.com/SonySemiconductorSolutions/aitrios-sdk-zone-detection-webapp-cs
+[submodule ".devcontainer/dependencies/aitrios-sdk-console-access-lib-python"]
+	path = .devcontainer/dependencies/aitrios-sdk-console-access-lib-python
+	url = https://github.com/SonySemiconductorSolutions/aitrios-sdk-console-access-lib-python
