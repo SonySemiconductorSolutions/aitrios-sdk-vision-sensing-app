@@ -94,7 +94,7 @@
 
 ==== 「**Vision and Sensing Application**」の作成フロー
 
-[mermaid, target="凡例"]
+[source,mermaid, target="凡例"]
 ----
 flowchart TD;
     %% definition
@@ -112,7 +112,7 @@ flowchart TD;
 
 ===== フロー
 
-[mermaid, target="フロー"]
+[source,mermaid, target="フロー"]
 ----
 flowchart TD
     %% definition

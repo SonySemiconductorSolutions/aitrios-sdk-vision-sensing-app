@@ -95,7 +95,7 @@ NOTE: Specific details of each function contained in a container are described i
 [[workflow]]
 === AI application development workflows and features to provide
 
-[mermaid, target="Legend"]
+[source,mermaid, target="Legend"]
 ----
 flowchart TD;
     %% definition
@@ -110,7 +110,7 @@ flowchart TD;
 ----
 
 
-[mermaid, target="AI application development workflows"]
+[source,mermaid, target="AI application development workflows"]
 ----
 flowchart TB
     id0((Start))

@@ -73,7 +73,7 @@ Run inferences and then check the accuracy of the learning process
 
 * Flow overview
 
-[mermaid, target="Legend"]
+[source,mermaid, target="Legend"]
 ----
 flowchart TD;
     %% definition
@@ -86,7 +86,7 @@ flowchart TD;
     end
 ----
 
-[mermaid, target="Flow overview"]
+[source,mermaid, target="Flow overview"]
 ----
 flowchart TD
     start((Start)) --> id1(1.Prepare a base AI model for transfer learning)

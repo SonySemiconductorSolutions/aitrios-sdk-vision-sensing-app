@@ -121,7 +121,7 @@ Notebook実行に使用する `**configuration.json**` とは別物であるこ�
 
 * フロー概要
 
-[mermaid, target="凡例"]
+[source,mermaid, target="凡例"]
 ----
 flowchart TD;
     %% definition
@@ -134,7 +134,7 @@ flowchart TD;
     end
 ----
 
-[mermaid, target="フロー概要"]
+[source,mermaid, target="フロー概要"]
 ----
 flowchart TD
     start((Start)) --> id1("1.インプットとして使用する画像を用意する")
