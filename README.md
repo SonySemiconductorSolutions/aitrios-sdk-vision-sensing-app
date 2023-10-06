@@ -265,7 +265,7 @@ Following functions are available on Dev Container.
 
 ## Installation Guide
 
-See [Development Environment Setup Guide](https://developer.aitrios.sony-semicon.com/file/download/develop-env-setup/).
+See [Development Environment Setup Guide](https://developer.aitrios.sony-semicon.com/en/downloads#sdk-getting-started).
 <br>
 
 >**NOTE**
