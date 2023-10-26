@@ -101,7 +101,7 @@ URI that grant limited access to Azure storage resources
 
 ==== Flow
 
-[mermaid, target="Legend"]
+[source,mermaid, target="Legend"]
 ----
 flowchart TD;
     %% definition
@@ -118,7 +118,7 @@ flowchart TD;
 ===== Import AI model
 * Flow
 
-[mermaid, target="Flow to import AI model"]
+[source,mermaid, target="Flow to import AI model"]
 ----
 flowchart TD
     %% definition
@@ -173,7 +173,7 @@ flowchart TD
 ===== Delete AI model
 * Flow
 
-[mermaid, target="Flow to delete AI model"]
+[source,mermaid, target="Flow to delete AI model"]
 ----
 flowchart TD
     %% definition
@@ -212,7 +212,7 @@ flowchart TD
 ===== Import "**PPL**"
 * Flow
 
-[mermaid, target="Flow to import PPL"]
+[source,mermaid, target="Flow to import PPL"]
 ----
 flowchart TD
     %% definition
@@ -267,7 +267,7 @@ flowchart TD
 ===== Delete "**PPL**"
 * Flow
 
-[mermaid, target="Flow to delete PPL"]
+[source,mermaid, target="Flow to delete PPL"]
 ----
 flowchart TD
     %% definition
@@ -307,7 +307,7 @@ flowchart TD
 
 ===== Import AI model
 
-[mermaid, target="Sequence to import AI model"]
+[source,mermaid, target="Sequence to import AI model"]
 ----
 %%{init:{'themeCSS':'text.actor {font-size:18px !important;} .messageText {font-size:18px !important;} .loopText {font-size:18px !important;} .noteText {font-size:18px !important;}'}}%%
 sequenceDiagram
@@ -347,7 +347,7 @@ sequenceDiagram
 
 ===== Delete AI model
 
-[mermaid, target="Sequence to delete AI model"]
+[source,mermaid, target="Sequence to delete AI model"]
 ----
 %%{init:{'themeCSS':'text.actor {font-size:18px !important;} .messageText {font-size:18px !important;} .loopText {font-size:18px !important;} .noteText {font-size:18px !important;}'}}%%
 sequenceDiagram
@@ -367,7 +367,7 @@ sequenceDiagram
 
 ===== Import "**PPL**"
 
-[mermaid, target="Sequence to import PPL"]
+[source,mermaid, target="Sequence to import PPL"]
 ----
 %%{init:{'themeCSS':'text.actor {font-size:18px !important;} .messageText {font-size:18px !important;} .loopText {font-size:18px !important;} .noteText {font-size:18px !important;}'}}%%
 sequenceDiagram
@@ -398,7 +398,7 @@ sequenceDiagram
 
 ===== Delete "**PPL**"
 
-[mermaid, target="Sequence to delete PPL"]
+[source,mermaid, target="Sequence to delete PPL"]
 ----
 %%{init:{'themeCSS':'text.actor {font-size:18px !important;} .messageText {font-size:18px !important;} .loopText {font-size:18px !important;} .noteText {font-size:18px !important;}'}}%%
 sequenceDiagram

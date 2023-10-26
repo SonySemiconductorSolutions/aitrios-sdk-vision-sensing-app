@@ -61,7 +61,7 @@ Added alternate text to images.
 === Functional overview
 * SDK provides the notebook for system client authentication to "**Console for AITRIOS**"
 
-[mermaid, target="Legend"]
+[source,mermaid, target="Legend"]
 ----
 flowchart TD;
     %% definition
@@ -77,7 +77,7 @@ flowchart TD;
 
 * Flow overview
 +
-[mermaid, target="Flow overview"]
+[source,mermaid, target="Flow overview"]
 ----
 flowchart TD
     start((Start)) --> id1(1.Get connection information)
@@ -187,7 +187,7 @@ Used for the following "**Console Access Library**" API +
 
 === Sequence
 
-[mermaid, target="Sequence"]
+[source,mermaid, target="Sequence"]
 ----
 %%{init:{'themeVariables':{'fontSize':'24px'}, 'themeCSS':'text.actor {font-size:18px !important;} .messageText {font-size:18px !important;}'}}%%
 sequenceDiagram

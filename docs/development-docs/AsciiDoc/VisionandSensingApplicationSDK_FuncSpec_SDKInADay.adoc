@@ -123,7 +123,7 @@ However, parts you can't run on Codespaces provide documentation instead
 
 * Flow overview
 
-[mermaid, target="Legend"]
+[source,mermaid, target="Legend"]
 ----
 flowchart TD;
     %% definition
@@ -136,7 +136,7 @@ flowchart TD;
     end
 ----
 
-[mermaid, target="Flow overview"]
+[source,mermaid, target="Flow overview"]
 ----
 flowchart TD
     start((Start)) --> id1(1.Prepare images to use as input)

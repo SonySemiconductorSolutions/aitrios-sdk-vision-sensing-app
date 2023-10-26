@@ -85,7 +85,7 @@ See <<anchor-ref, _"**Console User Manual**"_>> for details.
 
 === Flow
 
-[mermaid, target="Legend"]
+[source,mermaid, target="Legend"]
 ----
 flowchart TD;
     %% definition
@@ -106,7 +106,7 @@ flowchart TD;
 
 * Flow
 
-[mermaid, target="Flow to deploy AI model"]
+[source,mermaid, target="Flow to deploy AI model"]
 ----
 flowchart TD
     %% definition
@@ -169,7 +169,7 @@ You can't recover that edge AI device stops responding by SDK. +
 Restart or reset by other means.
 ====
 
-[mermaid, target="Flow to cancel AI model deployment state"]
+[source,mermaid, target="Flow to cancel AI model deployment state"]
 ----
 flowchart TD
     %% definition
@@ -208,7 +208,7 @@ flowchart TD
 ==== Delete deployment configuration
 * Flow
 
-[mermaid, target="Flow to delete deployment configuration"]
+[source,mermaid, target="Flow to delete deployment configuration"]
 ----
 flowchart TD
     %% definition
@@ -249,7 +249,7 @@ flowchart TD
 ==== Deploy "**PPL**"
 * Flow
 
-[mermaid, target="Flow to deploy PPL"]
+[source,mermaid, target="Flow to deploy PPL"]
 ----
 flowchart TD
     %% definition
@@ -293,7 +293,7 @@ flowchart TD
 
 ==== Deploy AI model
 
-[mermaid, target="Sequence to deploy AI model"]
+[source,mermaid, target="Sequence to deploy AI model"]
 ----
 %%{init:{'themeCSS':'text.actor {font-size:18px !important;} .messageText {font-size:18px !important;} .labelText {font-size:18px !important;} .loopText {font-size:18px !important;} .noteText {font-size:18px !important;}'}}%%
 sequenceDiagram
@@ -343,7 +343,7 @@ sequenceDiagram
 
 ==== Cancel AI model deployment state
 
-[mermaid, target="Sequence to cancel AI model deployment state"]
+[source,mermaid, target="Sequence to cancel AI model deployment state"]
 ----
 %%{init:{'themeCSS':'text.actor {font-size:18px !important;} .messageText {font-size:18px !important;} .labelText {font-size:18px !important;} .loopText {font-size:18px !important;} .noteText {font-size:18px !important;}'}}%%
 sequenceDiagram
@@ -368,7 +368,7 @@ sequenceDiagram
 
 ==== Delete deployment configuration
 
-[mermaid, target="Sequence to delete deployment configuration"]
+[source,mermaid, target="Sequence to delete deployment configuration"]
 ----
 %%{init:{'themeCSS':'text.actor {font-size:18px !important;} .messageText {font-size:18px !important;} .labelText {font-size:18px !important;} .loopText {font-size:18px !important;} .noteText {font-size:18px !important;}'}}%%
 sequenceDiagram
@@ -393,7 +393,7 @@ sequenceDiagram
 
 ==== Deploy "**PPL**"
 
-[mermaid, target="Sequence to deploy PPL"]
+[source,mermaid, target="Sequence to deploy PPL"]
 ----
 %%{init:{'themeCSS':'text.actor {font-size:18px !important;} .messageText {font-size:18px !important;} .labelText {font-size:18px !important;} .loopText {font-size:18px !important;} .noteText {font-size:18px !important;}'}}%%
 sequenceDiagram

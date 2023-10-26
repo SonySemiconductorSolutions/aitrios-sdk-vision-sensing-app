@@ -94,7 +94,7 @@ Added alternate text to images.
 
 ==== "**Vision and Sensing Application**" creation flow
 
-[mermaid, target="Legend"]
+[source,mermaid, target="Legend"]
 ----
 flowchart TD;
     %% definition
@@ -112,7 +112,7 @@ flowchart TD;
 
 ===== Flow
 
-[mermaid, target="Flow"]
+[source,mermaid, target="Flow"]
 ----
 flowchart TD
     %% definition

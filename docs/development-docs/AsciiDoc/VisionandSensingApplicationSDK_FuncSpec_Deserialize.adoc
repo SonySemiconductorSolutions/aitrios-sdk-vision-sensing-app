@@ -86,7 +86,7 @@ The inference results are stored in `**"O"**` of `**"Inferences"**`. The `**"AQA
 
 === Flow
 
-[mermaid, target="Legend"]
+[source,mermaid, target="Legend"]
 ----
 flowchart TD;
     %% definition
@@ -101,7 +101,7 @@ flowchart TD;
     end
 ----
 
-[mermaid, target="Flow"]
+[source,mermaid, target="Flow"]
 ----
 flowchart TD
     %% definition
@@ -141,7 +141,7 @@ flowchart TD
 
 === Sequence
 
-[mermaid, target="Sequence"]
+[source,mermaid, target="Sequence"]
 ----
 %%{init:{'themeCSS':'text.actor {font-size:18px !important;} .messageText {font-size:18px !important;} .labelText {font-size:18px !important;} .loopText {font-size:18px !important;} .noteText {font-size:18px !important;}'}}%%
 sequenceDiagram
