@@ -85,7 +85,7 @@ Reduce the size of the model by quantization so that it can be deployed to the t
 
 * The image format supported by the SDK is JPEG
 
-[source,mermaid, target="Legend"]
+[mermaid, target="Legend"]
 ----
 flowchart TD;
     %% definition
@@ -101,7 +101,7 @@ flowchart TD;
 
 * Flow overview
 +
-[source,mermaid, target="Flow overview"]
+[mermaid, target="Flow overview"]
 ----
 flowchart TD
     start((Start)) --> id1(1.Prepare an AI model to quantize)

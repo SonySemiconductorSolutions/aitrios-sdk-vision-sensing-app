@@ -83,7 +83,7 @@ AIモデルのフォーマットの一種
 
 * SDKにてサポートする画像フォーマットはJPEGとする
 
-[source,mermaid, target="凡例"]
+[mermaid, target="凡例"]
 ----
 flowchart TD;
     %% definition
@@ -99,7 +99,7 @@ flowchart TD;
 
 * フロー概要
 +
-[source,mermaid, target="フロー概要"]
+[mermaid, target="フロー概要"]
 ----
 flowchart TD
     start((Start)) --> id1(1.量子化するAIモデルを用意)

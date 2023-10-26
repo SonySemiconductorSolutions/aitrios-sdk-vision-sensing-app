@@ -80,7 +80,7 @@ Command ParameterにてモデルIDの設定が必要である。
 
 === フロー
 
-[source,mermaid, target="凡例"]
+[mermaid, target="凡例"]
 ----
 flowchart TD;
     %% definition
@@ -101,7 +101,7 @@ flowchart TD;
 
 * フロー
 
-[source,mermaid, target="AIモデルデプロイ フロー"]
+[mermaid, target="AIモデルデプロイ フロー"]
 ----
 flowchart TD
     %% definition
@@ -162,7 +162,7 @@ AIモデルデプロイ後、デバイスがハングし、データベース上
 また、デバイス自体のハング状態を元に戻すことはできない。別途デバイスの再起動やリセットを行う必要がある
 ====
 
-[source,mermaid, target="AIモデルデプロイ状態キャンセル フロー"]
+[mermaid, target="AIモデルデプロイ状態キャンセル フロー"]
 ----
 flowchart TD
     %% definition
@@ -201,7 +201,7 @@ flowchart TD
 ==== デプロイConfig削除
 * フロー
 
-[source,mermaid, target="デプロイConfig削除 フロー"]
+[mermaid, target="デプロイConfig削除 フロー"]
 ----
 flowchart TD
     %% definition
@@ -242,7 +242,7 @@ flowchart TD
 ==== 「**PPL**」デプロイ
 * フロー
 
-[source,mermaid, target="PPLデプロイ フロー"]
+[mermaid, target="PPLデプロイ フロー"]
 ----
 flowchart TD
     %% definition
@@ -286,7 +286,7 @@ flowchart TD
 
 ==== AIモデルデプロイ
 
-[source,mermaid, target="AIモデルデプロイ シーケンス"]
+[mermaid, target="AIモデルデプロイ シーケンス"]
 ----
 %%{init:{'themeCSS':'text.actor {font-size:18px !important;} .messageText {font-size:18px !important;} .labelText {font-size:18px !important;} .loopText {font-size:18px !important;} .noteText {font-size:18px !important;}'}}%%
 sequenceDiagram
@@ -336,7 +336,7 @@ sequenceDiagram
 
 ==== AIモデルデプロイ状態キャンセル
 
-[source,mermaid, target="AIモデルデプロイ状態キャンセル シーケンス"]
+[mermaid, target="AIモデルデプロイ状態キャンセル シーケンス"]
 ----
 %%{init:{'themeCSS':'text.actor {font-size:18px !important;} .messageText {font-size:18px !important;} .labelText {font-size:18px !important;} .loopText {font-size:18px !important;} .noteText {font-size:18px !important;}'}}%%
 sequenceDiagram
@@ -361,7 +361,7 @@ sequenceDiagram
 
 ==== デプロイConfig削除
 
-[source,mermaid, target="デプロイConfig削除 シーケンス"]
+[mermaid, target="デプロイConfig削除 シーケンス"]
 ----
 %%{init:{'themeCSS':'text.actor {font-size:18px !important;} .messageText {font-size:18px !important;} .labelText {font-size:18px !important;} .loopText {font-size:18px !important;} .noteText {font-size:18px !important;}'}}%%
 sequenceDiagram
@@ -386,7 +386,7 @@ sequenceDiagram
 
 ==== 「**PPL**」デプロイ
 
-[source,mermaid, target="PPLデプロイ シーケンス"]
+[mermaid, target="PPLデプロイ シーケンス"]
 ----
 %%{init:{'themeCSS':'text.actor {font-size:18px !important;} .messageText {font-size:18px !important;} .labelText {font-size:18px !important;} .loopText {font-size:18px !important;} .noteText {font-size:18px !important;}'}}%%
 sequenceDiagram

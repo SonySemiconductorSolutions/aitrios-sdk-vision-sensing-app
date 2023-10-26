@@ -100,7 +100,7 @@ Azure Storage リソースへの制限付きアクセス権を付与する URI
 
 ==== フロー
 
-[source,mermaid, target="凡例"]
+[mermaid, target="凡例"]
 ----
 flowchart TD;
     %% definition
@@ -117,7 +117,7 @@ flowchart TD;
 ===== AIモデルインポート
 * フロー
 
-[source,mermaid, target="AIモデルインポート フロー"]
+[mermaid, target="AIモデルインポート フロー"]
 ----
 flowchart TD
     %% definition
@@ -172,7 +172,7 @@ flowchart TD
 ===== AIモデル削除
 * フロー
 
-[source,mermaid, target="AIモデル削除 フロー"]
+[mermaid, target="AIモデル削除 フロー"]
 ----
 flowchart TD
     %% definition
@@ -211,7 +211,7 @@ flowchart TD
 ===== 「**PPL**」インポート
 * フロー
 
-[source,mermaid, target="PPLインポート フロー"]
+[mermaid, target="PPLインポート フロー"]
 ----
 flowchart TD
     %% definition
@@ -266,7 +266,7 @@ flowchart TD
 ===== 「**PPL**」削除
 * フロー
 
-[source,mermaid, target="PPL削除 フロー"]
+[mermaid, target="PPL削除 フロー"]
 ----
 flowchart TD
     %% definition
@@ -306,7 +306,7 @@ flowchart TD
 
 ===== AIモデルインポート
 
-[source,mermaid, target="AIモデルインポート シーケンス"]
+[mermaid, target="AIモデルインポート シーケンス"]
 ----
 %%{init:{'themeCSS':'text.actor {font-size:18px !important;} .messageText {font-size:18px !important;} .loopText {font-size:18px !important;} .noteText {font-size:18px !important;}'}}%%
 sequenceDiagram
@@ -346,7 +346,7 @@ sequenceDiagram
 
 ===== AIモデル削除
 
-[source,mermaid, target="AIモデル削除 シーケンス"]
+[mermaid, target="AIモデル削除 シーケンス"]
 ----
 %%{init:{'themeCSS':'text.actor {font-size:18px !important;} .messageText {font-size:18px !important;} .loopText {font-size:18px !important;} .noteText {font-size:18px !important;}'}}%%
 sequenceDiagram
@@ -366,7 +366,7 @@ sequenceDiagram
 
 ===== 「**PPL**」インポート
 
-[source,mermaid, target="PPLインポート シーケンス"]
+[mermaid, target="PPLインポート シーケンス"]
 ----
 %%{init:{'themeCSS':'text.actor {font-size:18px !important;} .messageText {font-size:18px !important;} .loopText {font-size:18px !important;} .noteText {font-size:18px !important;}'}}%%
 sequenceDiagram
@@ -397,7 +397,7 @@ sequenceDiagram
 
 ===== 「**PPL**」削除
 
-[source,mermaid, target="PPL削除 シーケンス"]
+[mermaid, target="PPL削除 シーケンス"]
 ----
 %%{init:{'themeCSS':'text.actor {font-size:18px !important;} .messageText {font-size:18px !important;} .loopText {font-size:18px !important;} .noteText {font-size:18px !important;}'}}%%
 sequenceDiagram

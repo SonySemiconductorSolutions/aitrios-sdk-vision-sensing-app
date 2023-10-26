@@ -19,11 +19,14 @@
 #include <string.h>
 #include <stdint.h>
 #include <stdlib.h>
+#include <pthread.h>
 #include <vector>
 
 #include "vision_app_public.h"
 #include "analyzer_objectdetection.h"
 #include "objectdetection_generated.h"
+
+extern pthread_mutex_t g_libc_mutex;
 
 /* -------------------------------------------------------- */
 /* define                                                   */
@@ -33,11 +36,11 @@
 /* -------------------------------------------------------- */
 /* macro define                                             */
 /* -------------------------------------------------------- */
-#define PPL_ERR_PRINTF(fmt, ...) fprintf(stderr, "E [VisionAPP] ");fprintf(stderr, fmt, ##__VA_ARGS__);fprintf(stderr, "\n")
-#define PPL_WARN_PRINTF(fmt, ...) fprintf(stderr, "W [VisionAPP] ");fprintf(stderr, fmt, ##__VA_ARGS__);fprintf(stderr, "\n")
-#define PPL_INFO_PRINTF(fmt, ...) fprintf(stdout, "I [VisionAPP] ");fprintf(stdout, fmt, ##__VA_ARGS__);fprintf(stdout, "\n")
-#define PPL_DBG_PRINTF(fmt, ...) printf( "D [VisionAPP] "); printf( fmt, ##__VA_ARGS__); printf( "\n")
-#define PPL_VER_PRINTF(fmt, ...) printf( "V [VisionAPP] "); printf( fmt, ##__VA_ARGS__); printf( "\n")
+#define PPL_ERR_PRINTF(fmt, ...) pthread_mutex_lock(&g_libc_mutex);fprintf(stderr, "E [VisionAPP] ");fprintf(stderr, fmt, ##__VA_ARGS__);fprintf(stderr, "\n");pthread_mutex_unlock(&g_libc_mutex);
+#define PPL_WARN_PRINTF(fmt, ...) pthread_mutex_lock(&g_libc_mutex);fprintf(stderr, "W [VisionAPP] ");fprintf(stderr, fmt, ##__VA_ARGS__);fprintf(stderr, "\n");pthread_mutex_unlock(&g_libc_mutex);
+#define PPL_INFO_PRINTF(fmt, ...) pthread_mutex_lock(&g_libc_mutex);fprintf(stdout, "I [VisionAPP] ");fprintf(stdout, fmt, ##__VA_ARGS__);fprintf(stdout, "\n");pthread_mutex_unlock(&g_libc_mutex);
+#define PPL_DBG_PRINTF(fmt, ...) pthread_mutex_lock(&g_libc_mutex);printf( "D [VisionAPP] "); printf( fmt, ##__VA_ARGS__); printf( "\n");pthread_mutex_unlock(&g_libc_mutex);
+#define PPL_VER_PRINTF(fmt, ...) pthread_mutex_lock(&g_libc_mutex);printf( "V [VisionAPP] "); printf( fmt, ##__VA_ARGS__); printf( "\n");pthread_mutex_unlock(&g_libc_mutex);
 
 /* -------------------------------------------------------- */
 /* structure                                                */
@@ -114,35 +117,68 @@ EPPL_RESULT_CODE PPL_ObjectDetectionSsdAnalyze(float *p_data, uint32_t in_size, 
     analyzeObjectDetectionSsdOutput(objectdetection_output, &output_objectdetection_data, ssd_param);
 
     /* Serialize Data to FLatbuffers */ 
+    pthread_mutex_lock(&g_libc_mutex);
     flatbuffers::FlatBufferBuilder* builder = new flatbuffers::FlatBufferBuilder();
+    pthread_mutex_unlock(&g_libc_mutex);
+
     createSSDOutputFlatbuffer(builder,&output_objectdetection_data);
 
+    pthread_mutex_lock(&g_libc_mutex);
     uint8_t* buf_ptr = builder->GetBufferPointer();
+    pthread_mutex_unlock(&g_libc_mutex);
+
     if (buf_ptr == NULL) {
         PPL_ERR_PRINTF("Error could not create Flatbuffer");
+
+        pthread_mutex_lock(&g_libc_mutex);
         builder->Clear();
+        pthread_mutex_unlock(&g_libc_mutex);
+
+        pthread_mutex_lock(&g_libc_mutex);
         delete(builder);
+        pthread_mutex_unlock(&g_libc_mutex);
+
         return E_PPL_OTHER;
     }
 
+    pthread_mutex_lock(&g_libc_mutex);
     uint32_t buf_size = builder->GetSize();
+    pthread_mutex_unlock(&g_libc_mutex);
+
+    pthread_mutex_lock(&g_libc_mutex);
     p_out_param = (uint8_t *)SessMalloc(buf_size);
+    pthread_mutex_unlock(&g_libc_mutex);
+
     if (p_out_param == NULL) {
         PPL_ERR_PRINTF("malloc failed for creating flatbuffer, malloc size=%d", buf_size);
+        pthread_mutex_lock(&g_libc_mutex);
         builder->Clear();
+        pthread_mutex_unlock(&g_libc_mutex);
+
+        pthread_mutex_lock(&g_libc_mutex);
         delete(builder);
+        pthread_mutex_unlock(&g_libc_mutex);
+
         return E_PPL_E_MEMORY_ERROR;
     }
     PPL_DBG_PRINTF("p_out_param = %p", p_out_param);
 
     /* Copy Data */
+    pthread_mutex_lock(&g_libc_mutex);
     memcpy(p_out_param, buf_ptr, buf_size);
+    pthread_mutex_unlock(&g_libc_mutex);
+
     *pp_out_buf = p_out_param;
     *p_out_size = buf_size;
 
     //Clean up
+    pthread_mutex_lock(&g_libc_mutex);
     builder->Clear();
+    pthread_mutex_unlock(&g_libc_mutex);
+
+    pthread_mutex_lock(&g_libc_mutex);
     delete(builder);
+    pthread_mutex_unlock(&g_libc_mutex);
 
     return E_PPL_OK;
 }
@@ -158,14 +194,37 @@ EPPL_RESULT_CODE json_parse(JSON_Value *root_value, PPL_SsdParam *p_ssd_param) {
     const char* ppl_id_version = PPL_ID_VERSION;
 
     PPL_DBG_PRINTF("PPL_Initialize: <json_parse>");
+    int ret;
+    
+    pthread_mutex_lock(&g_libc_mutex);
+    ret = json_object_has_value(json_object(root_value),"header");
+    pthread_mutex_unlock(&g_libc_mutex);
 
-    if (json_object_has_value(json_object(root_value),"header")) {
-        if (json_object_has_value_of_type(json_object(root_value),"header",JSONObject)) {
+    if (ret) {
+        pthread_mutex_lock(&g_libc_mutex);
+        ret = json_object_has_value_of_type(json_object(root_value),"header",JSONObject);
+        pthread_mutex_unlock(&g_libc_mutex);
+
+        if (ret) {
+            pthread_mutex_lock(&g_libc_mutex);
             JSON_Object *header = json_object_get_object(json_object(root_value), "header");
-            if (json_object_has_value(header,"id")) {
+            pthread_mutex_unlock(&g_libc_mutex);
+
+            pthread_mutex_lock(&g_libc_mutex);
+            ret = json_object_has_value(header,"id");
+            pthread_mutex_unlock(&g_libc_mutex);
+
+            if (ret) {
+                pthread_mutex_lock(&g_libc_mutex);
                 p = json_object_get_string(header, "id");
+                pthread_mutex_unlock(&g_libc_mutex);
+
                 if (p != NULL) { 
-                    if (strncmp(ppl_id_version, p, 2)== 0) {
+                    pthread_mutex_lock(&g_libc_mutex);
+                    ret = strncmp(ppl_id_version, p, 2);
+                    pthread_mutex_unlock(&g_libc_mutex);
+
+                    if (ret == 0) {
                         PPL_DBG_PRINTF("[PPL_PUBLIC] header_id = %s",p);
                     } else {
                         PPL_DBG_PRINTF("[PPL_PUBLIC] header_id = %s",p);
@@ -180,10 +239,21 @@ EPPL_RESULT_CODE json_parse(JSON_Value *root_value, PPL_SsdParam *p_ssd_param) {
                 return E_PPL_INVALID_PARAM;
             }
 
-            if (json_object_has_value(header,"version")) {
+            pthread_mutex_lock(&g_libc_mutex);
+            ret = json_object_has_value(header,"version");
+            pthread_mutex_unlock(&g_libc_mutex);
+
+            if (ret) {
+                pthread_mutex_lock(&g_libc_mutex);
                 p = json_object_get_string(header, "version");
+                pthread_mutex_unlock(&g_libc_mutex);
+
                 if (p != NULL) {
-                    if (strncmp(&ppl_id_version[3], p, 8) == 0) {
+                    pthread_mutex_lock(&g_libc_mutex);
+                    ret = strncmp(&ppl_id_version[3], p, 8);
+                    pthread_mutex_unlock(&g_libc_mutex);
+
+                    if (ret == 0) {
                         PPL_DBG_PRINTF("[PPL_PUBLIC] header_version p = %s ppl_id_version=%s",p,&ppl_id_version[3]);
                     } else {
                         PPL_DBG_PRINTF("[PPL_PUBLIC] header_version = %s",p);
@@ -206,8 +276,17 @@ EPPL_RESULT_CODE json_parse(JSON_Value *root_value, PPL_SsdParam *p_ssd_param) {
 /* private function                                         */
 /* -------------------------------------------------------- */
 static EPPL_RESULT_CODE PPL_ObjectDetectionSsdParamInit(JSON_Value *root_value, PPL_SsdParam *p_ssd_param) {
-    if (json_object_has_value(json_object(root_value),"dnn_output_detections")) {
+    int ret;
+
+    pthread_mutex_lock(&g_libc_mutex);
+    ret = json_object_has_value(json_object(root_value),"dnn_output_detections");
+    pthread_mutex_unlock(&g_libc_mutex);
+
+    if (ret) {
+        pthread_mutex_lock(&g_libc_mutex);
         uint16_t dnn_output_detections = json_object_get_number(json_object(root_value), "dnn_output_detections");
+        pthread_mutex_unlock(&g_libc_mutex);
+
         PPL_DBG_PRINTF("PPL_ObjectDetectionParamInit dnn_output_detections: %d", dnn_output_detections);
         p_ssd_param->dnnOutputDetections = dnn_output_detections;
     } else {
@@ -215,8 +294,15 @@ static EPPL_RESULT_CODE PPL_ObjectDetectionSsdParamInit(JSON_Value *root_value, 
         return E_PPL_INVALID_PARAM;
     }
 
-    if (json_object_has_value(json_object(root_value),"max_detections")) {
+    pthread_mutex_lock(&g_libc_mutex);
+    ret = json_object_has_value(json_object(root_value),"max_detections");
+    pthread_mutex_unlock(&g_libc_mutex);
+
+    if (ret) {
+        pthread_mutex_lock(&g_libc_mutex);
         uint16_t maxDetections = (int)json_object_get_number(json_object(root_value), "max_detections");
+        pthread_mutex_unlock(&g_libc_mutex);
+
         PPL_DBG_PRINTF("PPL_ObjectDetectionParamInit max_detections: %d", maxDetections);
         if (maxDetections > p_ssd_param->dnnOutputDetections) {
             PPL_WARN_PRINTF("max_detections > max number of classes, set to max number of classes");
@@ -229,8 +315,15 @@ static EPPL_RESULT_CODE PPL_ObjectDetectionSsdParamInit(JSON_Value *root_value, 
         return E_PPL_INVALID_PARAM;
     }
 
-    if (json_object_has_value(json_object(root_value),"threshold")) {
+    pthread_mutex_lock(&g_libc_mutex);
+    json_object_has_value(json_object(root_value),"threshold");
+    pthread_mutex_unlock(&g_libc_mutex);
+
+    if (ret) {
+        pthread_mutex_lock(&g_libc_mutex);
         float threshold = json_object_get_number(json_object(root_value), "threshold");
+        pthread_mutex_unlock(&g_libc_mutex);
+
         PPL_DBG_PRINTF("PPL_ObjectDetectionParamInit threshold: %lf", threshold);
         if (threshold < 0.0 || threshold > 1.0) {
             PPL_WARN_PRINTF("threshold value out of range, set to default threshold");
@@ -242,9 +335,16 @@ static EPPL_RESULT_CODE PPL_ObjectDetectionSsdParamInit(JSON_Value *root_value, 
         PPL_ERR_PRINTF("PPL_ObjectDetectionParamInit: json file does not have threshold");
         return E_PPL_INVALID_PARAM;
     }
+    
+    pthread_mutex_lock(&g_libc_mutex);
+    ret = json_object_has_value(json_object(root_value),"input_width");
+    pthread_mutex_unlock(&g_libc_mutex);
 
-    if (json_object_has_value(json_object(root_value),"input_width")) {
+    if (ret) {
+        pthread_mutex_lock(&g_libc_mutex);
         uint16_t input_width = json_object_get_number(json_object(root_value), "input_width");
+        pthread_mutex_unlock(&g_libc_mutex);
+
         PPL_DBG_PRINTF("PPL_ObjectDetectionParamInit input_width: %d", input_width);
         p_ssd_param->inputWidth = input_width;
     } else {
@@ -252,8 +352,15 @@ static EPPL_RESULT_CODE PPL_ObjectDetectionSsdParamInit(JSON_Value *root_value, 
         return E_PPL_INVALID_PARAM;
     }
 
-    if (json_object_has_value(json_object(root_value),"input_height")) {
+    pthread_mutex_lock(&g_libc_mutex);
+    ret = json_object_has_value(json_object(root_value),"input_height");
+    pthread_mutex_unlock(&g_libc_mutex);
+
+    if (ret) {
+        pthread_mutex_lock(&g_libc_mutex);
         uint16_t input_height = json_object_get_number(json_object(root_value), "input_height");
+        pthread_mutex_unlock(&g_libc_mutex);
+
         PPL_DBG_PRINTF("PPL_ObjectDetectionParamInit input_height: %d", input_height);
         p_ssd_param->inputHeight = input_height;
     } else {
@@ -290,7 +397,9 @@ static int createObjectDetectionSsdData(float *data_body, uint32_t detect_num, O
         bbox.x_min = out_data[count + i + (1 * totalDetections)];
         bbox.y_max = out_data[count + i + (2 * totalDetections)];
         bbox.x_max = out_data[count + i + (3 * totalDetections)];
+        pthread_mutex_lock(&g_libc_mutex);
         v_bbox.push_back(bbox);
+        pthread_mutex_unlock(&g_libc_mutex);
     }
     count += (totalDetections * 4);
 
@@ -302,7 +411,11 @@ static int createObjectDetectionSsdData(float *data_body, uint32_t detect_num, O
         }
         float class_index;
         class_index = out_data[count];
+
+        pthread_mutex_lock(&g_libc_mutex);
         v_classes.push_back(class_index);
+        pthread_mutex_unlock(&g_libc_mutex);
+
         count++;
     }
 
@@ -314,7 +427,11 @@ static int createObjectDetectionSsdData(float *data_body, uint32_t detect_num, O
         }
         float score;
         score = out_data[count];
+
+        pthread_mutex_lock(&g_libc_mutex);
         v_scores.push_back(score);
+        pthread_mutex_unlock(&g_libc_mutex);
+
         count++;
     }
 
@@ -332,9 +449,18 @@ static int createObjectDetectionSsdData(float *data_body, uint32_t detect_num, O
     }
 
     objectdetection_output->numOfDetections = numOfDetections;
+
+    pthread_mutex_lock(&g_libc_mutex);
     objectdetection_output->bboxes = v_bbox;
+    pthread_mutex_unlock(&g_libc_mutex);
+
+    pthread_mutex_lock(&g_libc_mutex);
     objectdetection_output->scores = v_scores;
+    pthread_mutex_unlock(&g_libc_mutex);
+
+    pthread_mutex_lock(&g_libc_mutex);
     objectdetection_output->classes = v_classes;
+    pthread_mutex_unlock(&g_libc_mutex);
 
     return 0;
 }
@@ -358,66 +484,135 @@ static void analyzeObjectDetectionSsdOutput(ObjectDetectionSsdOutputTensor out_t
 
         /* Extract scores */
         float score;
+
+        pthread_mutex_lock(&g_libc_mutex);
         score = out_tensor.scores[i];
-        
+        pthread_mutex_unlock(&g_libc_mutex);
+
         /* Filter Detections */
         if (score < ssd_param.threshold) {
             continue;
         } else {
+            pthread_mutex_lock(&g_libc_mutex);
             v_scores.push_back(score);
+            pthread_mutex_unlock(&g_libc_mutex);
 
             /* Extract bounding box co-ordinates */
             PPL_Bbox bbox;
+            pthread_mutex_lock(&g_libc_mutex);
             bbox.m_xmin = (uint16_t)(round((out_tensor.bboxes[i].x_min) * (ssd_param.inputWidth - 1)));
+            pthread_mutex_unlock(&g_libc_mutex);
+
+            pthread_mutex_lock(&g_libc_mutex);
             bbox.m_ymin = (uint16_t)(round((out_tensor.bboxes[i].y_min) * (ssd_param.inputHeight  - 1)));
+            pthread_mutex_unlock(&g_libc_mutex);
+
+            pthread_mutex_lock(&g_libc_mutex);
             bbox.m_xmax = (uint16_t)(round((out_tensor.bboxes[i].x_max) * (ssd_param.inputWidth  - 1)));
+            pthread_mutex_unlock(&g_libc_mutex);
+
+            pthread_mutex_lock(&g_libc_mutex);
             bbox.m_ymax = (uint16_t)(round((out_tensor.bboxes[i].y_max) * (ssd_param.inputHeight - 1)));
+            pthread_mutex_unlock(&g_libc_mutex);
+
+            pthread_mutex_lock(&g_libc_mutex);
             v_bbox.push_back(bbox);
+            pthread_mutex_unlock(&g_libc_mutex);
 
            /* Extract classes */
             uint8_t class_index;
+            pthread_mutex_lock(&g_libc_mutex);
             class_index = (uint8_t)out_tensor.classes[i];
+            pthread_mutex_unlock(&g_libc_mutex);
+
+            pthread_mutex_lock(&g_libc_mutex);
             v_classes.push_back(class_index);
+            pthread_mutex_unlock(&g_libc_mutex);
 
             detections_above_threshold++;
         }
     }
 
     objectdetection_data.numOfDetections = detections_above_threshold;
+
+    pthread_mutex_lock(&g_libc_mutex);
     objectdetection_data.v_bbox = v_bbox;
+    pthread_mutex_unlock(&g_libc_mutex);
+
+    pthread_mutex_lock(&g_libc_mutex);
     objectdetection_data.v_scores = v_scores;
+    pthread_mutex_unlock(&g_libc_mutex);
+
+    pthread_mutex_lock(&g_libc_mutex);
     objectdetection_data.v_classes = v_classes;
+    pthread_mutex_unlock(&g_libc_mutex);
+
     //objectdetection_data = getActualDetections(objectdetection_data);
 
     if (objectdetection_data.numOfDetections > ssd_param.maxDetections) {
         objectdetection_data.numOfDetections = ssd_param.maxDetections;
+
+        pthread_mutex_lock(&g_libc_mutex);
         objectdetection_data.v_bbox.resize(ssd_param.maxDetections);
+        pthread_mutex_unlock(&g_libc_mutex);
+
+        pthread_mutex_lock(&g_libc_mutex);
         objectdetection_data.v_classes.resize(ssd_param.maxDetections);
+        pthread_mutex_unlock(&g_libc_mutex);
+
+        pthread_mutex_lock(&g_libc_mutex);
         objectdetection_data.v_scores.resize(ssd_param.maxDetections);
+        pthread_mutex_unlock(&g_libc_mutex);
     }
 
     output_objectdetection_data->numOfDetections = objectdetection_data.numOfDetections;
+
+    pthread_mutex_lock(&g_libc_mutex);
     output_objectdetection_data->v_bbox = objectdetection_data.v_bbox;
+    pthread_mutex_unlock(&g_libc_mutex);
+
+    pthread_mutex_lock(&g_libc_mutex);
     output_objectdetection_data->v_scores = objectdetection_data.v_scores;
+    pthread_mutex_unlock(&g_libc_mutex);
+
+    pthread_mutex_lock(&g_libc_mutex);
     output_objectdetection_data->v_classes = objectdetection_data.v_classes;
+    pthread_mutex_unlock(&g_libc_mutex);
 
     PPL_DBG_PRINTF("number of detections = %d", objectdetection_data.numOfDetections);
     num_of_detections = objectdetection_data.numOfDetections;
     for (int i = 0; i < num_of_detections; i++) {
-        PPL_DBG_PRINTF(
-            "v_bbox[%d] :[x_min,y_min,x_max,y_max] = [%d,%d,%d,%d]",
-            i,
-            objectdetection_data.v_bbox[i].m_xmin,
-            objectdetection_data.v_bbox[i].m_ymin,
-            objectdetection_data.v_bbox[i].m_xmax,
-            objectdetection_data.v_bbox[i].m_ymax
-        );
+        pthread_mutex_lock(&g_libc_mutex);
+        uint16_t xmin = objectdetection_data.v_bbox[i].m_xmin;
+        pthread_mutex_unlock(&g_libc_mutex);
+
+        pthread_mutex_lock(&g_libc_mutex);
+        uint16_t ymin = objectdetection_data.v_bbox[i].m_ymin;
+        pthread_mutex_unlock(&g_libc_mutex);
+
+        pthread_mutex_lock(&g_libc_mutex);
+        uint16_t xmax = objectdetection_data.v_bbox[i].m_xmax;
+        pthread_mutex_unlock(&g_libc_mutex);
+
+        pthread_mutex_lock(&g_libc_mutex);
+        uint16_t ymax = objectdetection_data.v_bbox[i].m_ymax;
+        pthread_mutex_unlock(&g_libc_mutex);
+
+        PPL_DBG_PRINTF("v_bbox[%d] :[x_min,y_min,x_max,y_max] = [%d,%d,%d,%d]", i, xmin, ymin, xmax, ymax);
     }
     for (int i = 0; i < num_of_detections; i++) {
-        PPL_DBG_PRINTF("scores[%d] = %f", i, objectdetection_data.v_scores[i]);
+        pthread_mutex_lock(&g_libc_mutex);
+        float score = objectdetection_data.v_scores[i];
+        pthread_mutex_unlock(&g_libc_mutex);
+
+        PPL_DBG_PRINTF("scores[%d] = %f", i, score);
     }
     for (int i = 0; i < num_of_detections; i++) {
-        PPL_DBG_PRINTF("class_indices[%d] = %d", i, objectdetection_data.v_classes[i]);
+        pthread_mutex_lock(&g_libc_mutex);
+        uint8_t class_indice = objectdetection_data.v_classes[i];
+        pthread_mutex_unlock(&g_libc_mutex);
+
+        PPL_DBG_PRINTF("class_indices[%d/%d] = %d", i, num_of_detections, class_indice);
     }
 
     return;
@@ -432,20 +627,37 @@ static void createSSDOutputFlatbuffer(flatbuffers::FlatBufferBuilder* builder, c
     uint8_t numOfDetections = ssdData->numOfDetections;
     for (uint8_t i = 0; i < numOfDetections; i++) {
         PPL_DBG_PRINTF("left = %d, top = %d, right = %d, bottom = %d, class = %d, score = %f", ssdData->v_bbox[i].m_xmin, ssdData->v_bbox[i].m_ymin, ssdData->v_bbox[i].m_xmax, ssdData->v_bbox[i].m_ymax, ssdData->v_classes[i], ssdData->v_scores[i]);
+        pthread_mutex_lock(&g_libc_mutex);
         auto bbox_data = SmartCamera::CreateBoundingBox2d(*builder, ssdData->v_bbox[i].m_xmin, \
             ssdData->v_bbox[i].m_ymin, \
             ssdData->v_bbox[i].m_xmax, \
             ssdData->v_bbox[i].m_ymax);
+        pthread_mutex_unlock(&g_libc_mutex);
 
+        pthread_mutex_lock(&g_libc_mutex);
         auto general_data = SmartCamera::CreateGeneralObject(*builder, ssdData->v_classes[i], SmartCamera::BoundingBox_BoundingBox2d, bbox_data.Union(), ssdData->v_scores[i]);
+        pthread_mutex_unlock(&g_libc_mutex);
+
+        pthread_mutex_lock(&g_libc_mutex);
         gdata_vector.push_back(general_data);
+        pthread_mutex_unlock(&g_libc_mutex);
     }
 
+    pthread_mutex_lock(&g_libc_mutex);
     auto v_bbox = builder->CreateVector(gdata_vector);
-    auto od_data = SmartCamera::CreateObjectDetectionData(*builder, v_bbox);
-    auto out_data = SmartCamera::CreateObjectDetectionTop(*builder, od_data);
+    pthread_mutex_unlock(&g_libc_mutex);
 
+    pthread_mutex_lock(&g_libc_mutex);
+    auto od_data = SmartCamera::CreateObjectDetectionData(*builder, v_bbox);
+    pthread_mutex_unlock(&g_libc_mutex);
+
+    pthread_mutex_lock(&g_libc_mutex);
+    auto out_data = SmartCamera::CreateObjectDetectionTop(*builder, od_data);
+    pthread_mutex_unlock(&g_libc_mutex);
+
+    pthread_mutex_lock(&g_libc_mutex);
     builder->Finish(out_data);
+    pthread_mutex_unlock(&g_libc_mutex);
 
     return;
 }

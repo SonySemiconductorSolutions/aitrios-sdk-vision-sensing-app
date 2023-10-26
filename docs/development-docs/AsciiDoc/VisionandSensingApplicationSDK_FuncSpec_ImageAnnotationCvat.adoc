@@ -160,7 +160,7 @@ Added alternate text to images.
 
 * Flow overview
 +
-[source,mermaid, target="Legend"]
+[mermaid, target="Legend"]
 ----
 flowchart TD;
     %% definition
@@ -173,7 +173,7 @@ flowchart TD;
     end
 ----
 +
-[source,mermaid, target="Flow overview"]
+[mermaid, target="Flow overview"]
 ----
 flowchart TD
     start((Start)) --> id1(1.Start CVAT)

@@ -63,7 +63,7 @@ PDFビルド環境更新。
 
 SDKにて下記のフローでCOCOからサンプル画像をDownloadできる
 
-[source,mermaid, target="凡例"]
+[mermaid, target="凡例"]
 ----
 flowchart TD;
     %% definition
@@ -79,7 +79,7 @@ flowchart TD;
 
 * フロー概要
 
-[source,mermaid, target="フロー概要"]
+[mermaid, target="フロー概要"]
 ----
 flowchart TD
     start((Start)) --> id1(1.Notebook実行向けセットアップ)
@@ -115,7 +115,7 @@ flowchart TD
 . `**download_images**` ディレクトリの `**README.md**` に記載の手順・リンクから<<anchor-ref, 関連資料: COCO Annotations ファイル>>をBrowserでDownloadする
 . Downloadした<<anchor-ref, 関連資料: COCO Annotations ファイル>> zipを解凍し、設定ファイルで指定のパスに展開する
 
-[source,mermaid, target="Notebook実行向けセットアップ"]
+[mermaid, target="Notebook実行向けセットアップ"]
 ----
 %%{init:{'themeVariables':{'fontSize':'20px'}, 'themeCSS':'text.actor {font-size:18px !important;} .messageText {font-size:18px !important;}'}}%%
 sequenceDiagram

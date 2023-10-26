@@ -61,7 +61,7 @@
 === Functional Overview
 * SDKが提供するNotebookを実行することにより、「**Console for AITRIOS**」のシステムクライアント認証を行うことができる
 
-[source,mermaid, target="凡例"]
+[mermaid, target="凡例"]
 ----
 flowchart TD;
     %% definition
@@ -77,7 +77,7 @@ flowchart TD;
 
 * フロー概要
 +
-[source,mermaid, target="フロー概要"]
+[mermaid, target="フロー概要"]
 ----
 flowchart TD
     start((Start)) --> id1(1.接続情報の取得)
@@ -187,7 +187,7 @@ NOTE:「**Console Access Library**」APIに渡されるパラメータについ�
 
 === シーケンス
 
-[source,mermaid, target="シーケンス"]
+[mermaid, target="シーケンス"]
 ----
 %%{init:{'themeVariables':{'fontSize':'20px'}, 'themeCSS':'text.actor {font-size:18px !important;} .messageText {font-size:18px !important;}'}}%%
 sequenceDiagram

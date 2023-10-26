@@ -21,7 +21,7 @@ usage_exit() {
     echo "usage	: ./build.sh <Options>"
     echo ""
     echo " <Options>"
-    echo "    -t : (optional) specify build Wasm type. value is [ic|od|semseg]."
+    echo "    -t : (optional) specify build Wasm type. value is [ic|od]."
     echo "    -d : (optional) build for debugging."
     echo "    -c : (optional) clean all Wasm object."
     echo "    -C : (optional) clean all Wasm object and Docker image."
@@ -59,8 +59,8 @@ builddockerimage() {
     fi
 }
 
-build_ic_od_semseg() {
-    echo "build_ic_od_semseg"
+build_ic_od() {
+    echo "build_ic_od"
     builddockerimage
     docker run --rm \
         -v $PWD/sdk/:$PWD/sdk/ \
@@ -86,15 +86,6 @@ build_od() {
         /bin/sh -c "cd ${PWD}/sdk/sample && make ${BUILD_TYPE} APPTYPE=od"
 }
 
-build_semseg() {
-    echo "build_semseg"
-    builddockerimage
-    docker run --rm \
-        -v $PWD/sdk/:$PWD/sdk/ \
-        $NAME_IMAGE \
-        /bin/sh -c "cd ${PWD}/sdk/sample && make ${BUILD_TYPE} APPTYPE=semseg"
-}
-
 # while getopts ":AaCcdhlnpsvu-:" OPT
 while getopts ":cCdt:o:p:" OPT
 do
@@ -111,10 +102,8 @@ do
                 APP_TYPE=$OPTARG
             elif [ "$OPTARG" = "od" ]; then
                 APP_TYPE=$OPTARG
-            elif [ "$OPTARG" = "semseg" ]; then
-                APP_TYPE=$OPTARG
             else
-                echo "-t options must be ic or od or semseg."
+                echo "-t options must be ic or od."
                 exit 0
             fi;
             ;;
@@ -131,8 +120,6 @@ if [ "$APP_TYPE" = "od" ]; then
     build_od
 elif [ "$APP_TYPE" = "ic" ]; then
     build_ic
-elif [ "$APP_TYPE" = "semseg" ]; then
-    build_semseg
 else
-    build_ic_od_semseg
+    build_ic_od
 fi;

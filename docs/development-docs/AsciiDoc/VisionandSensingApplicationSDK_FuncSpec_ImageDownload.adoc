@@ -64,7 +64,7 @@ Large-scale object detection, segmentation, caption dataset
 
 The SDK downloads sample images from COCO in the following flow
 
-[source,mermaid, target="Legend"]
+[mermaid, target="Legend"]
 ----
 flowchart TD;
     %% definition
@@ -80,7 +80,7 @@ flowchart TD;
 
 * Flow overview
 
-[source,mermaid, target="Flow overview"]
+[mermaid, target="Flow overview"]
 ----
 flowchart TD
     start((Start)) --> id1(1.Setup for running the notebook)
@@ -116,7 +116,7 @@ flowchart TD
 . Download <<anchor-ref, _COCO annotations file_>> in your browser from the procedure and link provided in `**README.md**` in the `**download_images**` directory
 . Extract the downloaded <<anchor-ref, _COCO annotations file_>> zip to the path specified in the configuration file
 
-[source,mermaid, target="Setup for running the notebook"]
+[mermaid, target="Setup for running the notebook"]
 ----
 %%{init:{'themeVariables':{'fontSize':'24px'}, 'themeCSS':'text.actor {font-size:18px !important;} .messageText {font-size:18px !important;}'}}%%
 sequenceDiagram

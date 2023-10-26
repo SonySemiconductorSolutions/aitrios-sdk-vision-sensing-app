@@ -159,7 +159,7 @@
 
 * フロー概要
 +
-[source,mermaid, target="凡例"]
+[mermaid, target="凡例"]
 ----
 flowchart TD;
     %% definition
@@ -172,7 +172,7 @@ flowchart TD;
     end
 ----
 +
-[source,mermaid, target="フロー概要"]
+[mermaid, target="フロー概要"]
 ----
 flowchart TD
     start((Start)) --> id1(1.CVATの起動)

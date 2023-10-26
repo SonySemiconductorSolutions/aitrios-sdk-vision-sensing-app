@@ -78,12 +78,12 @@
 		// For git submodules: https://docs.github.com/ja/codespaces/managing-your-codespaces/managing-repository-access-for-your-codespaces
 		"codespaces": {
 			"repositories": {
-				"SonySemiconductorSolutions/aitrios-sdk-console-access-lib-python": {
+				"SonySemiconductorSolutions/-2SCS_cloudSDK_python": {
 					"permissions": {
 						"contents": "read"
 					}
 				},
-				"SonySemiconductorSolutions/aitrios-sdk-zone-detection-webapp-cs": {
+				"SonySemiconductorSolutions/aitrios-msft-solution-template-WebApp": {
 					"permissions": {
 						"contents": "read"
 					}

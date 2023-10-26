@@ -23,7 +23,7 @@ usage_exit() {
     echo "usage	: ./start.sh <Options>"
     echo ""
     echo " <Options>"
-    echo "    -t : (mandatory) specify build/run Wasm type. value is [ic|od|semseg]."
+    echo "    -t : (mandatory) specify build/run Wasm type. value is [ic|od]."
     echo "    -d : (optional) build for debugging. start and wait for attaching debugger."
     echo "    -o : (optional) specify output tensor jsonc file for debugging."
     echo "    -p : (optional) specify ppl parameter json file for debugging."
@@ -60,7 +60,7 @@ do
   esac
 done
 
-if [ $LOAD_PGM != "ic" ] && [ $LOAD_PGM != "od" ] && [ $LOAD_PGM != "semseg" ]; then
+if [ $LOAD_PGM != "ic" ] && [ $LOAD_PGM != "od" ]; then
     usage_exit
 fi
 
@@ -72,17 +72,11 @@ if [ "$USER_WASM_FILE" = "" ]; then
         else
             WASM_FILE=${PWD}/sdk/sample/build/release/vision_app_classification.wasm
         fi
-    elif [ $LOAD_PGM = "od" ]; then
+    else
         if [ -n "$DEBUGGER" ] && [ $DEBUGGER = "-d" ]; then
             WASM_FILE=${PWD}/sdk/sample/build/debug/vision_app_objectdetection.wasm
         else
             WASM_FILE=${PWD}/sdk/sample/build/release/vision_app_objectdetection.wasm
-        fi
-    else
-        if [ -n "$DEBUGGER" ] && [ $DEBUGGER = "-d" ]; then
-            WASM_FILE=${PWD}/sdk/sample/build/debug/vision_app_semanticsegmentation.wasm
-        else
-            WASM_FILE=${PWD}/sdk/sample/build/release/vision_app_semanticsegmentation.wasm
         fi
     fi
 else
@@ -98,20 +92,16 @@ fi
 if [ "$PPL_PARAMETER_FILE" = "" ]; then
     if [ $LOAD_PGM = "ic" ]; then
         PPL_PARAMETER_FILE="${PWD}/testapp/classification/ppl_parameter.json"
-    elif [ $LOAD_PGM = "od" ]; then
-        PPL_PARAMETER_FILE="${PWD}/testapp/objectdetection/ppl_parameter.json"
     else
-        PPL_PARAMETER_FILE="${PWD}/testapp/semanticsegmentation/ppl_parameter.json"
+        PPL_PARAMETER_FILE="${PWD}/testapp/objectdetection/ppl_parameter.json"
     fi
 fi
 
 if [ "$OUTPUT_TENSOR_FILE" = "" ]; then
     if [ $LOAD_PGM = "ic" ]; then
         OUTPUT_TENSOR_FILE="${PWD}/testapp/classification/output_tensor.jsonc"
-    elif [ $LOAD_PGM = "od" ]; then
-        OUTPUT_TENSOR_FILE="${PWD}/testapp/objectdetection/output_tensor.jsonc"
     else
-        OUTPUT_TENSOR_FILE="${PWD}/testapp/semanticsegmentation/output_tensor.jsonc"
+        OUTPUT_TENSOR_FILE="${PWD}/testapp/objectdetection/output_tensor.jsonc"
     fi 
 fi
 
