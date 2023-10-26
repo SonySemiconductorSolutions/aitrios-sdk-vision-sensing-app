@@ -62,12 +62,14 @@ Added alternate text to images.
 * Reference/Related documents
 ** WebAssembly
 *** https://webassembly.org/
-** [[dplspec]]Data Pipeline API Specifications（for Vision and Sensing Applicaiton version 1.0.0）
+
+** [[dplspec]]Data Pipeline API Specifications（for Vision and Sensing Application version 1.0.2）
 *** https://developer.aitrios.sony-semicon.com/en/file/download/aitrios-apispec-datapipeline-v1-0-0-en
-** [[evpspec]]EVP SDK API Specifications（for Vision and Sensing Applicaiton version 1.0.0）
+** [[evpspec]]EVP SDK API Specifications（for Vision and Sensing Application version 1.0.2）
 *** https://developer.aitrios.sony-semicon.com/en/file/download/aitrios-apispec-evpsdk-v1-0-0-en
-** [[senscordspec]]SensCord SDK API Specifications（for Vision and Sensing Applicaiton version 1.0.0）
-*** https://developer.aitrios.sony-semicon.com/en/file/download/aitrios-apispec-senscordsdk-v1-0-0-en
+** [[senscordspec]]SensCord SDK API Specifications（for Vision and Sensing Application version 1.0.2）
+*** https://developer.aitrios.sony-semicon.com/en/file/download/aitrios-apispec-senscordsdk-v1-0-1-en
+
 ** FlatBuffers
 *** https://google.github.io/flatbuffers/
 ** WebAssembly Micro Runtime (WAMR)
@@ -89,7 +91,6 @@ Added alternate text to images.
 * The following "**Vision and Sensing Application**" sample code is provided
 ** Object Detection
 ** Image Classification
-** Semantic Segmentation
 * Users can build a Wasm with "**Vision and Sensing Application**" sample code
 * Users can build a "**Vision and Sensing Application**" to a Wasm for debugging, and debug on SDK environment using test app
 

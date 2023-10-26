@@ -86,12 +86,6 @@ Please edit the files to test if needed.
 
     - **`./tutorials/4_prepare_application/1_develop/testapp/objectdetection/ppl_parameter.json`**
 
-- Semantic Segmentation
-
-    - **`./tutorials/4_prepare_application/1_develop/testapp/semanticsegmentation/output_tensor.jsonc`**
-
-    - **`./tutorials/4_prepare_application/1_develop/testapp/semanticsegmentation/ppl_parameter.json`**
-
 > **NOTE**
 > 
 > **`output_tensor.jsonc`** and **`ppl_parameter.json`** are only used for running/debugging Wasm in "**Vision and Sensing Application SDK**".
@@ -128,16 +122,6 @@ To build and run test application, execute following command in TERMINAL.
     Or (specify input file setting)
     ```bash
     $ ./tutorials/4_prepare_application/1_develop/start.sh -d -t od -o <file1> -p <file2>  
-    ```
-
-- Semantic Segmentation (default setting)
-    ```bash
-    $ ./tutorials/4_prepare_application/1_develop/start.sh -d -t semseg
-    ```
-
-    Or (specify input file setting)  
-    ```bash
-    $ ./tutorials/4_prepare_application/1_develop/start.sh -d -t semseg -o <file1> -p <file2>  
     ```
 
 > **NOTE**
@@ -234,10 +218,6 @@ Debug port : 1234
 - Object Detection
   - [vision_app_objectdetection.cpp](./sdk/sample/vision_app/single_dnn/objectdetection/src/vision_app_objectdetection.cpp)
   - [analyzer_objectdetection.cpp](./sdk/sample/post_process/objectdetection/src/analyzer_objectdetection.cpp)
-
-- Semantic Segmentation
-  - [vision_app_semanticsegmentation.cpp](./sdk/sample/vision_app/single_dnn/semanticsegmentation/src/vision_app_semanticsegmentation.cpp)
-  - [analyzer_semanticsegmentation.cpp](./sdk/sample/post_process/semanticsegmentation/src/analyzer_semanticsegmentation.cpp)
 
 3. Press the F5 key, then the program continues and stops at the breakpoint.
 

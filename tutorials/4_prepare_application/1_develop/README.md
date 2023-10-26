@@ -2,8 +2,8 @@
 
 This tutorial shows how to create a "**Vision and Sensing Application**" for the IMX500. The "**Vision and Sensing Application**" has an AI-Post process that processes AI output into usable data for application development. This section shows how to design, implement, and build the "**Vision and Sensing Application**".
 
-<!-- mermaid alt text: Vision and Sensing Application -->
-```mermaid
+<!-- source,mermaid alt text: Vision and Sensing Application -->
+```source,mermaid
 graph LR;
     %% definition
     classDef object fill:#FFE699, stroke:#FFD700
@@ -39,8 +39,8 @@ graph LR;
 
 <br>
 
-<!-- mermaid alt text: Legend -->
-```mermaid
+<!-- source,mermaid alt text: Legend -->
+```source,mermaid
 graph TB;
 %% definition
 classDef object fill:#FFE699, stroke:#FFD700
@@ -60,7 +60,6 @@ This tutorial includes the [sample "**Vision and Sensing Application**"](./sdk/s
 There are three types of sample:
 - [Image classification sample](./sdk/sample/vision_app/single_dnn/classification/)
 - [Object detection sample](./sdk/sample/vision_app/single_dnn/objectdetection/)
-- [Semantic segmentation sample](./sdk/sample/vision_app/single_dnn/semanticsegmentation/)
 
 Start with the sample to learn how to create a "**Vision and Sensing Application**".
 
@@ -74,7 +73,6 @@ See the following information on writing a FlatBuffers schema.
 - Sample FlatBuffers schema files 
   - [Image classification](./sdk/schema/classification.fbs)
   - [Object detection](./sdk/schema/objectdetection.fbs)
-  - [Semantic segmentation](./sdk/schema/semantic_segmentation.fbs)
 
 #### 2. Generate a C++ header file from the FlatBuffers schema file
 Open the Terminal and run the following command:
@@ -116,8 +114,8 @@ Get Output Tensor from Edge AI devices.
 3. "**Data Pipeline API**"<br>
 Upload serialized data processed by a "**Vision and Sensing Application**" to the cloud.
 
-<!-- mermaid alt text: Functions that interface with the Vision and Sensing Application -->
-```mermaid
+<!-- source,mermaid alt text: Functions that interface with the Vision and Sensing Application -->
+```source,mermaid
 graph TD;
     %% definition
     classDef object fill:#FFE699, stroke:#FFD700
@@ -139,8 +137,8 @@ graph TD;
     device---if_sc
 ```
 
-<!-- mermaid alt text: Legend -->
-```mermaid
+<!-- source,mermaid alt text: Legend -->
+```source,mermaid
 graph TB;
 %% definition
 classDef object fill:#FFE699, stroke:#FFD700
@@ -159,9 +157,10 @@ end
 ```
 
 See the API specification below or the [API sequence diagram](./README_api_seq.md) for more information.
-- ["**Data Pipeline API Specification (for Vision and Sensing Applicaiton version 1.0.0)**"](https://developer.aitrios.sony-semicon.com/en/file/download/aitrios-apispec-datapipeline-v1-0-0-en)
-- ["**EVP SDK API Specification (for Vision and Sensing Applicaiton version 1.0.0)**"](https://developer.aitrios.sony-semicon.com/en/file/download/aitrios-apispec-evpsdk-v1-0-0-en)
-- ["**SensCord SDK API Specification (for Vision and Sensing Applicaiton version 1.0.0)**"](https://developer.aitrios.sony-semicon.com/en/file/download/aitrios-apispec-senscordsdk-v1-0-0-en)
+
+- ["**Data Pipeline API Specification (for Vision and Sensing Application version 1.0.2)**"](https://developer.aitrios.sony-semicon.com/en/file/download/aitrios-apispec-datapipeline-v1-0-0-en)
+- ["**EVP SDK API Specification (for Vision and Sensing Application version 1.0.2)**"](https://developer.aitrios.sony-semicon.com/en/file/download/aitrios-apispec-evpsdk-v1-0-0-en)
+- ["**SensCord SDK API Specification (for Vision and Sensing Application version 1.0.2)**"](https://developer.aitrios.sony-semicon.com/en/file/download/aitrios-apispec-senscordsdk-v1-0-1-en)
 
 See also the [interface definition file](./sdk/vision_app_sdk/include/vision_app_public.h).
 
@@ -197,7 +196,7 @@ See the [/tutorials/4_prepare_application/1_develop/sdk/sample](./sdk/sample/) f
 > - https://github.com/bytecodealliance/wasm-micro-runtime/blob/main/doc/pthread_library.md#supported-apis
 
 ### Build the "**Vision and Sensing Application**"
-#### 1. (Optional) Edit the Makefile ([Image classification](./sdk/sample/vision_app/single_dnn/classification/Makefile) / [Object detection](./sdk/sample/vision_app/single_dnn/objectdetection/Makefile) / [Semantic segmentation](./sdk/sample/vision_app/single_dnn/semanticsegmentation/Makefile))
+#### 1. (Optional) Edit the Makefile ([Image classification](./sdk/sample/vision_app/single_dnn/classification/Makefile) / [Object detection](./sdk/sample/vision_app/single_dnn/objectdetection/Makefile))
 If you use the sample "**Vision and Sensing Application**", you do not need to edit the Makefile.
 
 - If you want to statically link dependencies, add **`-I <directory>`** to the build options: **`USER_CFLAGS`**
@@ -250,11 +249,10 @@ $ ./tutorials/4_prepare_application/1_develop/build.sh
 Then, the following files are generated:
 - **`/tutorials/4_prepare_application/1_develop/sdk/sample/build/release/vision_app_classification.wasm`**
 - **`/tutorials/4_prepare_application/1_develop/sdk/sample/build/release/vision_app_objectdetection.wasm`**
-- **`/tutorials/4_prepare_application/1_develop/sdk/sample/build/release/vision_app_semanticsegmentation.wasm`**
 
 > **TIP**
 > 
-> Execute the command with the **`ic`** option if you want to build only the image classification sample, the **`od`** option if you want to build only the object detection sample, and the **`semseg`** option if you want to build only the semantic segmentation sample.
+> Execute the command with the **`ic`** option if you want to build only the image classification sample, and the **`od`** option if you want to build only the object detection sample.
 > ```bash
 > $ ./tutorials/4_prepare_application/1_develop/build.sh -t <Option>
 > ```
@@ -302,7 +300,7 @@ For example, the logs can be implemented as follows :
 #define DBG_PRINTF(fmt, ...) printf( "D [VisionAPP] "); printf( fmt, ##__VA_ARGS__); printf( "\n")
 #define VER_PRINTF(fmt, ...) printf( "V [VisionAPP] "); printf( fmt, ##__VA_ARGS__); printf( "\n")
 ```
-For more information about implementing logs, see [limitations]().
+For more information about implementing logs, see [implementaion requirements](https://developer.aitrios.sony-semicon.com/en/file/download/dev-implementationrequirements-v1-4-2-00-en).
 
 See ["**Console User Manual**"](https://developer.aitrios.sony-semicon.com/documents/?page=console_user_manual&lang=ja) for how to enable Wasm logging and retrieve logs.
 
@@ -315,8 +313,7 @@ See ["**Console User Manual**"](https://developer.aitrios.sony-semicon.com/docum
 > To use this feature, you need to import Wasm to "**Console for AITRIOS**" and deploy it to a Edge AI Device. See [README](../README.md) for information on how to import and deploy.
 
 ## Restrictions
-- Files of the "**Vision and Sensing Application**" that can be deployed to a device must have an text section size of 256 KB or less.
-- For a "**Vision and Sensing Application**", the maximum RAM size is 2 MB (Global variable + Stack size + Output Tensor + UserHeap total).
+- "**Vision and Sensing Application**" has memory and implementation restrictions. See [implementaion requirements](https://developer.aitrios.sony-semicon.com/en/file/download/dev-implementationrequirements-v1-4-2-00-en) for more information.
 - Users are responsible for the combination of AI model and "**Vision and Sensing Application**", and the system does not check beforehand.
 - To get the output of the "**Vision and Sensing Application**" using Edge AI devices, you need to set the **`Mode`** parameter of the inferencing command **`StartUploadInferenceData`** to the mode that gets inferencing results. The **`SessSendData`** of the "**Data Pipeline API**" depends on this specification, and if it is not configured correctly, the specified data will not be uploaded to the cloud.<br>
 See ["**Console User Manual**"](https://developer.aitrios.sony-semicon.com/documents/?page=console_user_manual&lang=ja) for **`StartUploadInferenceData`** command details.

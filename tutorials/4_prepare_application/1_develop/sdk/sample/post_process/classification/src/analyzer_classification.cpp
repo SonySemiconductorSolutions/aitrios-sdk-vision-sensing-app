@@ -19,19 +19,22 @@
 #include <string.h>
 #include <stdint.h>
 #include <vector>
+#include <pthread.h>
 
 #include "vision_app_public.h"
 #include "analyzer_classification.h"
 #include "classification_generated.h"
 
+extern pthread_mutex_t g_libc_mutex;
+
 /* -------------------------------------------------------- */
 /* macro define                                             */
 /* -------------------------------------------------------- */
-#define PPL_ERR_PRINTF(fmt, ...) fprintf(stderr, "E [VisionAPP] ");fprintf(stderr, fmt, ##__VA_ARGS__);fprintf(stderr, "\n")
-#define PPL_WARN_PRINTF(fmt, ...) fprintf(stderr, "W [VisionAPP] ");fprintf(stderr, fmt, ##__VA_ARGS__);fprintf(stderr, "\n")
-#define PPL_INFO_PRINTF(fmt, ...) fprintf(stdout, "I [VisionAPP] ");fprintf(stdout, fmt, ##__VA_ARGS__);fprintf(stdout, "\n")
-#define PPL_DBG_PRINTF(fmt, ...) printf( "D [VisionAPP] "); printf( fmt, ##__VA_ARGS__); printf( "\n")
-#define PPL_VER_PRINTF(fmt, ...) printf( "V [VisionAPP] "); printf( fmt, ##__VA_ARGS__); printf( "\n")
+#define PPL_ERR_PRINTF(fmt, ...) pthread_mutex_lock(&g_libc_mutex);fprintf(stderr, "E [VisionAPP] ");fprintf(stderr, fmt, ##__VA_ARGS__);fprintf(stderr, "\n");pthread_mutex_unlock(&g_libc_mutex);
+#define PPL_WARN_PRINTF(fmt, ...) pthread_mutex_lock(&g_libc_mutex);fprintf(stderr, "W [VisionAPP] ");fprintf(stderr, fmt, ##__VA_ARGS__);fprintf(stderr, "\n");pthread_mutex_unlock(&g_libc_mutex);
+#define PPL_INFO_PRINTF(fmt, ...) pthread_mutex_lock(&g_libc_mutex);fprintf(stdout, "I [VisionAPP] ");fprintf(stdout, fmt, ##__VA_ARGS__);fprintf(stdout, "\n");pthread_mutex_unlock(&g_libc_mutex);
+#define PPL_DBG_PRINTF(fmt, ...) pthread_mutex_lock(&g_libc_mutex);printf( "D [VisionAPP] "); printf( fmt, ##__VA_ARGS__); printf( "\n");pthread_mutex_unlock(&g_libc_mutex);
+#define PPL_VER_PRINTF(fmt, ...) pthread_mutex_lock(&g_libc_mutex);printf( "V [VisionAPP] "); printf( fmt, ##__VA_ARGS__); printf( "\n");pthread_mutex_unlock(&g_libc_mutex);
 
 /* -------------------------------------------------------- */
 /* structure                                                */
@@ -88,35 +91,69 @@ EPPL_RESULT_CODE PPL_ClassificationAnalyze(float *p_data, uint32_t in_size, void
     analyzeClassificationOutput(classification_output, &output_classification_data, cls_param);
 
     /* serialize output data to flatbuffer */
+    pthread_mutex_lock(&g_libc_mutex);
     flatbuffers::FlatBufferBuilder* builder = new flatbuffers::FlatBufferBuilder();
+    pthread_mutex_unlock(&g_libc_mutex);
+
     createClassificationFlatbuffer(builder, &output_classification_data);
 
+    pthread_mutex_lock(&g_libc_mutex);
     uint8_t* buf_ptr = builder->GetBufferPointer();
+    pthread_mutex_unlock(&g_libc_mutex);
+
     if (buf_ptr == NULL) {
         PPL_ERR_PRINTF("Error could not create Flatbuffer");
+
+        pthread_mutex_lock(&g_libc_mutex);
         builder->Clear();
+        pthread_mutex_unlock(&g_libc_mutex);
+
+        pthread_mutex_lock(&g_libc_mutex);
         delete(builder);
+        pthread_mutex_unlock(&g_libc_mutex);
+
         return E_PPL_OTHER;
     }
 
+    pthread_mutex_lock(&g_libc_mutex);
     uint32_t buf_size = builder->GetSize();
+    pthread_mutex_unlock(&g_libc_mutex);
+
+    pthread_mutex_lock(&g_libc_mutex);
     p_out_param = (uint8_t *)SessMalloc(buf_size);
+    pthread_mutex_unlock(&g_libc_mutex);
+
     if (p_out_param == NULL) {
         PPL_ERR_PRINTF("malloc failed for creating flatbuffer, malloc size=%d", buf_size);
+
+        pthread_mutex_lock(&g_libc_mutex);
         builder->Clear();
+        pthread_mutex_unlock(&g_libc_mutex);
+    
+        pthread_mutex_lock(&g_libc_mutex);
         delete(builder);
+        pthread_mutex_unlock(&g_libc_mutex);
+
         return E_PPL_E_MEMORY_ERROR;
     }
     PPL_DBG_PRINTF("p_out_param = %p", p_out_param);
 
     /* Copy Data */
+    pthread_mutex_lock(&g_libc_mutex);
     memcpy(p_out_param, buf_ptr,buf_size);
+    pthread_mutex_unlock(&g_libc_mutex);
+
     *pp_out_buf = p_out_param;
     *p_out_size = buf_size;
 
     //Clean up
+    pthread_mutex_lock(&g_libc_mutex);
     builder->Clear();
+    pthread_mutex_unlock(&g_libc_mutex);
+
+    pthread_mutex_lock(&g_libc_mutex);
     delete(builder);
+    pthread_mutex_unlock(&g_libc_mutex);
 
     return E_PPL_OK;
 }
@@ -132,14 +169,37 @@ EPPL_RESULT_CODE json_parse(JSON_Value *root_value, PPL_ClsParam *p_cls_param) {
     const char* ppl_id_version = PPL_ID_VERSION;
 
     PPL_DBG_PRINTF("PPL_Initialize: <json_parse>");
+    int ret;
 
-    if (json_object_has_value(json_object(root_value),"header")) {
-        if (json_object_has_value_of_type(json_object(root_value),"header",JSONObject)) {
+    pthread_mutex_lock(&g_libc_mutex);
+    ret = json_object_has_value(json_object(root_value),"header");
+    pthread_mutex_unlock(&g_libc_mutex);
+
+    if (ret) {
+        pthread_mutex_lock(&g_libc_mutex);
+        ret = json_object_has_value_of_type(json_object(root_value),"header",JSONObject);
+        pthread_mutex_unlock(&g_libc_mutex);
+
+        if (ret) {
+            pthread_mutex_lock(&g_libc_mutex);
             JSON_Object *header = json_object_get_object(json_object(root_value), "header");
-            if (json_object_has_value(header,"id")) {
+            pthread_mutex_unlock(&g_libc_mutex);
+
+            pthread_mutex_lock(&g_libc_mutex);
+            ret = json_object_has_value(header,"id");
+            pthread_mutex_unlock(&g_libc_mutex);
+
+            if (ret) {
+                pthread_mutex_lock(&g_libc_mutex);
                 p = json_object_get_string(header, "id");
-                if (p != NULL) {
-                    if (strncmp(ppl_id_version, p, 2)== 0) {
+                pthread_mutex_unlock(&g_libc_mutex);
+
+                if (p != NULL) { 
+                    pthread_mutex_lock(&g_libc_mutex);
+                    ret = strncmp(ppl_id_version, p, 2);
+                    pthread_mutex_unlock(&g_libc_mutex);
+
+                    if (ret == 0) {
                         PPL_DBG_PRINTF("[PPL_PUBLIC] header_id = %s",p);
                     } else {
                         PPL_DBG_PRINTF("[PPL_PUBLIC] header_id = %s",p);
@@ -154,10 +214,21 @@ EPPL_RESULT_CODE json_parse(JSON_Value *root_value, PPL_ClsParam *p_cls_param) {
                 return E_PPL_INVALID_PARAM;
             }
 
-            if (json_object_has_value(header,"version")) {
+            pthread_mutex_lock(&g_libc_mutex);
+            ret = json_object_has_value(header,"version");
+            pthread_mutex_unlock(&g_libc_mutex);
+
+            if (ret) {
+                pthread_mutex_lock(&g_libc_mutex);
                 p = json_object_get_string(header, "version");
+                pthread_mutex_unlock(&g_libc_mutex);
+
                 if (p != NULL) {
-                    if (strncmp(&ppl_id_version[3], p, 8) == 0) {
+                    pthread_mutex_lock(&g_libc_mutex);
+                    ret = strncmp(&ppl_id_version[3], p, 8);
+                    pthread_mutex_unlock(&g_libc_mutex);
+
+                    if (ret == 0) {
                         PPL_DBG_PRINTF("[PPL_PUBLIC] header_version p = %s ppl_id_version=%s",p,&ppl_id_version[3]);
                     } else {
                         PPL_DBG_PRINTF("[PPL_PUBLIC] header_version = %s",p);
@@ -185,9 +256,17 @@ EPPL_RESULT_CODE json_parse(JSON_Value *root_value, PPL_ClsParam *p_cls_param) {
  */
 static EPPL_RESULT_CODE PPL_ClassificationParamInit(JSON_Value *root_value, PPL_ClsParam *p_cls_param) {
     PPL_DBG_PRINTF("PPL_ClassificationParamInit");
+    int ret;
 
-     if (json_object_has_value(json_object(root_value),"dnn_output_classes")){
+    pthread_mutex_lock(&g_libc_mutex);
+    ret = json_object_has_value(json_object(root_value),"dnn_output_classes");
+    pthread_mutex_unlock(&g_libc_mutex);
+
+     if (ret) {
+        pthread_mutex_lock(&g_libc_mutex);
         uint16_t dnn_output_classes = json_object_get_number(json_object(root_value), "dnn_output_classes");
+        pthread_mutex_unlock(&g_libc_mutex);
+
         PPL_DBG_PRINTF("PPL_ClassificationParamInit dnn_output_classes: %d", dnn_output_classes);
         p_cls_param->dnnOutputClasses = dnn_output_classes;
     } else {
@@ -195,8 +274,14 @@ static EPPL_RESULT_CODE PPL_ClassificationParamInit(JSON_Value *root_value, PPL_
         return E_PPL_INVALID_PARAM;
     }
 
-    if (json_object_has_value(json_object(root_value),"max_predictions")) {
+    pthread_mutex_lock(&g_libc_mutex);
+    ret = json_object_has_value(json_object(root_value),"max_predictions");
+    pthread_mutex_unlock(&g_libc_mutex);
+    if (ret) {
+        pthread_mutex_lock(&g_libc_mutex);
         uint16_t maxPredictions = (int)json_object_get_number(json_object(root_value), "max_predictions");
+        pthread_mutex_unlock(&g_libc_mutex);
+
         PPL_DBG_PRINTF("PPL_ClassificationParamInit: max_predictions: %d", maxPredictions);
 
         /* check param */
@@ -223,7 +308,10 @@ static void createClassificationData(float* data_body, uint32_t data_size, Class
     uint16_t size = data_size;
     for (uint16_t i = 0; i < size; i++) {
         float score = data_body[i];
+
+        pthread_mutex_lock(&g_libc_mutex);
         classification_output->scores.push_back(score);
+        pthread_mutex_unlock(&g_libc_mutex);
     }
 
     return;
@@ -238,24 +326,41 @@ static void analyzeClassificationOutput(ClassificationOutputTensor out_tensor, C
     std::vector<ClassificationItem> class_data;
 
     /* Extract number of predictions */
+    pthread_mutex_lock(&g_libc_mutex);
     num_of_predictions = out_tensor.scores.size();
+    pthread_mutex_unlock(&g_libc_mutex);
 
     /* Extract scores */
     for (uint16_t i = 0; i < num_of_predictions; i++) {
         ClassificationItem item;
         item.index = i;
+
+        pthread_mutex_lock(&g_libc_mutex);
         item.score = out_tensor.scores[i];
+        pthread_mutex_unlock(&g_libc_mutex);
+
+        pthread_mutex_lock(&g_libc_mutex);
         class_data.push_back(item);
+        pthread_mutex_unlock(&g_libc_mutex);
     }
 
-    if (class_data.size() > 0) {
+    pthread_mutex_lock(&g_libc_mutex);
+    size_t size = class_data.size();
+    pthread_mutex_unlock(&g_libc_mutex);
+
+    if (size > 0) {
+        pthread_mutex_lock(&g_libc_mutex);
         std::stable_sort(class_data.begin(), class_data.end(), [](const ClassificationItem &left, const ClassificationItem &right) {
             return left.score > right.score;
         });
+        pthread_mutex_unlock(&g_libc_mutex);
     }
 
     for (uint16_t i = 0; i < cls_param.maxPredictions; i++) {
+        pthread_mutex_lock(&g_libc_mutex);
         output_classification_data->v_classItem.push_back(class_data[i]);
+        pthread_mutex_unlock(&g_libc_mutex);
+
         PPL_DBG_PRINTF("Top[%d] = id: %d  score: %f", i, class_data[i].index, class_data[i].score);
     }
 
@@ -267,17 +372,37 @@ static void analyzeClassificationOutput(ClassificationOutputTensor out_tensor, C
 static void createClassificationFlatbuffer(flatbuffers::FlatBufferBuilder* builder, const ClassificationData *classificationData) {
 
     std::vector<flatbuffers::Offset<SmartCamera::GeneralClassification>> gdata_vector;
-    for (unsigned int i = 0; i < classificationData->v_classItem.size(); i++) {
+    pthread_mutex_lock(&g_libc_mutex);
+    unsigned int len = classificationData->v_classItem.size();
+    pthread_mutex_unlock(&g_libc_mutex);
+
+    for (unsigned int i = 0; i < len; i++) {
         PPL_DBG_PRINTF("class = %d, score = %f", classificationData->v_classItem[i].index,  classificationData->v_classItem[i].score);
+
+        pthread_mutex_lock(&g_libc_mutex);
         auto general_data = SmartCamera::CreateGeneralClassification(*builder, classificationData->v_classItem[i].index, classificationData->v_classItem[i].score);
+        pthread_mutex_unlock(&g_libc_mutex);
+
+        pthread_mutex_lock(&g_libc_mutex);
         gdata_vector.push_back(general_data);
+        pthread_mutex_unlock(&g_libc_mutex);
     }
 
+    pthread_mutex_lock(&g_libc_mutex);
     auto v_bbox = builder->CreateVector(gdata_vector);
-    auto class_data = SmartCamera::CreateClassificationData(*builder, v_bbox);
-    auto out_data = SmartCamera::CreateClassificationTop(*builder, class_data);
+    pthread_mutex_unlock(&g_libc_mutex);
 
+    pthread_mutex_lock(&g_libc_mutex);
+    auto class_data = SmartCamera::CreateClassificationData(*builder, v_bbox);
+    pthread_mutex_unlock(&g_libc_mutex);
+
+    pthread_mutex_lock(&g_libc_mutex);
+    auto out_data = SmartCamera::CreateClassificationTop(*builder, class_data);
+    pthread_mutex_unlock(&g_libc_mutex);
+
+    pthread_mutex_lock(&g_libc_mutex);
     builder->Finish(out_data);
+    pthread_mutex_unlock(&g_libc_mutex);
 
     return;
 }

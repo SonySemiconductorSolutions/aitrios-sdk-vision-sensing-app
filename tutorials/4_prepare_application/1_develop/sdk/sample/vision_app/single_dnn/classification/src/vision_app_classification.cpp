@@ -26,11 +26,11 @@
 /* -------------------------------------------------------- */
 /* macro define                                             */
 /* -------------------------------------------------------- */
-#define ERR_PRINTF(fmt, ...) fprintf(stderr, "E [VisionAPP] ");fprintf(stderr, fmt, ##__VA_ARGS__);fprintf(stderr, "\n")
-#define WARN_PRINTF(fmt, ...) fprintf(stderr, "W [VisionAPP] ");fprintf(stderr, fmt, ##__VA_ARGS__);fprintf(stderr, "\n")
-#define INFO_PRINTF(fmt, ...) fprintf(stdout, "I [VisionAPP] ");fprintf(stdout, fmt, ##__VA_ARGS__);fprintf(stdout, "\n")
-#define DBG_PRINTF(fmt, ...) printf( "D [VisionAPP] "); printf( fmt, ##__VA_ARGS__); printf( "\n")
-#define VER_PRINTF(fmt, ...) printf( "V [VisionAPP] "); printf( fmt, ##__VA_ARGS__); printf( "\n")
+#define ERR_PRINTF(fmt, ...) pthread_mutex_lock(&g_libc_mutex);fprintf(stderr, "E [VisionAPP] ");fprintf(stderr, fmt, ##__VA_ARGS__);fprintf(stderr, "\n");pthread_mutex_unlock(&g_libc_mutex);
+#define WARN_PRINTF(fmt, ...) pthread_mutex_lock(&g_libc_mutex);fprintf(stderr, "W [VisionAPP] ");fprintf(stderr, fmt, ##__VA_ARGS__);fprintf(stderr, "\n");pthread_mutex_unlock(&g_libc_mutex);
+#define INFO_PRINTF(fmt, ...) pthread_mutex_lock(&g_libc_mutex);fprintf(stdout, "I [VisionAPP] ");fprintf(stdout, fmt, ##__VA_ARGS__);fprintf(stdout, "\n");pthread_mutex_unlock(&g_libc_mutex);
+#define DBG_PRINTF(fmt, ...) pthread_mutex_lock(&g_libc_mutex);printf( "D [VisionAPP] "); printf( fmt, ##__VA_ARGS__); printf( "\n");pthread_mutex_unlock(&g_libc_mutex);
+#define VER_PRINTF(fmt, ...) pthread_mutex_lock(&g_libc_mutex);printf( "V [VisionAPP] "); printf( fmt, ##__VA_ARGS__); printf( "\n");pthread_mutex_unlock(&g_libc_mutex);
 
 /* -------------------------------------------------------- */
 /* static                                                   */
@@ -41,6 +41,9 @@ static bool  s_is_evp_exit = false;
 static bool  s_stream_stopped = true;
 static int   s_private_data = 0;
 static senscord_stream_t s_stream = NULL;
+
+/* prevent libc func with multi thread */
+pthread_mutex_t g_libc_mutex;
 
 static const char *s_level_str[] = {"SENSCORD_LEVEL_UNDEFINED", "SENSCORD_LEVEL_FAIL", "SENSCORD_LEVEL_FATAL"};
 static const char *s_cause_str[] = {"SENSCORD_ERROR_NONE",
@@ -76,6 +79,11 @@ int main(int argc, char *argv[]) {
     struct senscord_status_t status;
     SessResult        sess_ret = kSessOther;
     int32_t           ret = -1;
+
+    if (pthread_mutex_init(&g_libc_mutex, NULL) != 0) {
+        printf("pthread_mutex_init failed libc_mutex");
+        return -1;
+    }
 
     if (setvbuf(stdout, NULL, _IOFBF, BUFSIZ) != 0) {
         ERR_PRINTF("fail setvbuf");
@@ -192,7 +200,11 @@ int main(int argc, char *argv[]) {
         else {
             if (SESS_SEND_MAX_SIZE < out_size) {
                 DBG_PRINTF("SessSendData : size=%d", out_size);
+
+                pthread_mutex_lock(&g_libc_mutex);
                 SessFree(p_out_buf);
+                pthread_mutex_unlock(&g_libc_mutex);
+
                 goto release;
             }
 
@@ -268,9 +280,12 @@ sess_exit:
 
 pthread_exit:
     s_is_evp_exit = true;
-    if (pthread_join(evpthread_handle, NULL) != 0) {
+    ret = pthread_join(evpthread_handle, NULL);
+    if (ret != 0) {
         ERR_PRINTF("pthread_join error");
     }
+
+    pthread_mutex_destroy(&g_libc_mutex);
     return 0;
 }
 
@@ -316,7 +331,6 @@ static void *evp_Thread(void *arg) {
         else {
             /* Do Nothing */
         }
-        sleep(1);
     }
 
     return NULL;
@@ -338,7 +352,11 @@ static void ConfigurationCallback(const char *topic, const void *config, size_t 
     }
     INFO_PRINTF("%s topic:%s\nconfig:%s\nconfig_len:%zu\nuserData:%p\n", __func__, topic, (char*)config, configlen, userData);
 
-    if (strcmp((char *)config, "") == 0) {
+    pthread_mutex_lock(&g_libc_mutex);
+    int str_ret = strcmp((char *)config, "");
+    pthread_mutex_unlock(&g_libc_mutex);
+
+    if (str_ret == 0) {
         INFO_PRINTF("ConfigurationCallback: config is empty.");
         INFO_PRINTF("dnn_output_Classes: %d  max_predictions: %d", \
             s_cls_param.dnnOutputClasses, s_cls_param.maxPredictions);
@@ -347,9 +365,19 @@ static void ConfigurationCallback(const char *topic, const void *config, size_t 
 
     // parse the json parameter
     JSON_Value *root_value;
+
+    pthread_mutex_lock(&g_libc_mutex);
     root_value = json_parse_string((char *)config);
-    if (json_value_get_type(root_value) != JSONObject) {
+    pthread_mutex_unlock(&g_libc_mutex);
+
+    pthread_mutex_lock(&g_libc_mutex);
+    JSON_Value_Type type = json_value_get_type(root_value);
+    pthread_mutex_unlock(&g_libc_mutex);
+
+    if (type != JSONObject) {
+        pthread_mutex_lock(&g_libc_mutex);
         json_value_free(root_value);
+        pthread_mutex_unlock(&g_libc_mutex);
         ERR_PRINTF("Invalid param");
         return;
     }
@@ -357,10 +385,14 @@ static void ConfigurationCallback(const char *topic, const void *config, size_t 
     EPPL_RESULT_CODE ret = json_parse(root_value, &s_cls_param);
     if (ret != E_PPL_OK) {
         ERR_PRINTF("ConfigurationCallback: Get json_parse Fail Err[%d]", ret);
+        pthread_mutex_lock(&g_libc_mutex);
         json_value_free(root_value);
+        pthread_mutex_unlock(&g_libc_mutex);
         return;
     }
+    pthread_mutex_lock(&g_libc_mutex);
     json_value_free(root_value);
+    pthread_mutex_unlock(&g_libc_mutex);
     
     return;
 }
@@ -369,13 +401,17 @@ static void SendDataDoneCallback(void *buf_addr, void *private_data, SessResult 
 {
     if (send_data_ret == kSessOK) {
         if (buf_addr != NULL) {
+            pthread_mutex_lock(&g_libc_mutex);
             SessFree(buf_addr);
+            pthread_mutex_unlock(&g_libc_mutex);
         }
     }
     else {
         ERR_PRINTF("SendDataDoneCallback : send_data_ret:%d", send_data_ret);
         if (buf_addr != NULL) {
+            pthread_mutex_lock(&g_libc_mutex);
             SessFree(buf_addr);
+            pthread_mutex_unlock(&g_libc_mutex);
         }
     }
 }

@@ -21,13 +21,8 @@ else
 ifeq ($(APPTYPE),ic)
 	SUBDIRS += vision_app/single_dnn/classification
 else
-ifeq ($(APPTYPE),semseg)
-	SUBDIRS += vision_app/single_dnn/semanticsegmentation
-else
 	SUBDIRS += vision_app/single_dnn/objectdetection
 	SUBDIRS += vision_app/single_dnn/classification
-	SUBDIRS += vision_app/single_dnn/semanticsegmentation
-endif
 endif
 endif
 

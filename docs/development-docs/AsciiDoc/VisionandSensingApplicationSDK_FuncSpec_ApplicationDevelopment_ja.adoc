@@ -61,12 +61,14 @@
 * Reference/Related documents (関連資料)
 ** WebAssembly
 *** https://webassembly.org/
-** [[dplspec]]Data Pipeline API規格書（for Vision and Sensing Applicaiton version 1.0.0）
+
+** [[dplspec]]Data Pipeline API規格書（for Vision and Sensing Application version 1.0.2）
 *** https://developer.aitrios.sony-semicon.com/file/download/aitrios-apispec-datapipeline-v1-0-0-ja
-** [[evpspec]]EVP SDK API規格書（for Vision and Sensing Applicaiton version 1.0.0）
+** [[evpspec]]EVP SDK API規格書（for Vision and Sensing Application version 1.0.2）
 *** https://developer.aitrios.sony-semicon.com/file/download/aitrios-apispec-evpsdk-v1-0-0-ja
-** [[senscordspec]]SensCord SDK API規格書（for Vision and Sensing Applicaiton version 1.0.0）
-*** https://developer.aitrios.sony-semicon.com/file/download/aitrios-apispec-senscordsdk-v1-0-0-ja
+** [[senscordspec]]SensCord SDK API規格書（for Vision and Sensing Application version 1.0.2）
+*** https://developer.aitrios.sony-semicon.com/file/download/aitrios-apispec-senscordsdk-v1-0-1-ja
+
 ** FlatBuffers
 *** https://google.github.io/flatbuffers/
 ** WebAssembly Micro Runtime (WAMR)
@@ -88,7 +90,6 @@
 * 下記の「**Vision and Sensing Application**」のサンプルコードが提供されている
 ** Object Detection
 ** Image Classification
-** Semantic Segmentation
 * 「**Vision and Sensing Application**」のサンプルコードを使用してWasmビルドができる
 * デバッグ用にWasmビルドした「**Vision and Sensing Application**」を、テストアプリを使用しSDK環境上でデバッグ実行できる
 
