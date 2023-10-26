@@ -5,8 +5,8 @@ See the [sample code](./sdk/sample/vision_app/single_dnn/) and the [API Referenc
 
 ## Sequence
 
-<!-- mermaid alt text: Sequence -->
-```mermaid
+<!-- source,mermaid alt text: Sequence -->
+```source,mermaid
 sequenceDiagram
 participant Console as Console
 participant Native as Native (Firmware)
