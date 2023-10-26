@@ -157,9 +157,9 @@ end
 ```
 
 See the API specification below or the [API sequence diagram](./README_api_seq.md) for more information.
-- ["**Data Pipeline API Specification (for Vision and Sensing Applicaiton version 1.0.2)**"](https://developer.aitrios.sony-semicon.com/en/file/download/aitrios-apispec-datapipeline-v1-0-0-en)
-- ["**EVP SDK API Specification (for Vision and Sensing Applicaiton version 1.0.2)**"](https://developer.aitrios.sony-semicon.com/en/file/download/aitrios-apispec-evpsdk-v1-0-0-en)
-- ["**SensCord SDK API Specification (for Vision and Sensing Applicaiton version 1.0.2)**"](https://developer.aitrios.sony-semicon.com/en/file/download/aitrios-apispec-senscordsdk-v1-0-1-en)
+- ["**Data Pipeline API Specification (for Vision and Sensing Application version 1.0.2)**"](https://developer.aitrios.sony-semicon.com/en/file/download/aitrios-apispec-datapipeline-v1-0-0-en)
+- ["**EVP SDK API Specification (for Vision and Sensing Application version 1.0.2)**"](https://developer.aitrios.sony-semicon.com/en/file/download/aitrios-apispec-evpsdk-v1-0-0-en)
+- ["**SensCord SDK API Specification (for Vision and Sensing Application version 1.0.2)**"](https://developer.aitrios.sony-semicon.com/en/file/download/aitrios-apispec-senscordsdk-v1-0-1-en)
 
 See also the [interface definition file](./sdk/vision_app_sdk/include/vision_app_public.h).
 
