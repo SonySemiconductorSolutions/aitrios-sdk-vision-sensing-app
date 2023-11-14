@@ -49,7 +49,7 @@ The models and "**Vision and Sensing Applications**" can be deployed to Edge AI 
 This container includes tools and jupyter notebooks that can be used for development.
 
 <!-- source,mermaid alt text: Legend -->
-  ```source,mermaid
+  ```mermaid
   graph TB;
     %% definition
     classDef object fill:#FFE699, stroke:#FFD700
@@ -71,7 +71,7 @@ This container includes tools and jupyter notebooks that can be used for develop
 
 #### Workflow for developing AI models
 <!-- source,mermaid alt text: Workflow for developing AI models -->
-```source,mermaid
+```mermaid
 %%{init: {'theme': 'default'}}%%
 graph TB;
     style DevContainer fill:#FFFFFF, stroke:#6b8e23, stroke-dasharray: 10 2
@@ -149,7 +149,7 @@ graph TB;
 
 #### Workflow for developing "**Vision and Sensing Applications**"
 <!-- source,mermaid alt text: Workflow for developing Vision and Sensing Applications -->
-```source,mermaid
+```mermaid
 %%{init: {'theme': 'default'}}%%
 graph TB;
     style DevContainer fill:#FFFFFF, stroke:#6b8e23, stroke-dasharray: 10 2
