@@ -20,7 +20,7 @@ Additionally, in SDK v1.0, the "**Vision and Sensing Application**" also can do:
 Native (Firmware) has a main loop. Wasm ("**Vision and Sensing Application**") functions are called from Native.
 
 <!-- source,mermaid alt text: Sequence of SDK v0.2 -->
-```source,mermaid
+```mermaid
 sequenceDiagram
 participant Native as Native (Firmware)
 participant Wasm as Wasm (Vision and Sensing Application)
@@ -49,7 +49,7 @@ Wasm has a main loop and a thread. Wasm functions are called from Wasm and Nativ
 > This sequence is based on the processing of the sample code.
 
 <!-- source,mermaid alt text: Sequence of SDK v1.0 -->
-```source,mermaid
+```mermaid
 sequenceDiagram
 participant Native as Native (Firmware)
 participant Wasm_Lib as Wasm Native Library (Firmware)
