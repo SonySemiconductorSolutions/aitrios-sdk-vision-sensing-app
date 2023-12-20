@@ -2,7 +2,7 @@
 
 This tutorial shows how to create a "**Vision and Sensing Application**" for the IMX500. The "**Vision and Sensing Application**" has an AI-Post process that processes AI output into usable data for application development. This section shows how to design, implement, and build the "**Vision and Sensing Application**".
 
-<!-- source,mermaid alt text: Vision and Sensing Application -->
+<!-- mermaid alt text: Vision and Sensing Application -->
 ```mermaid
 graph LR;
     %% definition
@@ -39,7 +39,7 @@ graph LR;
 
 <br>
 
-<!-- source,mermaid alt text: Legend -->
+<!-- mermaid alt text: Legend -->
 ```mermaid
 graph TB;
 %% definition
@@ -114,7 +114,7 @@ Get Output Tensor from Edge AI devices.
 3. "**Data Pipeline API**"<br>
 Upload serialized data processed by a "**Vision and Sensing Application**" to the cloud.
 
-<!-- source,mermaid alt text: Functions that interface with the Vision and Sensing Application -->
+<!-- mermaid alt text: Functions that interface with the Vision and Sensing Application -->
 ```mermaid
 graph TD;
     %% definition
@@ -137,7 +137,7 @@ graph TD;
     device---if_sc
 ```
 
-<!-- source,mermaid alt text: Legend -->
+<!-- mermaid alt text: Legend -->
 ```mermaid
 graph TB;
 %% definition

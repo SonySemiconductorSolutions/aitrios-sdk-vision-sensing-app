@@ -48,7 +48,7 @@ The models and "**Vision and Sensing Applications**" can be deployed to Edge AI 
 "**Vision and Sensing Application SDK**" is provided as Development Container (Dev Container) that runs on GitHub Codespaces or Docker environment on Local PC.
 This container includes tools and jupyter notebooks that can be used for development.
 
-<!-- source,mermaid alt text: Legend -->
+<!-- mermaid alt text: Legend -->
   ```mermaid
   graph TB;
     %% definition
@@ -70,7 +70,7 @@ This container includes tools and jupyter notebooks that can be used for develop
   ```
 
 #### Workflow for developing AI models
-<!-- source,mermaid alt text: Workflow for developing AI models -->
+<!-- mermaid alt text: Workflow for developing AI models -->
 ```mermaid
 %%{init: {'theme': 'default'}}%%
 graph TB;
@@ -148,7 +148,7 @@ graph TB;
 ```
 
 #### Workflow for developing "**Vision and Sensing Applications**"
-<!-- source,mermaid alt text: Workflow for developing Vision and Sensing Applications -->
+<!-- mermaid alt text: Workflow for developing Vision and Sensing Applications -->
 ```mermaid
 %%{init: {'theme': 'default'}}%%
 graph TB;
