@@ -5,7 +5,7 @@ See the [sample code](./sdk/sample/vision_app/single_dnn/) and the [API Referenc
 
 ## Sequence
 
-<!-- source,mermaid alt text: Sequence -->
+<!-- mermaid alt text: Sequence -->
 ```mermaid
 sequenceDiagram
 participant Console as Console
