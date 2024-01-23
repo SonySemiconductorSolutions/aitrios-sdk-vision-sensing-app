@@ -338,18 +338,18 @@ See ["**Vision and Sensing Application**" Migration Guide from SDK v0.2 to v1.0]
 
 ## See also
 - ["**Console for AITRIOS**"](https://console.aitrios.sony-semicon.com/)
-- ["**Console Manual**"](https://developer.aitrios.sony-semicon.com/documents/?page=console_user_manual&lang=ja)
+- ["**Console Manual**"](https://developer.aitrios.sony-semicon.com/en/documents/console-user-manual)
 - ["**Cloud SDK Visualization Tutorial**"](https://github.com/SonySemiconductorSolutions/aitrios-sdk-visualization-ts/tree/main/docs/development-docs/)
-- ["**Developer Site**"](https://developer.aitrios.sony-semicon.com/en)
+- ["**Developer Site**"](https://developer.aitrios.sony-semicon.com/en/edge-ai-sensing/)
 
 ## Trademark
-- [Read This First](https://developer.aitrios.sony-semicon.com/documents/?page=read_this_first&lang=ja)
+- [Read This First](https://developer.aitrios.sony-semicon.com/en/documents/read-this-first)
 
 ## Security
 Before using Codespaces, please read the Site Policy of GitHub and understand the usage conditions. 
 
 ## AI Ethics
-This SDK is optimized for use with Sony's AITRIOS™ (https://developer.aitrios.sony-semicon.com). If you are willing to take part in the AITRIOS and use services provided through AITRIOS, you must sign up with https://developer.aitrios.sony-semicon.com and comply with AITRIOS Terms of Use and other applicable terms of use in addition to the license terms of this SDK.
+This SDK is optimized for use with Sony's AITRIOS™ (https://developer.aitrios.sony-semicon.com/edge-ai-sensing/). If you are willing to take part in the AITRIOS and use services provided through AITRIOS, you must sign up with https://developer.aitrios.sony-semicon.com/edge-ai-sensing/ and comply with AITRIOS Terms of Use and other applicable terms of use in addition to the license terms of this SDK.
 
 AITRIOS is a one-stop platform that provides tools and environments to facilitate software and application development and system construction.
 

@@ -61,14 +61,12 @@
 * Reference/Related documents (関連資料)
 ** WebAssembly
 *** https://webassembly.org/
-
 ** [[dplspec]]Data Pipeline API規格書（for Vision and Sensing Application version 1.0.2）
 *** https://developer.aitrios.sony-semicon.com/file/download/aitrios-apispec-datapipeline-v1-0-0-ja
 ** [[evpspec]]EVP SDK API規格書（for Vision and Sensing Application version 1.0.2）
 *** https://developer.aitrios.sony-semicon.com/file/download/aitrios-apispec-evpsdk-v1-0-0-ja
 ** [[senscordspec]]SensCord SDK API規格書（for Vision and Sensing Application version 1.0.2）
 *** https://developer.aitrios.sony-semicon.com/file/download/aitrios-apispec-senscordsdk-v1-0-1-ja
-
 ** FlatBuffers
 *** https://google.github.io/flatbuffers/
 ** WebAssembly Micro Runtime (WAMR)

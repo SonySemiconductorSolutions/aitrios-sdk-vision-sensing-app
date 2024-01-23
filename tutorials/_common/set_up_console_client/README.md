@@ -13,7 +13,7 @@ To use the "**Console Access Library**", you need following information to acces
 - **`client_secret`**
 - **`client_id`**
   - You can obtain Client Secret and Client ID on "**Portal for AITRIOS**". <br>
-  See ["**Portal for AITRIOS User Manual**"](https://developer.aitrios.sony-semicon.com/documents/?page=portal_user_manual&lang=ja) for details.
+  See ["**Portal for AITRIOS User Manual**"](https://developer.aitrios.sony-semicon.com/en/documents/portal-user-manual) for details.
 
 ### 2. Create setting file
 Place setting file (**`./configuration.json`** file) for using the "**Console Access Library**". 

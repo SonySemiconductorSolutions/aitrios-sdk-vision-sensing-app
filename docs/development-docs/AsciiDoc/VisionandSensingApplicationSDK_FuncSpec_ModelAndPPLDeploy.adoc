@@ -49,7 +49,7 @@ Note that it is separate from the `**configuration.json**` to configure notebook
 ** API Reference
 *** https://developer.aitrios.sony-semicon.com/development-guides/reference/api-references/
 ** "**Console User Manual**"
-*** https://developer.aitrios.sony-semicon.com/documents/?page=console_user_manual&lang=ja
+*** https://developer.aitrios.sony-semicon.com/en/documents/console-user-manual
 
 
 == Expected use case
