@@ -37,7 +37,7 @@
 [[anchor-ref]]
 * Reference/Related documents
 ** "**Console User Manual**"
-*** https://developer.aitrios.sony-semicon.com/documents/?page=console_user_manual&lang=ja
+*** https://developer.aitrios.sony-semicon.com/en/documents/console-user-manual
 
 
 == Expected use case

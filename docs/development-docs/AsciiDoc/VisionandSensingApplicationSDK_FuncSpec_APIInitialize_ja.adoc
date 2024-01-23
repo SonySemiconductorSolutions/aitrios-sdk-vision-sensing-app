@@ -42,7 +42,7 @@
 == 参照資料
 
 * 「**Portal ユーザーマニュアル**」 +
-** https://developer.aitrios.sony-semicon.com/documents/?page=portal_user_manual&lang=ja
+** https://developer.aitrios.sony-semicon.com/en/documents/portal-user-manual
 
 [[anchor-ref]]
 * APIリファレンス
@@ -116,7 +116,7 @@ APIを使用して「**Console for AITRIOS**」に接続するため、下記の
 
 * クライアントアプリ詳細情報 +
 「**Portal for AITRIOS**」のクライアントアプリ一覧から、下記を取得する。 +
-詳細は https://developer.aitrios.sony-semicon.com/documents/?page=portal_user_manual&lang=ja[「**Portal ユーザーマニュアル**」] を参照。
+詳細は https://developer.aitrios.sony-semicon.com/en/documents/portal-user-manual[「**Portal ユーザーマニュアル**」] を参照。
 
 ** クライアントID
 ** シークレット 

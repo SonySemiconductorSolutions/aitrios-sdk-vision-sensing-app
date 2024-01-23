@@ -2,7 +2,7 @@
 
 The SDK provides Jupyter notebooks to deploy AI model to Edge AI devices.
 
-See ["**Console Manual**"](https://developer.aitrios.sony-semicon.com/documents/?page=console_user_manual&lang=ja) if you want to deploy from "**Console for AITRIOS**" Web UI.
+See ["**Console Manual**"](https://developer.aitrios.sony-semicon.com/en/documents/console-user-manual) if you want to deploy from "**Console for AITRIOS**" Web UI.
 
 ## Deploy AI model to devices
 See [README](./deploy_to_device/README.md) to get started.

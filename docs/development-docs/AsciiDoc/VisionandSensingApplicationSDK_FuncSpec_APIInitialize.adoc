@@ -42,7 +42,7 @@ Added alternate text to images.
 == Reference materials
 
 * "**Portal User Manual**" +
-** https://developer.aitrios.sony-semicon.com/documents/?page=portal_user_manual&lang=ja
+** https://developer.aitrios.sony-semicon.com/en/documents/portal-user-manual
 
 [[anchor-ref]]
 * API Reference
@@ -116,7 +116,7 @@ Check the following from the documentation of this function (`**README.md**`) :
 
 * Client app details + 
 Get from the list of client apps in "**Portal for AITRIOS**": + 
-See https://developer.aitrios.sony-semicon.com/documents/?page=portal_user_manual&lang=ja["**Portal User Manual**"] for details.
+See https://developer.aitrios.sony-semicon.com/en/documents/portal-user-manual["**Portal User Manual**"] for details.
 
 ** Client ID
 ** Secret
