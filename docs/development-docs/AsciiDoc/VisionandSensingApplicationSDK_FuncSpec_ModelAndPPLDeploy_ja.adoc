@@ -47,7 +47,7 @@ Notebook実行に使用する `**configuration.json**` とは別物であるこ�
 ** APIリファレンス
 *** https://developer.aitrios.sony-semicon.com/development-guides/reference/api-references/
 ** 「**Console ユーザーマニュアル**」
-*** https://developer.aitrios.sony-semicon.com/documents/?page=console_user_manual&lang=ja
+*** https://developer.aitrios.sony-semicon.com/en/documents/console-user-manual
 
 
 == 想定ユースケース

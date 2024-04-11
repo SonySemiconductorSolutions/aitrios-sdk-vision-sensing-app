@@ -2,8 +2,8 @@
 
 This tutorial shows how to create a "**Vision and Sensing Application**" for the IMX500. The "**Vision and Sensing Application**" has an AI-Post process that processes AI output into usable data for application development. This section shows how to design, implement, and build the "**Vision and Sensing Application**".
 
-<!-- source,mermaid alt text: Vision and Sensing Application -->
-```source,mermaid
+<!-- mermaid alt text: Vision and Sensing Application -->
+```mermaid
 graph LR;
     %% definition
     classDef object fill:#FFE699, stroke:#FFD700
@@ -39,8 +39,8 @@ graph LR;
 
 <br>
 
-<!-- source,mermaid alt text: Legend -->
-```source,mermaid
+<!-- mermaid alt text: Legend -->
+```mermaid
 graph TB;
 %% definition
 classDef object fill:#FFE699, stroke:#FFD700
@@ -105,7 +105,7 @@ When designing a "**Vision and Sensing Application**", you need to implement it 
 
 1. "**EVP SDK API**"<br>
 Register a callback function and get a configuration file such as PPL Parameter used to process a "**Vision and Sensing Application**".<br>
-See ["**Console User Manual**"](https://developer.aitrios.sony-semicon.com/documents/?page=console_user_manual&lang=ja) for how to set the PPL Parameter when using Edge AI Devices.
+See ["**Console User Manual**"](https://developer.aitrios.sony-semicon.com/en/documents/console-user-manual) for how to set the PPL Parameter when using Edge AI Devices.
     - Command parameter file (JSON) specifications
 
 2. "**SensCord SDK API**"<br>
@@ -114,8 +114,8 @@ Get Output Tensor from Edge AI devices.
 3. "**Data Pipeline API**"<br>
 Upload serialized data processed by a "**Vision and Sensing Application**" to the cloud.
 
-<!-- source,mermaid alt text: Functions that interface with the Vision and Sensing Application -->
-```source,mermaid
+<!-- mermaid alt text: Functions that interface with the Vision and Sensing Application -->
+```mermaid
 graph TD;
     %% definition
     classDef object fill:#FFE699, stroke:#FFD700
@@ -137,8 +137,8 @@ graph TD;
     device---if_sc
 ```
 
-<!-- source,mermaid alt text: Legend -->
-```source,mermaid
+<!-- mermaid alt text: Legend -->
+```mermaid
 graph TB;
 %% definition
 classDef object fill:#FFE699, stroke:#FFD700
@@ -299,9 +299,9 @@ For example, the logs can be implemented as follows :
 #define DBG_PRINTF(fmt, ...) printf( "D [VisionAPP] "); printf( fmt, ##__VA_ARGS__); printf( "\n")
 #define VER_PRINTF(fmt, ...) printf( "V [VisionAPP] "); printf( fmt, ##__VA_ARGS__); printf( "\n")
 ```
-For more information about implementing logs, see [implementaion requirements](https://developer.aitrios.sony-semicon.com/en/file/download/dev-implementationrequirements-v1-4-2-00-en).
+For more information about implementing logs, see [implementation requirements](https://developer.aitrios.sony-semicon.com/en/file/download/dev-implementationrequirements-v1-4-2-00-en).
 
-See ["**Console User Manual**"](https://developer.aitrios.sony-semicon.com/documents/?page=console_user_manual&lang=ja) for how to enable Wasm logging and retrieve logs.
+See ["**Console User Manual**"](https://developer.aitrios.sony-semicon.com/en/documents/console-user-manual) for how to enable Wasm logging and retrieve logs.
 
 > **TIP**
 > 
@@ -312,10 +312,10 @@ See ["**Console User Manual**"](https://developer.aitrios.sony-semicon.com/docum
 > To use this feature, you need to import Wasm to "**Console for AITRIOS**" and deploy it to a Edge AI Device. See [README](../README.md) for information on how to import and deploy.
 
 ## Restrictions
-- "**Vision and Sensing Application**" has memory and implementation restrictions. See [implementaion requirements](https://developer.aitrios.sony-semicon.com/en/file/download/dev-implementationrequirements-v1-4-2-00-en) for more information.
+- "**Vision and Sensing Application**" has memory and implementation restrictions. See [implementation requirements](https://developer.aitrios.sony-semicon.com/en/file/download/dev-implementationrequirements-v1-4-2-00-en) for more information.
 - Users are responsible for the combination of AI model and "**Vision and Sensing Application**", and the system does not check beforehand.
 - To get the output of the "**Vision and Sensing Application**" using Edge AI devices, you need to set the **`Mode`** parameter of the inferencing command **`StartUploadInferenceData`** to the mode that gets inferencing results. The **`SessSendData`** of the "**Data Pipeline API**" depends on this specification, and if it is not configured correctly, the specified data will not be uploaded to the cloud.<br>
-See ["**Console User Manual**"](https://developer.aitrios.sony-semicon.com/documents/?page=console_user_manual&lang=ja) for **`StartUploadInferenceData`** command details.
+See ["**Console User Manual**"](https://developer.aitrios.sony-semicon.com/en/documents/console-user-manual) for **`StartUploadInferenceData`** command details.
   - Command parameter file (JSON) specifications
 
 ## References
