@@ -85,7 +85,7 @@ You can run all cells at once, or you can run the cells one by one.
 
 If you want to use the downloaded COCO images to train or retrain AI model on "**Console for AITRIOS**",
 
-see ["**Console Manual**"](https://developer.aitrios.sony-semicon.com/documents/?page=console_user_manual&lang=ja) for details.
+see ["**Console Manual**"](https://developer.aitrios.sony-semicon.com/en/documents/console-user-manual) for details.
 
 - Create model
 - Train model

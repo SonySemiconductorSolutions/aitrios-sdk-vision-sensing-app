@@ -1,9 +1,0 @@
-{
-    "header": {
-        "id": "00",
-        "version": "01.01.00"
-    },
-    "dnn_output_tensor_size": 15625,
-    "input_width": 125,
-    "input_height": 125
-}

@@ -2,7 +2,7 @@
 
 (Optional) Set up device using "**Console for AITRIOS**".
 
-See ["**Console Manual**"](https://developer.aitrios.sony-semicon.com/documents/?page=console_user_manual&lang=ja) for details.
+See ["**Console Manual**"](https://developer.aitrios.sony-semicon.com/en/documents/console-user-manual) for details.
 
 - Enroll device
 - Manage device

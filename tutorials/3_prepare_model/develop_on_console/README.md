@@ -2,4 +2,4 @@
 
 You can develop AI model and deploy it to Edge AI Device using the functions provided by "**Console for AITRIOS**".
 
-See ["**Console Manual**"](https://developer.aitrios.sony-semicon.com/documents/?page=console_user_manual&lang=ja) for details.
+See ["**Console Manual**"](https://developer.aitrios.sony-semicon.com/en/documents/console-user-manual) for details.

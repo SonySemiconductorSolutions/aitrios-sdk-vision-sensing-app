@@ -5,7 +5,7 @@ By running the [import_to_console.ipynb](./import_to_console.ipynb), you can imp
 > **NOTE**
 >
 > Azure Blob Storage is required to import an AI model to "**Console for AITRIOS**" using this notebook.<br>
-> If you want to import an AI model from a local environment, use "**Console UI**". See ["**Console User Manual**"](https://developer.aitrios.sony-semicon.com/documents/?page=console_user_manual&lang=ja) for details.
+> If you want to import an AI model from a local environment, use "**Console UI**". See ["**Console User Manual**"](https://developer.aitrios.sony-semicon.com/en/documents/console-user-manual) for details.
 
 ## Get started
 ### 1. Setup "**Console Access Library**"
