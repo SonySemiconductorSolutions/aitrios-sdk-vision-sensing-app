@@ -342,12 +342,6 @@ See ["**Edge Application**" Migration Guide from SDK v0.2 to v1.0](./tutorials/4
 ## Security
 Before using Codespaces, please read the Site Policy of GitHub and understand the usage conditions. 
 
-This software is Beta version. Please note the following when using it.
-
-Regarding the use of Beta version:
-- Beta version is released with the assumption for use in development.
-- Beta version may contain errors or defects that obstruct regular operation of the device.
-
 ## AI Ethics
 This SDK is optimized for use with Sony's AITRIOS™ (https://developer.aitrios.sony-semicon.com/edge-ai-sensing/). If you are willing to take part in the AITRIOS and use services provided through AITRIOS, you must sign up with https://developer.aitrios.sony-semicon.com/edge-ai-sensing/ and comply with AITRIOS Terms of Use and other applicable terms of use in addition to the license terms of this SDK.
 
