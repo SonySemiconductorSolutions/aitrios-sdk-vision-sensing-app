@@ -1,0 +1,6 @@
+# cvat v2.6.1 docker compose configuration for devcontainer with docker in docker
+
+services:
+  traefik:
+    ports:
+      - 8080:8080

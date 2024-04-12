@@ -1,0 +1,25 @@
+{
+    "header": {
+        "id": "00",
+        "version": "01.02.00"
+    },
+    "models": {
+        "detection_bird": {
+            "network_id": "000001",
+            "param": {
+                "dnn_output_detections": 10,
+                "max_detections": 3,
+                "threshold": 0.3,
+                "input_width": 300,
+                "input_height": 300
+            }
+        },
+        "classification_bird": {
+            "network_id": "000002",
+            "param": {
+                "max_predictions": 3,
+                "dnn_output_classes": 5
+            }
+        }
+    }
+}

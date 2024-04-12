@@ -1,0 +1,855 @@
+= Edge Application SDK pass:[<br/>] AI Model and PPL Import pass:[<br/>] Functional Specifications pass:[<br/>]
+:sectnums:
+:sectnumlevels: 1
+:author: Copyright 2022-2023 Sony Semiconductor Solutions Corporation
+:version-label: Version 
+:revnumber: x.x.x
+:revdate: YYYY - MM - DD
+:trademark-desc1: AITRIOS™ and AITRIOS logos are the registered trademarks or trademarks
+:trademark-desc2: of Sony Group Corporation or its affiliated companies.
+:toc:
+:toc-title: TOC
+:toclevels: 1
+:chapter-label:
+:lang: en
+
+== Change history
+
+|===
+|Date |What/Why
+
+|2023/01/30
+|Initial draft.
+
+|2023/05/26
+|Fixed the notation of tool names and parentheses. + 
+Changed the default value of `**network_type**`. + 
+Some environments do not render AsciiDoc's Mermaid diagrams, so modified to rendered image references. + 
+Added alternate text to images.
+
+|===
+
+== Terms/Abbreviations
+|===
+|Terms/Abbreviations |Meaning 
+
+|"**PPL**"
+|A module that processes the output of the AI model (Output Tensor) of edge AI devices
+
+|SAS
+|Shared Access Signatures +
+URI that grant limited access to Azure storage resources
+
+|===
+
+== Reference materials
+
+* Reference/Related documents
+[[anchor-ref]]
+** API Reference
+*** https://developer.aitrios.sony-semicon.com/development-guides/reference/api-references/
+
+** "**Console Access Library**" Functional Specifications
+*** https://developer.aitrios.sony-semicon.com/development-guides/documents/specifications/
+
+== Expected use case
+
+* Import AI models created in your environment into "**Console for AITRIOS**"
+
+* Import created "**PPL**" into "**Console for AITRIOS**"
+
+* Check the import status of the AI model or "**PPL**"
+
+* Convert an AI model imported into "**Console for AITRIOS**" into a format that can be deployed to edge AI devices
+
+* Check AI model conversion state
+
+* Delete an AI model or "**PPL**" that has been imported into "**Console for AITRIOS**"
+
+== Functional overview/Algorithm
+
+=== Functional overview
+
+* Users can use "**Console Access Library**" in the SDK's Dev Container (Local PC or Codespaces)
+
+** Users can do the following through the "**Console Access Library**":
+
+*** Import AI models into "**Console for AITRIOS**"
+
+**** Use AI models supported by "**Console for AITRIOS**". See https://developer.aitrios.sony-semicon.com/development-guides/overview[here].
+
+**** Must store AI models to Azure Blob Storage to import into "**Console for AITRIOS**"
+
+*** Convert AI models imported into "**Console for AITRIOS**"
+
+*** Import "**PPL**" into "**Console for AITRIOS**"
+
+**** Import the following "**PPL**":
+
+***** SDK supports ".wasm" (File not yet AOT compiled)
+
+|===
+|Extensions for "**PPL**" files that can be imported |SDK support 
+
+|.wasm (File not yet AOT compiled)
+|Yes
+
+|.aot (AOT compiled file)
+|No
+
+|===
+
+==== Flow
+
+[source,mermaid, target="Legend"]
+----
+flowchart TD;
+    %% definition
+    classDef object fill:#FFE699, stroke:#FFD700
+    classDef external_service fill:#BFBFBF, stroke:#6b8e23, stroke-dasharray: 10 2
+    style legend fill:#FFFFFF,stroke:#000000
+
+    %% impl
+    subgraph legend["Legend"]
+        process(Processing/User behavior)
+    end
+----
+
+===== Import AI model
+* Flow
+
+[source,mermaid, target="Flow to import AI model"]
+----
+flowchart TD
+    %% definition
+    classDef object fill:#FFE699, stroke:#FFD700
+
+    start((Start))
+    id2(Run the notebook for system client authentication)
+    id3(Run the notebook to get AI model list)
+    id4(Create and edit the configuration file for running the notebook to import AI model)
+    id5(Run the notebook to import AI model)
+    finish(((Finish)))
+
+    %% impl
+    start --> id2
+    id2 --> id3
+    id3 --> id4
+    id4 --> id5
+    id5 --> finish
+----
+
+* Flow details
+. Run the notebook for system client authentication
+
+. Run the notebook to get AI model list
+
+** Run the notebook to get a list of AI models that have been imported into "**Console for AITRIOS**", and get settings in the configuration file, `**model_id**`.
+
+*** Assume the following case
+
+**** Upgrade an AI model that has already been imported into "**Console for AITRIOS**"
+
+**** Check the AI model import status of "**Console for AITRIOS**"
+
+**** Check the conversion status of the AI model in "**Console for AITRIOS**"
+
+. Create and edit the configuration file for running the notebook to import AI model
+
+** Create and edit the configuration file <<anchor-conf, _configuration.json_>> to configure notebook runtime settings
+
+. Run the notebook to import AI model
+
+** Run the notebook with the following features:
+
+*** Imports AI models into "**Console for AITRIOS**"
+
+*** Checks the AI model import status of "**Console for AITRIOS**"
+
+*** Converts an AI model imported into "**Console for AITRIOS**"
+
+*** Checks AI model conversion state.
+
+===== Delete AI model
+* Flow
+
+[source,mermaid, target="Flow to delete AI model"]
+----
+flowchart TD
+    %% definition
+    classDef object fill:#FFE699, stroke:#FFD700
+
+    start((Start))
+    id1(Run the notebook for system client authentication)
+    id2(Run the notebook to get AI model list)
+    id3(Create and edit the configuration file for running the notebook to delete AI model)
+    id4(Run the notebook to delete AI model)
+    finish(((Finish)))
+
+    %% impl
+    start --> id1
+    id1 --> id2
+    id2 --> id3
+    id3 --> id4
+    id4 --> finish
+----
+
+* Flow details
+. Run the notebook for system client authentication
+
+. Run the notebook to get AI model list
+
+** Run the notebook to get a list of AI models that have already been imported into "**Console for AITRIOS**", and get settings in the configuration file, `**model_id**`.
+
+. Create and edit the configuration file for running the notebook to delete AI model
+
+** Create and edit the configuration file <<anchor-conf-del, _configuration.json_>> to configure notebook runtime settings
+
+. Run the notebook to delete AI model
+
+** Run the notebook to delete the AI model from "**Console for AITRIOS**"
+
+===== Import "**PPL**"
+* Flow
+
+[source,mermaid, target="Flow to import PPL"]
+----
+flowchart TD
+    %% definition
+    classDef object fill:#FFE699, stroke:#FFD700
+
+    start((Start))
+    id1(Prepare PPL to import)
+    id2(Run the notebook for system client authentication)
+    id3(Run the notebook to get PPL list)
+    id4(Create and edit the configuration file for running the notebook to import PPL)
+    id5(Run the notebook to import PPL)
+    finish(((Finish)))
+
+    %% impl
+    start --> id1
+    id1 --> id2
+    id2 --> id3
+    id3 --> id4
+    id4 --> id5
+    id5 --> finish
+----
+
+* Flow details
+. Prepare "**PPL**" to import
+
+** Store the "**PPL**" to import into the SDK runtime environment
+
+. Run the notebook for system client authentication
+
+. Run the notebook to get "**PPL**" list
+
+** Run the notebook to get a list of "**PPL**" that have already been imported into "**Console for AITRIOS**", and get settings in the configuration file, `**app_name**` and `**version_number**`.
+
+*** Assume the following case
+
+**** Check the "**PPL**" import status of "**Console for AITRIOS**"
+
+. Create and edit the configuration file for running the notebook to import "**PPL**"
+
+** Create and edit the configuration file <<anchor-conf-ppl, _configuration.json_>> to configure notebook runtime settings
+
+. Run the notebook to import "**PPL**"
+
+** Run the notebook with the following features:
+
+*** Encodes "**PPL**" in Base64 format
+
+*** Imports "**PPL**" into "**Console for AITRIOS**"
+
+*** Checks the "**PPL**" import status of "**Console for AITRIOS**"
+
+===== Delete "**PPL**"
+* Flow
+
+[source,mermaid, target="Flow to delete PPL"]
+----
+flowchart TD
+    %% definition
+    classDef object fill:#FFE699, stroke:#FFD700
+
+    start((Start))
+    id1(Run the notebook for system client authentication)
+    id2(Run the notebook to get PPL list)
+    id3(Create and edit the configuration file for running the notebook to delete PPL)
+    id4(Run the notebook to delete PPL)
+    finish(((Finish)))
+
+    %% impl
+    start --> id1
+    id1 --> id2
+    id2 --> id3
+    id3 --> id4
+    id4 --> finish
+----
+
+* Flow details
+. Run the notebook for system client authentication
+
+. Run the notebook to get "**PPL**" list
+
+** Run the notebook to get a list of "**PPL**" that have already been imported into "**Console for AITRIOS**", and get settings in the configuration file, `**app_name**` and `**version_number**`.
+
+. Create and edit the configuration file for running the notebook to delete "**PPL**"
+
+** Create and edit the configuration file <<anchor-conf-ppl-del, _configuration.json_>> to configure notebook runtime settings
+
+. Run the notebook to delete "**PPL**"
+
+** Run the notebook to delete the "**PPL**" from "**Console for AITRIOS**"
+
+==== Sequence
+
+===== Import AI model
+
+[source,mermaid, target="Sequence to import AI model"]
+----
+%%{init:{'themeCSS':'text.actor {font-size:18px !important;} .messageText {font-size:18px !important;} .loopText {font-size:18px !important;} .noteText {font-size:18px !important;}'}}%%
+sequenceDiagram
+  participant user as User
+  participant container as Dev Container
+  participant console as Console<br>for AITRIOS
+
+  user->>container: Run the notebook <br> for system client authentication
+  opt Run arbitrarily
+    user->>container: Run the notebook <br> to get AI model list
+  end
+  user->>container: Create and edit <br> the configuration file <br> for running the notebook <br> to import AI model
+  user->>container: Run the notebook <br> to import AI model <br> (Cell to import AI model)
+
+  container->>console: Run the API <br> to import AI model
+  console-->>container: Response
+  container-->>user: Results
+
+  user->>container: Run the notebook <br> to import AI model <br> (Cell to check <br> AI model import results)
+  container->>console: Run the API <br> to get AI model information
+  console-->>container: Response
+  container-->>user: Results
+
+  user->>container: Run the notebook <br> to import AI model <br> (Cell to convert AI model)
+  container->>+console: Run the API <br> to convert AI model
+  console-->>container: Response
+  container-->>user: Results
+  Note over container, console: AI model conversion <br> runs on Console for AITRIOS <br> and may wait tens of minutes <br> after response is returned
+
+  opt Run arbitrarily multiple times
+    user->>container: Run the notebook <br> to import AI model <br> (Cell to check <br> AI model conversion state)
+    container->>console: Run the API <br> to get the status <br> of AI model conversion
+    console-->>-container: Response
+    container-->>user: Results
+  end
+----
+
+===== Delete AI model
+
+[source,mermaid, target="Sequence to delete AI model"]
+----
+%%{init:{'themeCSS':'text.actor {font-size:18px !important;} .messageText {font-size:18px !important;} .loopText {font-size:18px !important;} .noteText {font-size:18px !important;}'}}%%
+sequenceDiagram
+  participant user as User
+  participant container as Dev Container
+  participant console as Console<br>for AITRIOS
+
+  user->>container: Run the notebook <br> for system client authentication
+  user->>container: Run the notebook <br> to get AI model list
+  user->>container: Create and edit <br> the configuration file <br> for running the notebook <br> to delete AI model
+  user->>container: Run the notebook <br> to delete AI model
+
+  container->>console: Run the API <br> to delete AI model
+  console-->>container: Response
+  container-->>user: Results
+----
+
+===== Import "**PPL**"
+
+[source,mermaid, target="Sequence to import PPL"]
+----
+%%{init:{'themeCSS':'text.actor {font-size:18px !important;} .messageText {font-size:18px !important;} .loopText {font-size:18px !important;} .noteText {font-size:18px !important;}'}}%%
+sequenceDiagram
+  participant user as User
+  participant container as Dev Container
+  participant console as Console<br>for AITRIOS
+
+  user->>container: Prepare PPL to import
+  user->>container: Run the notebook <br> for system client authentication
+  
+  opt Run arbitrarily
+    user->>container: Run the notebook <br> to get PPL list
+  end  user->>container: Create and edit <br> the configuration file <br> for running the notebook <br> to import PPL
+  user->>container: Run the notebook <br> to import PPL <br> (Cell to import PPL)
+  
+  container->>container: Encode PPL in Base64 format
+  container->>console: Run the API <br> to import PPL
+  console-->>container: Response
+  container-->>user: Results
+
+  opt Run arbitrarily multiple times
+    user->>container: Run the notebook <br> to import PPL <br> (Cell to check <br> PPL import results)
+    container->>console: Run the API <br> to get PPL information
+    console-->>container: Response
+    container-->>user: Results
+  end
+----
+
+===== Delete "**PPL**"
+
+[source,mermaid, target="Sequence to delete PPL"]
+----
+%%{init:{'themeCSS':'text.actor {font-size:18px !important;} .messageText {font-size:18px !important;} .loopText {font-size:18px !important;} .noteText {font-size:18px !important;}'}}%%
+sequenceDiagram
+  participant user as User
+  participant container as Dev Container
+  participant console as Console<br>for AITRIOS
+
+  user->>container: Run the notebook <br> for system client authentication
+  user->>container: Run the notebook <br> to get PPL list
+  user->>container: Create and edit <br> the configuration file <br> for running the notebook <br> to delete PPL
+  user->>container: Run the notebook <br> to delete PPL
+  
+  container->>console: Run the API <br> to delete PPL
+  console-->>container: Response
+  container-->>user: Results
+----
+
+
+== User interface specifications (Import AI model)
+=== Prerequisite
+* You have registered as a user through "**Portal for AITRIOS**" and participated in the AITRIOS project
+
+* You have prepared an AI model
+
+* You have uploaded an AI model to Azure Blob Storage and gotten its SAS URI
+
+
+=== How to start each function
+. Launch the SDK environment and preview the `**README.md**` in the top directory
+. Jump to the `**README.md**` in the `**tutorials**` directory from the hyperlink in the SDK environment top directory
+. Jump to the `**README.md**` in the `**3_prepare_model**` directory from the hyperlink in the `**README.md**` in the `**tutorials**` directory
+. Jump to the `**README.md**` in the `**develop_on_sdk**` directory from the hyperlink in the `**README.md**` in the `**3_prepare_model**` directory
+. Jump to the `**README.md**` in the `**3_import_to_console**` directory from the hyperlink in the `**README.md**` in the `**develop_on_sdk**` directory
+. Jump to each feature from each file in the `**3_import_to_console**` directory
+
+
+=== Run the notebook for system client authentication
+. Jump to the `**README.md**` in the `**set_up_console_client**` directory from the hyperlink in the `**README.md**` in the `**3_import_to_console**` directory
+. Open the notebook for system client authentication, _*.ipynb_, in the `**set_up_console_client**` directory, and run the python scripts in it
+
+
+=== Run the notebook to get AI model list
+. Jump to the `**README.md**` in the `**get_model_list**` directory from the hyperlink in the `**README.md**` in the `**3_import_to_console**` directory
+. Open the notebook to get AI model list, _*.ipynb_, in the `**get_model_list**` directory, and run the python scripts in it
+
+
+=== Create and edit the configuration file for running the notebook to import AI model
+NOTE: All parameters are required, unless otherwise indicated.
+
+NOTE: The parameters passed to the "**Console Access Library**" API are as specified in the <<anchor-ref, "**Console Access Library**" API>>.
+
+. Create and edit the configuration file, `**configuration.json**`, in the execution directory.
+
+[[anchor-conf]]
+[cols="1,1,1,1a"]
+|===
+|Configuration |Meaning |Range |Remarks
+
+|`**model_id**`
+|ID of AI model to import +
+ +
+If it is a new ID, it is newly registered. +
+Upgrade if it is a registered ID.
+|String +
+Details follow the "**Console Access Library**" API specification.
+|Don't abbreviate +
+Used for the following "**Console Access Library**" API.
+
+* `**ai_model.ai_model.AIModel.import_base_model**`
+* `**ai_model.ai_model.AIModel.get_base_model_status**`
+* `**ai_model.ai_model.AIModel.publish_model**`
+
+|`**model**`
+|SAS URI for AI model to import
+|SAS URI format +
+Details follow the "**Console Access Library**" API specification.
+|Don't abbreviate +
+Used for the following "**Console Access Library**" API.
+
+* `**ai_model.ai_model.AIModel.import_base_model**`
+
+
+|`**converted**`
+|Option to indicate converted
+|true or false +
+Details follow the "**Console Access Library**" API specification.
+|Optional +
+If omitted, specify false +
+Used for the following "**Console Access Library**" API.
+
+* `**ai_model.ai_model.AIModel.import_base_model**`
+
+|`**vendor_name**`
+|Vendor name + 
+(specify for new registration)
+|String +
+Details follow the "**Console Access Library**" API specification.
+|Optional +
+If omitted, no vendor name +
+Used for the following "**Console Access Library**" API.
+
+* `**ai_model.ai_model.AIModel.import_base_model**`
+
+|`**comment**`
+|AI model and version description +
+ +
+AI model and version description for new registrations, +
+Set as description of version when upgrading
+|String +
+Details follow the "**Console Access Library**" API specification.
+|Optional +
+If omitted, no description +
+Used for the following "**Console Access Library**" API.
+
+* `**ai_model.ai_model.AIModel.import_base_model**`
+
+|`**network_type**`
+|Network type
+|String +
+Details follow the "**Console Access Library**" API specification.
+|Optional +
+Specify only for new registration +
+If omitted, specify "0" +
+Used for the following "**Console Access Library**" API.
+
+* `**ai_model.ai_model.AIModel.import_base_model**`
+
+|`**labels**`
+|Label name +
+ +
+For Custom Vision, set the contents of the label.txt file that comes with the AI model file
+|["label01","label02","label03"] +
+Details follow the "**Console Access Library**" API specification.
+|Optional +
+Used for the following "**Console Access Library**" API.
+
+* `**ai_model.ai_model.AIModel.import_base_model**`
+
+|===
+
+
+=== Run the notebook to import AI model
+. Open the notebook, `**import_to_console.ipynb**`, in the `**3_import_to_console**` directory, and run the python scripts in it
+
+** The scripts do the following:
+
+*** Checks that <<anchor-conf, _configuration.json_>> exists in the `**3_import_to_console**` directory
+
+**** If an error occurs, the error description is displayed and running is interrupted.
+
+*** Checks the contents of <<anchor-conf, _configuration.json_>>
+
+**** If an error occurs, the error description is displayed and running is interrupted.
+
+*** Runs the API to import AI model
+
+**** If the import is successful, `**import_to_console.ipynb**` displays a successful message
+
+*** Runs the API to check AI model import results
+
+**** If the AI model information is successfully gotten, `**import_to_console.ipynb**` displays a successful message and the gotten status
+
+*** Runs the API to convert AI model
+
+**** If the API execution is successful, `**import_to_console.ipynb**` displays a successful message
+
+**** It takes several tens of minutes to complete conversion of the AI model, so checks AI model conversion state
+
+*** Runs the API to check AI model conversion state
+
+**** If the conversion status of the AI model information is successfully gotten, `**import_to_console.ipynb**` displays a successful message and the gotten status
+
+** If an error occurs, the error description is displayed in the `**import_to_console.ipynb**` and running is interrupted.
+
+*** See https://developer.aitrios.sony-semicon.com/development-guides/documents/specifications/["**Cloud SDK Console Access Library (Python) Functional Specifications**"] for details on errors and response times
+
+
+== User interface specifications (Delete AI model)
+=== Prerequisite
+* You have registered as a user through "**Portal for AITRIOS**" and participated in the AITRIOS project
+
+* You have imported AI model into "**Console for AITRIOS**"
+
+
+=== How to start each function
+. Launch the SDK environment and preview the `**README.md**` in the top directory
+. Jump to the `**README.md**` in the `**tutorials**` directory from the hyperlink in the SDK environment top directory
+. Jump to the `**README.md**` in the `**3_prepare_model**` directory from the hyperlink in the `**README.md**` in the `**tutorials**` directory
+. Jump to the `**README.md**` in the `**develop_on_sdk**` directory from the hyperlink in the `**README.md**` in the `**3_prepare_model**` directory
+. Jump to the `**README.md**` in the `**delete_model_on_console**` directory from the hyperlink in the `**README.md**` in the `**develop_on_sdk**` directory
+. Jump to each feature from each file in the `**delete_model_on_console**` directory
+
+
+=== Run the notebook for system client authentication
+. Jump to the `**README.md**` in the `**set_up_console_client**` directory from the hyperlink in the `**README.md**` in the `**delete_model_on_console**` directory
+. Open the notebook for system client authentication, _*.ipynb_, in the `**set_up_console_client**` directory, and run the python scripts in it
+
+
+=== Run the notebook to get AI model list
+. Jump to the `**README.md**` in the `**get_model_list**` directory from the hyperlink in the `**README.md**` in the `**delete_model_on_console**` directory
+. Open the notebook to get AI model list, _*.ipynb_, in the `**get_model_list**` directory, and run the python scripts in it
+
+
+=== Create and edit the configuration file for running the notebook to delete AI model
+NOTE: All parameters are required, unless otherwise indicated.
+
+NOTE: The parameters passed to the "**Console Access Library**" API are as specified in the <<anchor-ref, "**Console Access Library**" API>>.
+
+. Create and edit the configuration file, `**configuration.json**` , in the execution directory.
+
+[[anchor-conf-del]]
+[cols="1,1,1,1a"]
+|===
+|Configuration |Meaning |Range |Remarks
+
+|`**model_id**`
+|ID of AI model to delete
+|String +
+Details follow the "**Console Access Library**" API specification.
+|Don't abbreviate +
+Used for the following "**Console Access Library**" API.
+
+* `**ai_model.ai_model.AIModel.delete_model**`
+
+|===
+
+
+=== Run the notebook to delete AI model
+. Open the notebook, `**delete_model_on_console.ipynb**`, in the `**delete_model_on_console**` directory, and run the python scripts in it
+
+** The scripts do the following:
+
+*** Checks that <<anchor-conf-del, _configuration.json_>> exists in the `**delete_model_on_console**` directory
+
+**** If an error occurs, the error description is displayed and running is interrupted.
+
+*** Checks the contents of <<anchor-conf-del, _configuration.json_>>
+
+**** If an error occurs, the error description is displayed and running is interrupted.
+
+*** Runs the API to delete AI model
+
+**** If the deletion is successful, `**delete_model_on_console.ipynb**` displays a successful message
+
+** If an error occurs, the error description is displayed in the `**delete_model_on_console.ipynb**` and running is interrupted.
+
+*** See https://developer.aitrios.sony-semicon.com/development-guides/documents/specifications/["**Cloud SDK Console Access Library (Python) Functional Specifications**"] for details on errors and response times
+
+
+
+== User interface specifications (Import "**PPL**")
+=== Prerequisite
+* You have registered as a user through "**Portal for AITRIOS**" and participated in the AITRIOS project
+
+* You have prepared "**PPL**"
+
+=== How to start each function
+. Launch the SDK environment and preview the `**README.md**` in the top directory
+. Jump to the `**README.md**` in the `**tutorials**` directory from the hyperlink in the SDK environment top directory
+. Jump to the `**4_prepare_application**` directory from the hyperlink in the `**README.md**` in the `**tutorials**` directory
+. Jump to the `**README.md**` in the `**2_import_to_console**` directory from the hyperlink in the `**README.md**` in the `**4_prepare_application**` directory
+. Jump to each feature from each file in the `**2_import_to_console**` directory
+
+
+=== Prepare "**PPL**" to import
+. Prepare a "**PPL**" to import and store it in any directory
+
+
+=== Run the notebook for system client authentication
+. Jump to the `**README.md**` in the `**set_up_console_client**` directory from the hyperlink in the `**README.md**` in the `**2_import_to_console**` directory
+. Open the notebook for system client authentication, _*.ipynb_, in the `**set_up_console_client**` directory, and run the python scripts in it
+
+
+=== Run the notebook to get "**PPL**" list
+. Jump to the `**README.md**` in the `**get_application_list**` directory from the hyperlink in the `**README.md**` in the `**2_import_to_console**` directory
+. Open the notebook to get "**PPL**" list, _*.ipynb_, in the `**get_application_list**` directory, and run the python scripts in it
+
+
+=== Create and edit the configuration file for running the notebook to import "**PPL**"
+NOTE: All parameters are required, unless otherwise indicated.
+
+NOTE: Do not use symbolic links to files and directories.
+
+NOTE: The parameters passed to the "**Console Access Library**" API are as specified in the <<anchor-ref, "**Console Access Library**" API>>.
+
+. Create and edit the configuration file, `**configuration.json**`, in the execution directory.
+
+[[anchor-conf-ppl]]
+[cols="1,1,1,1a"]
+|===
+|Configuration |Meaning |Range |Remarks
+
+|`**app_name**`
+|"**PPL**" name
+|String +
+Details follow the "**Console Access Library**" API specification.
+|Don't abbreviate +
+Used for the following "**Console Access Library**" API.
+
+* `**deployment.deployment.Deployment.import_device_app**`
+
+|`**version_number**`
+|"**PPL**" version
+|String +
+Details follow the "**Console Access Library**" API specification.
+|Don't abbreviate +
+Used for the following "**Console Access Library**" API.
+
+* `**deployment.deployment.Deployment.import_device_app**`
+
+|`**ppl_file**`
+|"**PPL**" file path
+|Absolute path or relative to the notebook (*.ipynb)
+|Don't abbreviate
+
+|`**comment**`
+|"**PPL**" description
+|String +
+Details follow the "**Console Access Library**" API specification.
+|Optional +
+If omitted, no comment +
+Used for the following "**Console Access Library**" API.
+
+* `**deployment.deployment.Deployment.import_device_app**`
+
+|===
+
+=== Run the notebook to import "**PPL**"
+. Open the notebook, `**import_to_console.ipynb**`, in the `**2_import_to_console**` directory, and run the python scripts in it
+
+** The scripts do the following:
+
+*** Checks that <<anchor-conf-ppl, _configuration.json_>> exists in the `**2_import_to_console**` directory
+
+**** If an error occurs, the error description is displayed and running is interrupted.
+
+*** Checks the contents of <<anchor-conf-ppl, _configuration.json_>>
+
+**** If an error occurs, the error description is displayed and running is interrupted.
+
+*** Encodes "**PPL**" in Base64 format
+
+**** If an error occurs, the error description is displayed and running is interrupted.
+
+*** Runs the API to import "**PPL**"
+
+**** If the import is successful, `**import_to_console.ipynb**` displays a successful message
+
+*** Runs the API to check "**PPL**" import results
+
+**** If the "**PPL**" information is successfully gotten, `**import_to_console.ipynb**` displays a successful message and the gotten status
+
+** If an error occurs, the error description is displayed in the `**import_to_console.ipynb**` and running is interrupted.
+
+*** See https://developer.aitrios.sony-semicon.com/development-guides/documents/specifications/["**Cloud SDK Console Access Library (Python) Functional Specifications**"] for details on errors and response times
+
+
+
+== User interface specifications (Delete "**PPL**")
+=== Prerequisite
+* You have registered as a user through "**Portal for AITRIOS**" and participated in the AITRIOS project
+
+* You have imported "**PPL**" into "**Console for AITRIOS**"
+
+
+=== How to start each function
+. Launch the SDK environment and preview the `**README.md**` in the top directory
+. Jump to the `**README.md**` in the `**tutorials**` directory from the hyperlink in the SDK environment top directory
+. Jump to the `**4_prepare_application**` directory from the hyperlink in the `**README.md**` in the `**tutorials**` directory
+. Jump to the `**README.md**` in the `**delete_application_on_console**` directory from the hyperlink in the `**README.md**` in the `**4_prepare_application**` directory
+. Jump to each feature from each file in the `**delete_application_on_console**` directory
+
+
+=== Run the notebook for system client authentication
+. Jump to the `**README.md**` in the `**set_up_console_client**` directory from the hyperlink in the `**README.md**` in the `**delete_application_on_console**` directory
+. Open the notebook for system client authentication, _*.ipynb_, in the `**set_up_console_client**` directory, and run the python scripts in it
+
+
+=== Run the notebook to get "**PPL**" list
+. Jump to the `**README.md**` in the `**get_application_list**` directory from the hyperlink in the `**README.md**` in the `**delete_application_on_console**` directory
+. Open the notebook to get "**PPL**" list, _*.ipynb_, in the `**get_application_list**` directory, and run the python scripts in it
+
+
+=== Create and edit the configuration file for running the notebook to delete "**PPL**"
+NOTE: All parameters are required, unless otherwise indicated.
+
+NOTE: The parameters passed to the "**Console Access Library**" API are as specified in the <<anchor-ref, "**Console Access Library**" API>>.
+
+. Create and edit the configuration file, `**configuration.json**`, in the execution directory.
+
+[[anchor-conf-ppl-del]]
+[cols="1,1,1,1a"]
+|===
+|Configuration |Meaning |Range |Remarks
+
+|`**app_name**`
+|"**PPL**" name
+|String +
+Details follow the "**Console Access Library**" API specification.
+|Don't abbreviate +
+Used for the following "**Console Access Library**" API.
+
+* `**deployment.deployment.Deployment.delete_device_app**`
+
+|`**version_number**`
+|"**PPL**" version
+|String +
+Details follow the "**Console Access Library**" API specification.
+|Don't abbreviate +
+Used for the following "**Console Access Library**" API.
+
+* `**deployment.deployment.Deployment.delete_device_app**`
+
+|===
+
+=== Run the notebook to delete "**PPL**"
+. Open the notebook, `**delete_application_on_console.ipynb**`, in the `**delete_application_on_console**` directory, and run the python scripts in it
+
+** The scripts do the following:
+
+*** Checks that <<anchor-conf-ppl-del, _configuration.json_>> exists in the `**delete_application_on_console**` directory
+
+**** If an error occurs, the error description is displayed and running is interrupted.
+
+*** Checks the contents of <<anchor-conf-ppl-del, _configuration.json_>>
+
+**** If an error occurs, the error description is displayed and running is interrupted.
+
+*** Runs the API to delete "**PPL**"
+
+**** If the deletion is successful, `**delete_application_on_console.ipynb**` displays a successful message
+
+** If an error occurs, the error description is displayed in the `**delete_application_on_console.ipynb**` and running is interrupted.
+
+*** See https://developer.aitrios.sony-semicon.com/development-guides/documents/specifications/["**Cloud SDK Console Access Library (Python) Functional Specifications**"] for details on errors and response times
+
+
+
+== Target performances/Impact on performances
+** Usability
+
+*** When the SDK environment is built, AI models and "**PPL**" can be imported into "**Console for AITRIOS**" without any additional installation steps
+
+** UI response time of 1.2 seconds or less
+** If processing takes more than 5 seconds, indicates that processing is in progress with successive updates
+
+== Assumption/Restriction
+* If you cancel and restart an encoding or import process, start each process from the beginning instead of resuming in the middle
+
+== Remarks
+* None
+
+== Unconfirmed items
+* None

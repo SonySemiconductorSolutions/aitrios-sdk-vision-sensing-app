@@ -16,6 +16,7 @@
 ############################################################################
 
 DEBUG ?= 0
+TESTAPP_DUMP_MEMORY_CONSUMPTION ?= 0
 
 CLEAN_DIR = $(PWD)/build
 DEBUG_BUILD_DIR = $(PWD)/build/debug/sample/vision_app/single_dnn/classification
@@ -55,6 +56,9 @@ ifeq ($(DEBUG), 1)
 	USER_CFLAGS    = -g -O0
 else
 	USER_CFLAGS    = -O2
+endif
+ifeq ($(TESTAPP_DUMP_MEMORY_CONSUMPTION), 1)
+	USER_CFLAGS    += -DTESTAPP_DUMP_MEMORY_CONSUMPTION
 endif
 USER_CPPFLAGS  = $(USER_CFLAGS)
 USER_LDFLAGS   = -z stack-size=32768 \

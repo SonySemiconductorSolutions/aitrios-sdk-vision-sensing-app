@@ -2,7 +2,7 @@
 
 This tutorial shows you how to annotate your images using [CVAT](https://github.com/opencv/cvat).
 
-You can generate image classification dataset used for transfer learning in "**Vision and Sensing Application SDK**".
+You can generate image classification dataset used for transfer learning in "**Edge Application SDK**".
 
 ## 1. Start up CVAT
 
@@ -50,7 +50,7 @@ You can generate image classification dataset used for transfer learning in "**V
 
 The procedure is described below. See the [CVAT Documentation](https://opencv.github.io/cvat/docs/) for details.
 
-JPEG image format is supported in "**Vision and Sensing Application SDK**".
+JPEG image format is supported in "**Edge Application SDK**".
 
 A number of images each label is recommended at least 10 to use for training AI Model.
 
@@ -64,10 +64,14 @@ Please see details on [Getting started in CVAT](https://opencv.github.io/cvat/do
 
 1. In CVAT Web UI, create new project.
 2. Open the project, and add labels.
-3. In the project, create new job.
-4. In the job, create new task.
-5. Select images or zip file to import.
-6. Press "Submit" button.
+3. In the project, create new task.
+4. Select images or zip file to import.
+5. Press "Submit & Open" button.
+
+> **NOTE**
+> 
+> There is a following restriction when opening Codespaces in web browser.
+> - Importing file larger than 2MB will fail. As workaround, please open Codespaces in VS Code or do following [Import images from Codespaces (devcontainer)](#import-images-from-codespaces-devcontainer).
 
 ### Import images from Codespaces (devcontainer)
 
@@ -102,6 +106,12 @@ Please see details on [Getting started in CVAT](https://opencv.github.io/cvat/do
     |**`import_dir`**|Folder path for import files|Absolute path or relative path from configuration.json/Notebook (*.ipynb)|Required|
     |**`import_image_extension`**|Extension of JPEG images for import files|string of extension (typical: jpg)|Required|
     |**`import_task_name`**|Task name of CVAT to be created by import files. Importing with the same task name more than once will create tasks with the same name (but different task IDs). |string|Required|
+    
+>**NOTE**
+>
+>**`cvat_project_id`** The project id is displayed in the CVAT Web UI project page like 
+>
+>"Project #1 created by USERNAME on CREATED_DATE" (in this case the project id is 1).
 
 5. Open [Notebook](./import_api.ipynb) and run all cells.
 
@@ -172,7 +182,7 @@ If you want to export dataset to Codespaces (devcontainer), please see following
     
     If zip file already exists in **`export_dir`**, "Failed to move dataset. A dataset file with the same name exists." message appears and the zip file is not exported.
 
-## 5. Convert dataset to use for "**Vision and Sensing Application SDK**"
+## 5. Convert dataset to use for "**Edge Application SDK**"
 
 1. Place setting file (**`./configuration.json`** file) for conversion dataset. 
     - configuration.json

@@ -1,0 +1,287 @@
+= Edge Application SDK pass:[<br/>] Deserialize pass:[<br/>] Functional Specifications pass:[<br/>]
+:sectnums:
+:sectnumlevels: 1
+:author: Copyright 2023 Sony Semiconductor Solutions Corporation
+:version-label: Version 
+:revnumber: x.x.x
+:revdate: YYYY - MM - DD
+:trademark-desc1: AITRIOS™ and AITRIOS logos are the registered trademarks or trademarks
+:trademark-desc2: of Sony Group Corporation or its affiliated companies.
+:toc:
+:toc-title: TOC
+:toclevels: 1
+:chapter-label:
+:lang: en
+
+== Change history
+
+|===
+|Date |What/Why
+
+|2023/05/26
+|Initial draft.
+
+|===
+
+== Terms/Abbreviations
+|===
+|Terms/Abbreviations |Meaning 
+
+|FlatBuffers
+|Serialization library
+
+|===
+
+== Reference materials
+
+[[anchor-ref]]
+* Reference/Related documents
+** "**Console User Manual**"
+*** https://developer.aitrios.sony-semicon.com/en/documents/console-user-manual
+
+
+== Expected use case
+
+* Deserialize the inference results and check the content
+
+== Functional overview/Algorithm
+
+=== Functional overview
+
+* You can decode Base64 encoded inference results
+
+* You can deserialize what's serialized in "FlatBuffers"
+
+=== Deserialize function
+==== Files that support deserialization
+
+* Binary file of inference results
+
+* Inference results metadata (or similarly formatted json file) that can be gotten by running inference in "**Console for AITRIOS**"
+** The following is an example of inference results metadata that can be gotten by running inference in "**Console for AITRIOS**":
+
+[source, json]
+----
+{
+  "DeviceID": "xxxxx",
+  "ModelID": "xxxxx",
+  "Image": true,
+  "Inferences": [
+    {
+      "T": "xxxxx",
+      "O": "AQAAAA=="
+    }
+  ],
+  "id": "xxxxx",
+  "_rid": "xxxxx",
+  "_self": "xxxxx",
+  "_etag": "xxxxx",
+  "_attachments": "xxxxx",
+  "_ts": 0
+}
+----
+
+The inference results are stored in `**"O"**` of `**"Inferences"**`. The `**"AQAAAA=="**` in `**"O"**` is Base64 encoded.
+
+
+=== Flow
+
+[source,mermaid, target="Legend"]
+----
+flowchart TD;
+    %% definition
+    classDef object fill:#FFE699, stroke:#FFD700
+    classDef external_service fill:#BFBFBF, stroke:#6b8e23, stroke-dasharray: 10 2
+    style legend fill:#FFFFFF,stroke:#000000
+
+    %% impl
+    subgraph legend["Legend"]
+        process(Processing/User behavior)
+        object[Input/output data]:::object
+    end
+----
+
+[source,mermaid, target="Flow"]
+----
+flowchart TD
+    %% definition
+    classDef object fill:#FFE699, stroke:#FFD700
+    style sdk fill:#FFFFFF, stroke:#6b8e23, stroke-dasharray: 10 2
+
+    start((Start))
+    id1(Prepare a file to deserialize)
+    subgraph sdk[Required files]
+    data2[Schema file .fbs]:::object
+    data3[Binary or json file]:::object
+    end
+    id2(Create and edit the configuration file for deserialization)
+    id3(Run the notebook to deserialize)
+    data1[Deserialized file .json]:::object
+    finish(((Finish)))
+
+    %% impl
+    start --> id1
+    id1 --- sdk
+    sdk --- id2
+    id2 --- id3
+    id3 --- data1
+    data1 --> finish
+----
+
+
+* Flow details
+
+. Prepare a file to deserialize
+** Prepare a schema file for the serialized data, a file to deserialize, and store it in any directory
+
+. Create and edit the configuration file for deserialization
+** Create and edit the configuration file <<anchor-conf, _configuration.json_>> to configure notebook runtime settings
+
+. Run the notebook to deserialize
+
+=== Sequence
+
+[source,mermaid, target="Sequence"]
+----
+%%{init:{'themeCSS':'text.actor {font-size:18px !important;} .messageText {font-size:18px !important;} .labelText {font-size:18px !important;} .loopText {font-size:18px !important;} .noteText {font-size:18px !important;}'}}%%
+sequenceDiagram
+  participant User
+  participant Dev Container
+  participant docker container
+
+  User->>Dev Container: Prepare a file to deserialize
+  User->>Dev Container: Create and edit <br> the configuration file <br> for deserialization
+  User->>Dev Container: Run the notebook <br> to deserialize
+  opt If the file to deserialize is a json file <br> (specified by input_type in the configuration file)
+    Dev Container->>Dev Container: Gets Base64 encoded inference results <br> from json file
+    Dev Container->>Dev Container: Decodes the Base64 encoded inference results
+    Dev Container->>Dev Container: Creates a Base64 decoded <br> binary file
+    Dev Container-->>User: Results
+  end
+  Dev Container->>docker container: Runs a shell script <br> for deserialization
+  Note left of docker container:Schema file
+  Note left of docker container:Binary file
+  docker container->>docker container: Deserializes <br> the binary file
+  docker container->>Dev Container: Creates a deserialized <br> json file
+  Note right of Dev Container:json file
+  Dev Container-->>User: Results
+  opt If the file to deserialize <br> is a json file <br> (specified by input_type <br> in the configuration file)
+    Dev Container->>Dev Container: Removes the binary file
+    Dev Container-->>User: Results
+  end
+----
+
+
+== User interface specifications
+=== How to start each function
+. Jump to the `**README.md**` in the `**deserialize**` directory from the hyperlink in the `**README.md**` in the directory for each feature that uses deserialization
+
+
+=== Prepare a file to deserialize
+. Prepare a schema file for the serialized data, a file to deserialize, and store it in any directory under the `**deserialize**` directory
+
+NOTE: If you want to use the results of running inference in "**Console for AITRIOS**", see <<anchor-ref, "**Console User Manual**">> for details.
+
+
+=== Create and edit the configuration file for deserialization
+NOTE: All parameters are required, unless otherwise indicated.
+
+NOTE: All values are case sensitive, unless otherwise indicated.
+
+NOTE: Do not use symbolic links to files and directories.
+
+NOTE: Only paths under the `**deserialize**` directory can be specified for directory paths and file paths.
+
+. Create and edit the configuration file, `**configuration.json**`, in the `**deserialize**` directory.
+
+[[anchor-conf]]
+|===
+|Configuration |Meaning |Range |Remarks
+
+|`**schema_file**`
+|Schema file path
+|Absolute path or relative to the notebook (*.ipynb)
+|
+
+|`**serialized_file**`
+|Path of the file to deserialize
+|Absolute path or relative to the notebook (*.ipynb)
+|If you omit the setting for `**output_dir**`, or specify an empty string, you can not set a file in the same directory as the notebook (*.ipynb).
+
+|`**input_type**`
+|Type of file to deserialize
+|"binary" or "json" +
+ +
+"binary": Binary file of inference results +
+"json": The metadata json file where the inference results are stored +
+|
+
+|`**output_dir**`
+|Path to which the file will be output +
+ +
+Destination of the deserialization results file
+|Absolute path or relative to the notebook (*.ipynb)
+|Optional +
+If omitted or empty, the path to which the file will be output is the same directory as the notebook (*.ipynb). +
+ +
+The format of the output filename is as follows: +
+"File name of `**serialized_file**` without extension".json +
+ +
+If the path to which the file will be output contains a file that duplicates the output filename, an error message is displayed and running is interrupted.
+
+|===
+
+
+=== Run the notebook to deserialize
+. Open the notebook, `**deserialize.ipynb**`, in the `**deserialize**` directory, and run the python scripts in it
+
+** The scripts do the following:
+
+*** Checks that <<anchor-conf, _configuration.json_>> exists in the `**deserialize**` directory
+**** If an error occurs, the error description is displayed and running is interrupted.
+
+*** Checks the contents of <<anchor-conf, _configuration.json_>>
+**** If an error occurs, the error description is displayed and running is interrupted.
+
+*** Checks that <<anchor-conf, _configuration.json_>> includes values for `**schema_file**` and `**serialized_file**`
+**** If an error occurs, the error description is displayed and running is interrupted.
+
+*** Checks that <<anchor-conf, _configuration.json_>> includes value for `**output_dir**`
+**** If the directory specified by `**output_dir**` does not already exist, it is created at the same time.
+**** If an error occurs, the error description is displayed and running is interrupted.
+
+*** Gets inference results in json file when `**input_type**` in <<anchor-conf,_configuration.json_>> is "json"
+**** If getting inference results in json file is successful, decodes Base64 encoded inference results
+***** If decoding Base64 is successful, outputs Base64 decoded file to the path of `**output_dir**`
+***** Output filename is "filename of `**serialized_file**` without extension".bin and removes it after deserialization is complete
+**** If an error occurs, the error description is displayed and running is interrupted.
+
+*** Runs a shell script for deserialization
+**** If successful, outputs deserialization results file to the path of `**output_dir**`
+**** Output filename is "filename of `**serialized_file**` without extension".json
+**** If an error occurs, the error description is displayed and running is interrupted.
+
+*** Deletes output Base64 decoded file when `**input_type**` is "json"
+**** If an error occurs, the error description is displayed and running is interrupted.
+
+*** Displays link to deserialization results file
+**** Click the link to view the contents of the deserialization results file
+
+
+== Target performances/Impact on performances
+* Usability
+
+** When the SDK environment is built, users can deserialize without any additional installation steps
+** UI response time of 1.2 seconds or less
+** If processing takes more than 5 seconds, indicates that processing is in progress with successive updates
+** Provides users with documentation of usage tools and version information
+
+
+== Assumption/Restriction
+* None
+
+== Remarks
+* None
+
+== Unconfirmed items
+* None

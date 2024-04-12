@@ -38,7 +38,7 @@
 
 #include "loader.h"
 
-#define HEAP_BUF_SIZE 4096 * 1024
+#define HEAP_BUF_SIZE 8192 * 1024
 const uint32 ERROR_BUF_SIZE = 128;
 const uint32 WASM_BUF_SIZE = 4096 * 1024;
 const uint32 WASM_STACK_SIZE = 32768;

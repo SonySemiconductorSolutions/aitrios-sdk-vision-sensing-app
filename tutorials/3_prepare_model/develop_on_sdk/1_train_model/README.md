@@ -1,4 +1,4 @@
-# Train AI model on "**Vision and Sensing Application SDK**"
+# Train AI model on "**Edge Application SDK**"
 
 The following AI model training is supported:
 

@@ -1,5 +1,5 @@
-# "**Vision and Sensing Application SDK**" Tutorial
-You can start "**Vision and Sensing Application SDK**" workflow using the following tutorial.
+# "**Edge Application SDK**" Tutorial
+You can start "**Edge Application SDK**" workflow using the following tutorial.
 
 ## 1. Initialize
 This part describes how to start using "**Console for AITRIOS**".
@@ -22,7 +22,7 @@ You can develop AI models on SDK or "**Console for AITRIOS**".
 See [README](3_prepare_model/README.md) for details.
 
 ## 4. Prepare application
-This part describes how to develop and build a "**Vision and Sensing Application**".<br>
+This part describes how to develop and build a "**Edge Application**".<br>
 
 See [README](./4_prepare_application/README.md) for details.
 

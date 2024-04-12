@@ -1,0 +1,853 @@
+= Edge Application SDK pass:[<br/>] AIモデル・PPLインポート pass:[<br/>] 機能仕様書 pass:[<br/>]
+:sectnums:
+:sectnumlevels: 1
+:author: Copyright 2022-2023 Sony Semiconductor Solutions Corporation
+:version-label: Version 
+:revnumber: x.x.x
+:revdate: YYYY - MM - DD
+:trademark-desc: AITRIOS™、およびそのロゴは、ソニーグループ株式会社またはその関連会社の登録商標または商標です。
+:toc:
+:toc-title: 目次
+:toclevels: 1
+:chapter-label:
+:lang: ja
+
+== 更新履歴
+
+|===
+|Date |What/Why
+
+|2023/01/30
+|初版作成
+
+|2023/05/26
+|ツール名と括弧の表記の修正 + 
+`**network_type**` のデフォルト値の変更 + 
+一部環境でAsciiDocのMermaid図が表示されないため、レンダリング後の画像参照に修正 + 
+図の代替テキスト追加
+
+|===
+
+== 用語・略語
+|===
+|Terms/Abbreviations |Meaning 
+
+|「**PPL**」
+|エッジAIデバイスのAIモデルの出力 (Output Tensor) を加工処理するモジュール
+
+|SAS
+|Shared Access Signatures +
+Azure Storage リソースへの制限付きアクセス権を付与する URI
+
+|===
+
+== 参照資料
+
+* Reference/Related documents (関連資料)
+[[anchor-ref]]
+** APIリファレンス
+*** https://developer.aitrios.sony-semicon.com/development-guides/reference/api-references/
+
+** 「**Console Access Library**」機能仕様書
+*** https://developer.aitrios.sony-semicon.com/development-guides/documents/specifications/
+
+== 想定ユースケース
+
+* 自分の環境で作成したAIモデルを「**Console for AITRIOS**」にインポートしたい
+
+* 作成した「**PPL**」を「**Console for AITRIOS**」にインポートしたい
+
+* AIモデル、または「**PPL**」のインポート状況を確認したい
+
+* 「**Console for AITRIOS**」にインポートしたAIモデルを、エッジAIデバイスへデプロイできる形式に変換したい
+
+* AIモデル変換状況を確認したい
+
+* 「**Console for AITRIOS**」にインポート済みのAIモデル、または「**PPL**」を削除したい
+
+== 機能概要、アルゴリズム
+
+=== Functional Overview
+
+* SDKのDev Container (Local PCまたはCodespaces) において、「**Console Access Library**」を扱うことができる
+
+** 「**Console Access Library**」経由で実行できることは下記の通り
+
+*** AIモデルを「**Console for AITRIOS**」にインポートできる
+
+**** 使用できるAIモデルは https://developer.aitrios.sony-semicon.com/development-guides/overview[「**Console for AITRIOS**」の動作仕様] に従う
+
+**** 「**Console for AITRIOS**」へのインポート元はAzure Blob Storageの為、AIモデルはAzure Blob Storageへの保存が必要
+
+*** 「**Console for AITRIOS**」にインポートされたAIモデルを変換できる
+
+*** 「**PPL**」を「**Console for AITRIOS**」にインポートできる
+
+**** 使用できる「**PPL**」ファイルは下記の通り
+
+***** SDKでは「.wasm」 (未AOTコンパイルファイル) をサポートする
+
+|===
+|「**Console Access Library**」がサポートするインポートが可能な「**PPL**」の拡張子 |SDKにおけるサポート 
+
+|.wasm (未AOTコンパイルファイル)
+|Yes
+
+|.aot (AOTコンパイル済みファイル)
+|No
+
+|===
+
+==== フロー
+
+[source,mermaid, target="凡例"]
+----
+flowchart TD;
+    %% definition
+    classDef object fill:#FFE699, stroke:#FFD700
+    classDef external_service fill:#BFBFBF, stroke:#6b8e23, stroke-dasharray: 10 2
+    style legend fill:#FFFFFF,stroke:#000000
+
+    %% impl
+    subgraph legend["凡例"]
+        process(処理/ユーザーの行動)
+    end
+----
+
+===== AIモデルインポート
+* フロー
+
+[source,mermaid, target="AIモデルインポート フロー"]
+----
+flowchart TD
+    %% definition
+    classDef object fill:#FFE699, stroke:#FFD700
+
+    start((Start))
+    id2(システムクライアント認証用Notebook実行)
+    id3(AIモデル情報一覧取得用Notebook実行)
+    id4("AIモデルインポート用Notebook実行向け設定ファイル作成・編集")
+    id5(AIモデルインポート用Notebook実行)
+    finish(((Finish)))
+
+    %% impl
+    start --> id2
+    id2 --> id3
+    id3 --> id4
+    id4 --> id5
+    id5 --> finish
+----
+
+* フロー詳細
+. システムクライアント認証用Notebook実行
+
+. AIモデル情報一覧取得用Notebook実行
+
+** 「**Console for AITRIOS**」にインポート済みの `**model_id**` が必要な場合にAIモデル情報一覧取得用Notebookを実行する
+
+*** 下記のケースを想定
+
+**** 「**Console for AITRIOS**」へインポート済みのAIモデルをバージョンアップしたい
+
+**** 「**Console for AITRIOS**」のAIモデルインポート状態を確認したい
+
+**** 「**Console for AITRIOS**」のAIモデルの変換状況を確認したい
+
+. AIモデルインポート用Notebook実行向け設定ファイル作成・編集
+
+** 設定ファイル<<anchor-conf, configuration.json>>を作成、編集してNotebook実行時の設定を行う
+
+. AIモデルインポート用Notebook実行
+
+** 下記の機能を持つNotebookを実行する
+
+*** AIモデルを「**Console for AITRIOS**」へインポート
+
+*** 「**Console for AITRIOS**」のAIモデルインポート状態を確認
+
+*** 「**Console for AITRIOS**」へインポートしたAIモデルを変換
+
+*** AIモデルの変換状況を確認
+
+===== AIモデル削除
+* フロー
+
+[source,mermaid, target="AIモデル削除 フロー"]
+----
+flowchart TD
+    %% definition
+    classDef object fill:#FFE699, stroke:#FFD700
+
+    start((Start))
+    id1(システムクライアント認証用Notebook実行)
+    id2(AIモデル情報一覧取得用Notebook実行)
+    id3("AIモデル削除用Notebook実行向け設定ファイル作成・編集")
+    id4(AIモデル削除用Notebook実行)
+    finish(((Finish)))
+
+    %% impl
+    start --> id1
+    id1 --> id2
+    id2 --> id3
+    id3 --> id4
+    id4 --> finish
+----
+
+* フロー詳細
+. システムクライアント認証用Notebook実行
+
+. AIモデル情報一覧取得用Notebook実行
+
+** AIモデル情報一覧取得用Notebookを実行して、「**Console for AITRIOS**」へインポート済みの `**model_id**` を取得する
+
+. AIモデル削除用Notebook実行向け設定ファイル作成・編集
+
+** 設定ファイル<<anchor-conf-del, configuration.json>>を作成、編集してNotebook実行時の設定を行う
+
+. AIモデル削除用Notebook実行
+
+** AIモデル削除用Notebook実行して、「**Console for AITRIOS**」から対象のAIモデルを削除する
+
+===== 「**PPL**」インポート
+* フロー
+
+[source,mermaid, target="PPLインポート フロー"]
+----
+flowchart TD
+    %% definition
+    classDef object fill:#FFE699, stroke:#FFD700
+
+    start((Start))
+    id1("インポートするPPLを用意")
+    id2(システムクライアント認証用Notebook実行)
+    id3(PPL情報一覧取得用Notebook実行)
+    id4("PPLインポート用Notebook実行向け設定ファイル作成・編集")
+    id5(PPLインポート用Notebook実行)
+    finish(((Finish)))
+
+    %% impl
+    start --> id1
+    id1 --> id2
+    id2 --> id3
+    id3 --> id4
+    id4 --> id5
+    id5 --> finish
+----
+
+* フロー詳細
+. インポートする「**PPL**」を用意
+
+** インポートする「**PPL**」を、SDK実行環境へ格納する
+
+. システムクライアント認証用Notebook実行
+
+. 「**PPL**」情報一覧取得用Notebook実行
+
+** 「**Console for AITRIOS**」にインポート済みの `**app_name**` 、 `**version_number**` が必要な場合に「**PPL**」情報一覧取得用Notebookを実行する
+
+*** 下記のケースを想定
+
+**** 「**Console for AITRIOS**」上の「**PPL**」インポート状態を確認したい
+
+. 「**PPL**」インポート用Notebook実行向け設定ファイル作成・編集
+
+** 設定ファイル<<anchor-conf-ppl, configuration.json>>を作成、編集してNotebook実行時の設定を行う
+
+. 「**PPL**」インポート用Notebook実行
+
+** 下記の機能を持つNotebookを実行する
+
+*** 「**PPL**」をBase64形式でエンコード
+
+*** 「**PPL**」を「**Console for AITRIOS**」へインポート
+
+*** 「**Console for AITRIOS**」上の「**PPL**」インポート状態を確認
+
+===== 「**PPL**」削除
+* フロー
+
+[source,mermaid, target="PPL削除 フロー"]
+----
+flowchart TD
+    %% definition
+    classDef object fill:#FFE699, stroke:#FFD700
+
+    start((Start))
+    id1(システムクライアント認証用Notebook実行)
+    id2(PPL情報一覧取得用Notebook実行)
+    id3("PPL削除用Notebook実行向け設定ファイル作成・編集")
+    id4(PPL削除用Notebook実行)
+    finish(((Finish)))
+
+    %% impl
+    start --> id1
+    id1 --> id2
+    id2 --> id3
+    id3 --> id4
+    id4 --> finish
+----
+
+* フロー詳細
+. システムクライアント認証用Notebook実行
+
+. 「**PPL**」情報一覧取得用Notebook実行
+
+** 「**PPL**」情報一覧取得用Notebookを実行して、「**Console for AITRIOS**」へインポート済みの `**app_name**` 、 `**version_number**` を取得する
+
+. 「**PPL**」削除用Notebook実行向け設定ファイル作成・編集
+
+** 設定ファイル<<anchor-conf-ppl-del, configuration.json>>を作成、編集してNotebook実行時の設定を行う
+
+. 「**PPL**」削除用Notebook実行
+
+** 「**PPL**」削除用Notebook実行して、「**Console for AITRIOS**」から対象の「**PPL**」を削除する
+
+==== シーケンス
+
+===== AIモデルインポート
+
+[source,mermaid, target="AIモデルインポート シーケンス"]
+----
+%%{init:{'themeCSS':'text.actor {font-size:18px !important;} .messageText {font-size:18px !important;} .loopText {font-size:18px !important;} .noteText {font-size:18px !important;}'}}%%
+sequenceDiagram
+  participant user as User
+  participant container as Dev Container
+  participant console as Console<br>for AITRIOS
+
+  user->>container: システムクライアント認証用<br>Notebook実行
+  opt 任意で実行する
+    user->>container: AIモデル情報一覧取得用<br>Notebook実行
+  end
+  user->>container: AIモデルインポート用<br>Notebook実行向け<br>設定ファイル作成・編集
+  user->>container: AIモデルインポート用<br>Notebook実行<br> (AIモデルインポートセル)
+
+  container->>console: AIモデルインポートAPI実行
+  console-->>container: レスポンス
+  container-->>user: 結果表示
+
+  user->>container: AIモデルインポート用<br>Notebook実行<br> (AIモデルインポート結果確認セル)
+  container->>console: AIモデル情報取得API実行
+  console-->>container: レスポンス
+  container-->>user: 結果表示
+
+  user->>container: AIモデルインポート用<br>Notebook実行<br> (AIモデル変換セル)
+  container->>+console: AIモデル変換API実行
+  console-->>container: レスポンス
+  container-->>user: 結果表示
+  Note over container, console: AIモデル変換は<br>Console for AITRIOS上で<br>実行されるため、<br>レスポンスが返ってきてから<br>数十分待つ可能性あり
+
+  opt 任意で複数回実行する
+    user->>container: AIモデルインポート用<br>Notebook実行<br> (AIモデル変換状況確認セル)
+    container->>console: AIモデル変換状況<br>取得API実行
+    console-->>-container: レスポンス
+    container-->>user: 結果表示
+  end
+----
+
+===== AIモデル削除
+
+[source,mermaid, target="AIモデル削除 シーケンス"]
+----
+%%{init:{'themeCSS':'text.actor {font-size:18px !important;} .messageText {font-size:18px !important;} .loopText {font-size:18px !important;} .noteText {font-size:18px !important;}'}}%%
+sequenceDiagram
+  participant user as User
+  participant container as Dev Container
+  participant console as Console<br>for AITRIOS
+
+  user->>container: システムクライアント認証用Notebook実行
+  user->>container: AIモデル情報一覧取得用Notebook実行
+  user->>container: AIモデル削除用Notebook実行向け<br>設定ファイル作成・編集
+  user->>container: AIモデル削除用Notebook実行
+
+  container->>console: AIモデル削除API実行
+  console-->>container: レスポンス
+  container-->>user: 結果表示
+----
+
+===== 「**PPL**」インポート
+
+[source,mermaid, target="PPLインポート シーケンス"]
+----
+%%{init:{'themeCSS':'text.actor {font-size:18px !important;} .messageText {font-size:18px !important;} .loopText {font-size:18px !important;} .noteText {font-size:18px !important;}'}}%%
+sequenceDiagram
+  participant user as User
+  participant container as Dev Container
+  participant console as Console<br>for AITRIOS
+
+  user->>container: インポートするPPLを用意
+  user->>container: システムクライアント認証用Notebook実行
+  
+  opt 任意で実行する
+    user->>container: PPL情報一覧取得用Notebook実行
+  end  user->>container: PPLインポート用Notebook実行向け<br>設定ファイル作成・編集
+  user->>container: PPLインポート用Notebook実行<br> (PPLインポートセル)
+  
+  container->>container: PPLをBase64形式でエンコード
+  container->>console: PPLインポートAPI実行
+  console-->>container: レスポンス
+  container-->>user: 結果表示
+
+  opt 任意で複数回実行する
+    user->>container: PPLインポート用Notebook実行<br> (PPLインポート結果確認セル)
+    container->>console: PPL情報取得API実行
+    console-->>container: レスポンス
+    container-->>user: 結果表示
+  end
+----
+
+===== 「**PPL**」削除
+
+[source,mermaid, target="PPL削除 シーケンス"]
+----
+%%{init:{'themeCSS':'text.actor {font-size:18px !important;} .messageText {font-size:18px !important;} .loopText {font-size:18px !important;} .noteText {font-size:18px !important;}'}}%%
+sequenceDiagram
+  participant user as User
+  participant container as Dev Container
+  participant console as Console<br>for AITRIOS
+
+  user->>container: システムクライアント認証用Notebook実行
+  user->>container: PPL情報一覧取得用Notebook実行
+  user->>container: PPL削除用Notebook実行向け<br>設定ファイル作成・編集
+  user->>container: PPL削除用Notebook実行
+  
+  container->>console: PPL削除API実行
+  console-->>container: レスポンス
+  container-->>user: 結果表示
+----
+
+
+== 操作性仕様、画面仕様 (AIモデルインポート)
+=== 前提条件
+* 「**Portal for AITRIOS**」からユーザー登録し、AITRIOSのプロジェクトに参加していること
+
+* AIモデルを用意していること
+
+* AIモデルをAzure Blob Storageへアップロードし、SAS URIを取得していること
+
+
+=== How to start each function
+. SDK環境を立ち上げ、Topの `**README.md**` をプレビュー表示する
+. SDK環境Topの `**README.md**` に含まれるハイパーリンクから、 `**tutorials**` ディレクトリの `**README.md**` にジャンプする
+. `**tutorials**` ディレクトリの `**README.md**` に含まれるハイパーリンクから、`**3_prepare_model**` ディレクトリの `**README.md**` にジャンプする
+. `**3_prepare_model**` ディレクトリの `**README.md**` に含まれるハイパーリンクから、`**develop_on_sdk**` ディレクトリの `**README.md**` にジャンプする
+. `**develop_on_sdk**` ディレクトリの `**README.md**` に含まれるハイパーリンクから、`**3_import_to_console**` ディレクトリの `**README.md**` にジャンプする
+. `**3_import_to_console**` ディレクトリの各ファイルから各機能に遷移する
+
+
+=== システムクライアント認証用Notebook実行
+. `**3_import_to_console**` ディレクトリの `**README.md**` に含まれるハイパーリンクから、`**set_up_console_client**` ディレクトリの `**README.md**` にジャンプする
+. `**set_up_console_client**` ディレクトリのシステムクライアント認証用Notebook (*.ipynb) を開き、その中のPythonスクリプトを実行する
+
+
+=== AIモデル情報一覧取得用Notebook実行
+. `**3_import_to_console**` ディレクトリの `**README.md**` に含まれるハイパーリンクから、`**get_model_list**` ディレクトリの `**README.md**` にジャンプする
+. `**get_model_list**` ディレクトリのAIモデル情報一覧取得用Notebook (*.ipynb) を開き、その中のPythonスクリプトを実行する
+
+
+=== AIモデルインポート用Notebook実行向け設定ファイル作成・編集
+NOTE: 特別な記載がある場合を除き、原則として省略は不可。
+
+NOTE: 「**Console Access Library**」APIに渡されるパラメータについては、 <<anchor-ref, 「**Console Access Library**」API>>の仕様に従う。
+
+. 実行ディレクトリに設定ファイル (`**configuration.json**`) を作成し、編集する
+
+[[anchor-conf]]
+[cols="1,1,1,1a"]
+|===
+|Configuration |Meaning |Range |Remarks
+
+|`**model_id**`
+|インポートするAIモデルのID +
+ +
+新しい `**model_id**` の場合は新規登録、 +
+システムに既に登録されている `**model_id**` を指定した場合はバージョンアップを行う
+|文字列 +
+詳細は「**Console Access Library**」APIの仕様に従う。
+|省略不可 +
+下記の「**Console Access Library**」APIに使用される。
+
+* `**ai_model.ai_model.AIModel.import_base_model**`
+* `**ai_model.ai_model.AIModel.get_base_model_status**`
+* `**ai_model.ai_model.AIModel.publish_model**`
+
+|`**model**`
+|インポートするAIモデル用 SAS URI
+|SAS URI形式 +
+詳細は「**Console Access Library**」APIの仕様に従う。
+|省略不可 +
+下記の「**Console Access Library**」APIに使用される。
+
+* `**ai_model.ai_model.AIModel.import_base_model**`
+
+
+|`**converted**`
+|変換済みフラグ
+|true or false +
+詳細は「**Console Access Library**」APIの仕様に従う。
+|省略可 +
+省略した場合、false指定と同じ動作となる +
+下記の「**Console Access Library**」APIに使用される。
+
+* `**ai_model.ai_model.AIModel.import_base_model**`
+
+|`**vendor_name**`
+|ベンダー名 (新規登録の場合に指定)
+|文字列 +
+詳細は「**Console Access Library**」APIの仕様に従う。
+|省略可 +
+省略した場合、ベンダー名なし +
+下記の「**Console Access Library**」APIに使用される。
+
+* `**ai_model.ai_model.AIModel.import_base_model**`
+
+|`**comment**`
+|AIモデルとバージョンの説明 +
+ +
+新規登録時はAIモデルとバージョンの説明、 +
+バージョンアップ時はバージョンの説明として設定
+|文字列 +
+詳細は「**Console Access Library**」APIの仕様に従う。
+|省略可 +
+省略した場合、説明なしとして設定 +
+下記の「**Console Access Library**」APIに使用される。
+
+* `**ai_model.ai_model.AIModel.import_base_model**`
+
+|`**network_type**`
+|ネットワーク種別
+|文字列 +
+詳細は「**Console Access Library**」APIの仕様に従う。
+|省略可 +
+新規登録の場合のみ有効 +
+省略した場合、"0"指定と同じ動作となる +
+下記の「**Console Access Library**」APIに使用される。
+
+* `**ai_model.ai_model.AIModel.import_base_model**`
+
+|`**labels**`
+|ラベル名 +
+ +
+Custom Visionの場合、AIモデルファイルに付属するlabel.txtファイルの内容を設定する
+|["label01","label02","label03"] +
+詳細は「**Console Access Library**」APIの仕様に従う。
+|省略可 +
+下記の「**Console Access Library**」APIに使用される。
+
+* `**ai_model.ai_model.AIModel.import_base_model**`
+
+|===
+
+
+=== AIモデルインポート用Notebook実行
+. `**3_import_to_console**` の `**import_to_console.ipynb**` を開き、その中のPythonスクリプトを実行する
+
+** その後下記の動作をする
+
+*** `**3_import_to_console**` ディレクトリの<<anchor-conf, configuration.json>>の存在をチェックする
+
+**** エラー発生時はその内容を表示し、中断する
+
+*** <<anchor-conf, configuration.json>>の内容をチェックする
+
+**** エラー発生時はその内容を表示し、中断する
+
+*** AIモデルインポートAPIを実行する
+
+**** インポートに成功した場合は、`**import_to_console.ipynb**` 内の出力に成功した旨のメッセージを表示する
+
+*** AIモデルインポート結果確認APIを実行する
+
+**** AIモデルの情報取得に成功した場合は、`**import_to_console.ipynb**` 内の出力に成功した旨のメッセージと取得したAIモデルのステータスを表示する
+
+*** AIモデル変換APIを実行する
+
+**** API実行に成功した場合は、`**import_to_console.ipynb**` 内の出力に成功した旨のメッセージを表示する
+
+**** AIモデルの変換完了までは数十分程度の時間がかかるため、次に動作する「AIモデル変換状況確認APIを実行する」で状況の確認が必要
+
+*** AIモデル変換状況確認APIを実行する
+
+**** AIモデルの変換状況取得に成功した場合は、`**import_to_console.ipynb**` 内の出力に成功した旨のメッセージと取得したAIモデルのステータスを表示する
+
+** エラー発生時は `**import_to_console.ipynb**` 内の出力にエラー内容を表示し、中断する
+
+*** エラーや応答時間の詳細については、 https://developer.aitrios.sony-semicon.com/development-guides/documents/specifications/[「**Cloud SDK Console Access Library(Python) 機能仕様書**」] 参照
+
+
+== 操作性仕様、画面仕様 (AIモデル削除)
+=== 前提条件
+* 「**Portal for AITRIOS**」からユーザー登録し、AITRIOSのプロジェクトに参加していること
+
+* AIモデルを「**Console for AITRIOS**」へインポートしていること
+
+
+=== How to start each function
+. SDK環境を立ち上げ、Topの `**README.md**` をプレビュー表示する
+. SDK環境Topの `**README.md**` に含まれるハイパーリンクから、 `**tutorials**` ディレクトリの `**README.md**` にジャンプする
+. `**tutorials**` ディレクトリの `**README.md**` に含まれるハイパーリンクから、`**3_prepare_model**` ディレクトリの `**README.md**` にジャンプする
+. `**3_prepare_model**` ディレクトリの `**README.md**` に含まれるハイパーリンクから、`**develop_on_sdk**` ディレクトリの `**README.md**` にジャンプする
+. `**develop_on_sdk**` ディレクトリの `**README.md**` に含まれるハイパーリンクから、`**delete_model_on_console**` ディレクトリの `**README.md**` にジャンプする
+. `**delete_model_on_console**` ディレクトリの各ファイルから各機能に遷移する
+
+
+=== システムクライアント認証用Notebook実行
+. `**delete_model_on_console**` ディレクトリの `**README.md**` に含まれるハイパーリンクから、`**set_up_console_client**` ディレクトリの `**README.md**` にジャンプする
+. `**set_up_console_client**` ディレクトリのシステムクライアント認証用Notebook (*.ipynb) を開き、その中のPythonスクリプトを実行する
+
+
+=== AIモデル情報一覧取得用Notebook実行
+. `**delete_model_on_console**` ディレクトリの `**README.md**` に含まれるハイパーリンクから、`**get_model_list**` ディレクトリの `**README.md**` にジャンプする
+. `**get_model_list**` ディレクトリのAIモデル情報一覧取得用Notebook (*.ipynb) を開き、その中のPythonスクリプトを実行する
+
+
+=== AIモデル削除用Notebook実行向け設定ファイル作成・編集
+NOTE: 特別な記載がある場合を除き、原則として省略は不可。
+
+NOTE: 「**Console Access Library**」APIに渡されるパラメータについては、 <<anchor-ref, 「**Console Access Library**」API>>の仕様に従う。
+
+. 実行ディレクトリに設定ファイル ( `**configuration.json**`) を作成し、編集する
+
+[[anchor-conf-del]]
+[cols="1,1,1,1a"]
+|===
+|Configuration |Meaning |Range |Remarks
+
+|`**model_id**`
+|削除するAIモデルのID
+|文字列 +
+詳細は「**Console Access Library**」APIの仕様に従う。
+|省略不可 +
+下記の「**Console Access Library**」APIに使用される。
+
+* `**ai_model.ai_model.AIModel.delete_model**`
+
+|===
+
+
+=== AIモデル削除用Notebook実行
+. `**delete_model_on_console**` の `**delete_model_on_console.ipynb**` を開き、その中のPythonスクリプトを実行する
+
+** その後下記の動作をする
+
+*** `**delete_model_on_console**` ディレクトリの<<anchor-conf-del, configuration.json>>の存在をチェックする
+
+**** エラー発生時はその内容を表示し、中断する
+
+*** <<anchor-conf-del, configuration.json>>の内容をチェックする
+
+**** エラー発生時はその内容を表示し、中断する
+
+*** AIモデル削除APIを実行する
+
+**** 削除に成功した場合は、`**delete_model_on_console.ipynb**` 内の出力に成功した旨のメッセージを表示する
+
+** エラー発生時は `**delete_model_on_console.ipynb**` 内の出力にエラー内容を表示し、中断する
+
+*** エラーや応答時間の詳細については、 https://developer.aitrios.sony-semicon.com/development-guides/documents/specifications/[「**Cloud SDK Console Access Library(Python) 機能仕様書**」] 参照
+
+
+
+== 操作性仕様、画面仕様 (「**PPL**」インポート)
+=== 前提条件
+* 「**Portal for AITRIOS**」からユーザー登録し、AITRIOSのプロジェクトに参加していること
+
+* 「**PPL**」を用意していること
+
+=== How to start each function
+. SDK環境を立ち上げ、Topの `**README.md**` をプレビュー表示する
+. SDK環境Topの `**README.md**` に含まれるハイパーリンクから、 `**tutorials**` ディレクトリの `**README.md**` にジャンプする
+. `**tutorials**` ディレクトリの `**README.md**` に含まれるハイパーリンクから、`**4_prepare_application**` ディレクトリの `**README.md**` にジャンプする
+. `**4_prepare_application**` ディレクトリの `**README.md**` に含まれるハイパーリンクから、`**2_import_to_console**` ディレクトリの `**README.md**` にジャンプする
+. `**2_import_to_console**` ディレクトリの各ファイルから各機能に遷移する
+
+
+=== インポートする「**PPL**」を用意
+. インポート対象の「**PPL**」を用意して、任意のディレクトリへ格納する
+
+
+=== システムクライアント認証用Notebook実行
+. `**2_import_to_console**` ディレクトリの `**README.md**` に含まれるハイパーリンクから、`**set_up_console_client**` ディレクトリの `**README.md**` にジャンプする
+. `**set_up_console_client**` ディレクトリのシステムクライアント認証用Notebook (*.ipynb) を開き、その中のPythonスクリプトを実行する
+
+
+=== 「**PPL**」情報一覧取得用Notebook実行
+. `**2_import_to_console**` ディレクトリの `**README.md**` に含まれるハイパーリンクから、`**get_application_list**` ディレクトリの `**README.md**` にジャンプする
+. `**get_application_list**` ディレクトリの「**PPL**」情報一覧取得用Notebook (*.ipynb) を開き、その中のPythonスクリプトを実行する
+
+
+=== 「**PPL**」インポート用Notebook実行向け設定ファイル作成・編集
+NOTE: 特別な記載がある場合を除き、原則として省略は不可。
+
+NOTE: 原則としてシンボリックリンクのフォルダパス、ファイルパスは使用不可。
+
+NOTE: 「**Console Access Library**」APIに渡されるパラメータについては、 <<anchor-ref, 「**Console Access Library**」API>>の仕様に従う。
+
+. 実行ディレクトリに設定ファイル (`**configuration.json**`) を作成し、編集する
+
+[[anchor-conf-ppl]]
+[cols="1,1,1,1a"]
+|===
+|Configuration |Meaning |Range |Remarks
+
+|`**app_name**`
+|「**PPL**」名
+|文字列 +
+詳細は「**Console Access Library**」APIの仕様に従う。
+|省略不可 +
+下記の「**Console Access Library**」APIに使用される。
+
+* `**deployment.deployment.Deployment.import_device_app**`
+
+|`**version_number**`
+|「**PPL**」バージョン
+|文字列 +
+詳細は「**Console Access Library**」APIの仕様に従う。
+|省略不可 +
+下記の「**Console Access Library**」APIに使用される。
+
+* `**deployment.deployment.Deployment.import_device_app**`
+
+|`**ppl_file**`
+|「**PPL**」ファイルのパス
+|絶対パスまたはNotebook (*.ipynb) からの相対パス
+|省略不可
+
+|`**comment**`
+|「**PPL**」説明
+|文字列 +
+詳細は「**Console Access Library**」APIの仕様に従う。
+|省略可 +
+指定なしの場合、コメントなし +
+下記の「**Console Access Library**」APIに使用される。
+
+* `**deployment.deployment.Deployment.import_device_app**`
+
+|===
+
+=== 「**PPL**」インポート用Notebook実行
+. `**2_import_to_console**` ディレクトリの `**import_to_console.ipynb**` を開き、その中のPythonスクリプトを実行する
+
+** その後下記の動作をする
+
+*** `**2_import_to_console**` ディレクトリの<<anchor-conf-ppl, configuration.json>>の存在をチェックする
+
+**** エラー発生時はその内容を表示し、中断する
+
+*** <<anchor-conf-ppl, configuration.json>>の内容をチェックする
+
+**** エラー発生時はその内容を表示し、中断する
+
+*** 「**PPL**」をBase64形式でエンコードする
+
+**** エラー発生時はその内容を表示し、中断する
+
+*** 「**PPL**」インポートAPIを実行する
+
+**** インポートに成功した場合は、`**import_to_console.ipynb**` 内の出力に成功した旨のメッセージを表示する
+
+*** 「**PPL**」インポート結果確認APIを実行する
+
+**** 「**PPL**」の情報取得に成功した場合は、`**import_to_console.ipynb**` 内の出力に成功した旨のメッセージと取得した「**PPL**」のステータスを表示する
+
+** エラー発生時は `**import_to_console.ipynb**` 内の出力にエラー内容を表示し、中断する
+
+*** エラーや応答時間の詳細については、 https://developer.aitrios.sony-semicon.com/development-guides/documents/specifications/[「**Cloud SDK Console Access Library(Python) 機能仕様書**」] 参照
+
+
+
+== 操作性仕様、画面仕様 (「**PPL**」削除)
+=== 前提条件
+* 「**Portal for AITRIOS**」からユーザー登録し、AITRIOSのプロジェクトに参加していること
+
+* 「**PPL**」を「**Console for AITRIOS**」へインポートしていること
+
+
+=== How to start each function
+. SDK環境を立ち上げ、Topの `**README.md**` をプレビュー表示する
+. SDK環境Topの `**README.md**` に含まれるハイパーリンクから、 `**tutorials**` ディレクトリの `**README.md**` にジャンプする
+. `**tutorials**` ディレクトリの `**README.md**` に含まれるハイパーリンクから、`**4_prepare_application**` ディレクトリの `**README.md**` にジャンプする
+. `**4_prepare_application**` ディレクトリの `**README.md**` に含まれるハイパーリンクから、`**delete_application_on_console**` ディレクトリの `**README.md**` にジャンプする
+. `**delete_application_on_console**` ディレクトリの各ファイルから各機能に遷移する
+
+
+=== システムクライアント認証用Notebook実行
+. `**delete_application_on_console**` ディレクトリの `**README.md**` に含まれるハイパーリンクから、`**set_up_console_client**` ディレクトリの `**README.md**` にジャンプする
+. `**set_up_console_client**` ディレクトリのシステムクライアント認証用Notebook (*.ipynb) を開き、その中のPythonスクリプトを実行する
+
+
+=== 「**PPL**」情報一覧取得用Notebook実行
+. `**delete_application_on_console**` ディレクトリの `**README.md**` に含まれるハイパーリンクから、`**get_application_list**` ディレクトリの `**README.md**` にジャンプする
+. `**get_application_list**` ディレクトリの「**PPL**」情報一覧取得用Notebook (*.ipynb) を開き、その中のPythonスクリプトを実行する
+
+
+=== 「**PPL**」削除用Notebook実行向け設定ファイル作成・編集
+NOTE: 特別な記載がある場合を除き、原則として省略は不可。
+
+NOTE: 「**Console Access Library**」APIに渡されるパラメータについては、 <<anchor-ref, 「**Console Access Library**」API>>の仕様に従う。
+
+. 実行ディレクトリに設定ファイル (`**configuration.json**`) を作成し、編集する
+
+[[anchor-conf-ppl-del]]
+[cols="1,1,1,1a"]
+|===
+|Configuration |Meaning |Range |Remarks
+
+|`**app_name**`
+|「**PPL**」名
+|文字列 +
+詳細は「**Console Access Library**」APIの仕様に従う。
+|省略不可 +
+下記の「**Console Access Library**」APIに使用される。
+
+* `**deployment.deployment.Deployment.delete_device_app**`
+
+|`**version_number**`
+|「**PPL**」バージョン
+|文字列 +
+詳細は「**Console Access Library**」APIの仕様に従う。
+|省略不可 +
+下記の「**Console Access Library**」APIに使用される。
+
+* `**deployment.deployment.Deployment.delete_device_app**`
+
+|===
+
+=== 「**PPL**」削除用Notebook実行
+. `**delete_application_on_console**` ディレクトリの `**delete_application_on_console.ipynb**` を開き、その中のPythonスクリプトを実行する
+
+** その後下記の動作をする
+
+*** `**delete_application_on_console**` ディレクトリの<<anchor-conf-ppl-del, configuration.json>>の存在をチェックする
+
+**** エラー発生時はその内容を表示し、中断する
+
+*** <<anchor-conf-ppl-del, configuration.json>>の内容をチェックする
+
+**** エラー発生時はその内容を表示し、中断する
+
+*** 「**PPL**」削除APIを実行する
+
+**** 削除に成功した場合は、`**delete_application_on_console.ipynb**` 内の出力に成功した旨のメッセージを表示する
+
+** エラー発生時は `**delete_application_on_console.ipynb**` 内の出力にエラー内容を表示し、中断する
+
+*** エラーや応答時間の詳細については、 https://developer.aitrios.sony-semicon.com/development-guides/documents/specifications/[「**Cloud SDK Console Access Library(Python) 機能仕様書**」] 参照
+
+
+
+== 目標性能
+** ユーザビリティ
+
+*** SDKの環境構築完了後、追加のインストール手順なしに、AIモデル、「**PPL**」の「**Console for AITRIOS**」へのインポートができること
+
+** UIの応答時間が1.2秒以内であること
+** 処理に5秒以上かかる場合は、処理中の表現を逐次更新表示できること
+
+== 制限事項
+* エンコードやインポート処理を途中でキャンセルして再開する場合、途中からの再開ではなく各処理を最初から実行する
+
+== その他特記事項
+* なし
+
+== 未決定事項
+* なし
