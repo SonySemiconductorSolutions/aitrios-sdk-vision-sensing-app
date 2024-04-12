@@ -24,9 +24,6 @@
         "network_type": {
             "type": "string",
             "default":"0"
-        },
-        "labels": {
-            "type": "array"
         }
     },
     "additionalProperties": false

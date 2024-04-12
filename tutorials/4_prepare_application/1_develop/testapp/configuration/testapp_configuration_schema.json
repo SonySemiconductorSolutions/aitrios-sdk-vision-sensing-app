@@ -1,0 +1,68 @@
+{
+    "$schema": "https://json-schema.org/draft-07/schema",
+    "type": "object",
+    "required": [
+        "input_tensor_dewarp_crop_property",
+        "senscord_dnn_property"
+    ],
+    "properties": {
+        "input_tensor_dewarp_crop_property": {
+            "$ref": "#/definitions/input_tensor_dewarp_crop_property"
+        },
+        "senscord_dnn_property": {
+            "$ref": "#/definitions/senscord_dnn_property"
+        }
+    },
+    "definitions": {
+        "input_tensor_dewarp_crop_property": {
+            "type": "object",
+            "required": [
+                "left",
+                "top",
+                "width",
+                "height"
+            ],
+            "properties": {
+                "left": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 65535
+                },
+                "top": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 65535
+                },
+                "width": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 65535
+                },
+                "height": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 65535
+                }
+            }
+        },
+        "senscord_dnn_property": {
+            "type": "object",
+            "required": [
+                "network_id",
+                "network_ordinal"
+            ],
+            "properties": {
+                "network_id": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 4294967295
+                },
+                "network_ordinal": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 255
+                }
+            }
+        }
+    }
+}

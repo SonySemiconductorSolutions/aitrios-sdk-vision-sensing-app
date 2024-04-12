@@ -1,29 +1,29 @@
-# "**Vision and Sensing Application**" Migration Guide from SDK v0.2 to v1.0
+# "**Edge Application**" Migration Guide from SDK v0.2 to v1.0
 
-If you have already developed the "**Vision and Sensing Application**" using SDK v0.2,
-you need to modify the source code of the "**Vision and Sensing Application**" to migrate to SDK v1.0.
+If you have already developed the "**Edge Application**" using SDK v0.2,
+you need to modify the source code of the "**Edge Application**" to migrate to SDK v1.0.
 
 ## Overview
 
-In SDK v0.2, the "**Vision and Sensing Application**" can do:
+In SDK v0.2, the "**Edge Application**" can do:
 
 - Customize behavior by changing parameters using **`PPLParameter`** in Command Parameter File of StartUploadInferenceData
 - Receive and Analyze IMX500 Output Tensor data
 - Upload the analyzed Metadata of inference result
 
-Additionally, in SDK v1.0, the "**Vision and Sensing Application**" also can do:
+Additionally, in SDK v1.0, the "**Edge Application**" also can do:
 
 - Customize a whole behavior like sequence and timing of getting Output Tensor, analyzing and uploading by custom implementation in event loop.
 
 ## Sequence of SDK v0.2
 
-Native (Firmware) has a main loop. Wasm ("**Vision and Sensing Application**") functions are called from Native.
+Native (Firmware) has a main loop. Wasm ("**Edge Application**") functions are called from Native.
 
 <!-- mermaid alt text: Sequence of SDK v0.2 -->
 ```mermaid
 sequenceDiagram
 participant Native as Native (Firmware)
-participant Wasm as Wasm (Vision and Sensing Application)
+participant Wasm as Wasm (Edge Application)
 Native->>Native: Receive PPL Parameter from Console
 Native->>Wasm: PPL_Initialize()
 Wasm->>Wasm: Get PPL Parameter
@@ -53,15 +53,15 @@ Wasm has a main loop and a thread. Wasm functions are called from Wasm and Nativ
 sequenceDiagram
 participant Native as Native (Firmware)
 participant Wasm_Lib as Wasm Native Library (Firmware)
-participant Wasm as Wasm (Vision and Sensing Application)
-participant Wasm_Thread as Wasm thread (Vision and Sensing Application)
+participant Wasm as Wasm (Edge Application)
+participant Wasm_Thread as Wasm thread (Edge Application)
 Native->>Wasm: Main()
+Wasm->>Wasm_Thread: pthread_create
+Wasm_Thread-->>Wasm: 
 Wasm->>Wasm_Lib: SessInit()
 Wasm_Lib-->>Wasm: 
 Wasm->>Wasm_Lib: SessRegisterSendDataCallback()
 Wasm_Lib-->>Wasm: 
-Wasm->>Wasm_Thread: pthread_create
-Wasm_Thread-->>Wasm: 
 Wasm_Thread->>Wasm_Lib: EVP_setConfigurationCallback()
 Wasm_Lib-->>Wasm_Thread: 
 loop Loop in Wasm thread
@@ -101,11 +101,11 @@ Wasm-->>Native:
 
 ## Migration steps
 
-The sample code of "**Vision and Sensing Application**" in SDK v1.0 is implemented as the same behavior and sequence of SDK v0.2.
+The sample code of "**Edge Application**" in SDK v1.0 is implemented as the same behavior and sequence of SDK v0.2.
 
-So please use the [sample code](../../../tutorials/4_prepare_application/1_develop/sdk/sample/) of "**Vision and Sensing Application**" in SDK v1.0 as base source code.
+So please use the [sample code](../../../tutorials/4_prepare_application/1_develop/sdk/sample/) of "**Edge Application**" in SDK v1.0 as base source code.
 
-And please move your custom code of "**Vision and Sensing Application**" (modified, added and removed code based on the sample code of SDK v0.2) from SDK v0.2 to SDK v1.0.
+And please move your custom code of "**Edge Application**" (modified, added and removed code based on the sample code of SDK v0.2) from SDK v0.2 to SDK v1.0.
 
 1. Place your FlatBuffers .fbs file to [schema folder](../../../tutorials/4_prepare_application/1_develop/sdk/schema/)
 
@@ -137,9 +137,9 @@ And please move your custom code of "**Vision and Sensing Application**" (modifi
     | ------------- | ------------- | ------------- |
     | Serialization logic  | [createSSDOutputFlatbuffer() in PPL_ObjectDetectionSsdAnalyze()](https://github.com/SonySemiconductorSolutions/aitrios-sdk-vision-sensing-app/blob/v0.2.0/tutorials/4_prepare_application/1_develop/sample/objectdetection/ppl_objectdetection.cpp#L389)  | [createSSDOutputFlatbuffer() in PPL_ObjectDetectionSsdAnalyze()](../../../tutorials/4_prepare_application/1_develop/sdk/sample/post_process/objectdetection/src/analyzer_objectdetection.cpp#L118) |
 
-7. Build "**Vision and Sensing Application**". See [Build the "**Vision and Sensing Application**"](../../../tutorials/4_prepare_application/1_develop/README.md#build-the-vision-and-sensing-application)
+7. Build "**Edge Application**". See [Build the "**Edge Application**"](../../../tutorials/4_prepare_application/1_develop/README.md#build-the-edge-application)
 
-8. (Optional) Running/debugging Wasm in "**Vision and Sensing Application SDK**". See [Running/debugging Wasm in "**Vision and Sensing Application SDK**"](../../../tutorials/4_prepare_application/1_develop/README_wasmdebug.md).
+8. (Optional) Running/debugging Wasm in "**Edge Application SDK**". See [Running/debugging Wasm in "**Edge Application SDK**"](../../../tutorials/4_prepare_application/1_develop/README_wasmdebug.md).
 
 ## Appendix
 

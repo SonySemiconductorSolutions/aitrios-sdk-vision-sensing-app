@@ -1,0 +1,315 @@
+= Edge Application SDK pass:[<br/>] アプリケーション開発 pass:[<br/>] 機能仕様書 pass:[<br/>]
+:sectnums:
+:sectnumlevels: 1
+:author: Copyright 2022-2023 Sony Semiconductor Solutions Corporation
+:version-label: Version 
+:revnumber: x.x.x
+:revdate: YYYY - MM - DD
+:trademark-desc: AITRIOS™、およびそのロゴは、ソニーグループ株式会社またはその関連会社の登録商標または商標です。
+:toc:
+:toc-title: 目次
+:toclevels: 1
+:chapter-label:
+:lang: ja
+
+== 更新履歴
+
+|===
+|Date |What/Why
+
+|2022/11/16
+|初版作成
+
+|2023/01/30
+|後処理のデバッグ機能の追加。フォルダ構成変更。PDFビルド環境更新。
+
+|2023/05/26
+|ツール名と括弧の表記の修正 + 
+後処理コードの仕様変更に伴う修正 + 
+一部環境でAsciiDocのMermaid図が表示されないため、レンダリング後の画像参照に修正 + 
+図の代替テキスト追加
+
+|2023/11/10
+|後処理アプリがエッジAIデバイスにデプロイ可能なサイズかどうかを確認する機能の追加 +
+メモリ使用量を確認する機能の追加 +
+デバッグ機能における入力パラメータ(テストアプリ設定ファイル)の記載追加
+|===
+
+== 用語・略語
+|===
+|Terms/Abbreviations |Meaning 
+
+|「**Edge Application**」
+|後処理 (AIモデルの出力となるOutput Tensorの加工処理)
+
+|「**PPL**」
+|エッジAIデバイスのAIモデルの出力 (Output Tensor) を加工処理するモジュール
+
+|Wasm
+|WebAssemblyの略。仮想マシン用のバイナリ命令形式
+
+|FlatBuffers
+|シリアライゼーションライブラリ
+
+|WAMR-IDE
+|WebAssemblyアプリケーションの実行、デバッグをサポートする統合開発環境
+
+|PPL Parameter
+|「**Edge Application**」の処理に使用するパラメータ
+
+|LLDB
+|ソフトウェアデバッガ
+|===
+
+== 参照資料
+* Reference/Related documents (関連資料)
+** WebAssembly
+*** https://webassembly.org/
+** [[dplspec]]Data Pipeline API規格書（for Edge Application version 1.1.0）
+*** https://developer.aitrios.sony-semicon.com/file/download/aitrios-apispec-datapipeline-v1-0-0-ja
+** [[evpspec]]EVP API規格書（for Edge Application version 1.1.0）
+*** https://developer.aitrios.sony-semicon.com/file/download/aitrios-apispec-evpsdk-v1-0-0-ja
+** [[senscordspec]]SensCord API規格書（for Edge Application version 1.1.0）
+*** https://developer.aitrios.sony-semicon.com/file/download/aitrios-apispec-senscordsdk-v1-0-1-ja
+** FlatBuffers
+*** https://google.github.io/flatbuffers/
+** WebAssembly Micro Runtime (WAMR)
+*** https://github.com/bytecodealliance/wasm-micro-runtime/
+** LLDB
+*** https://lldb.llvm.org/
+
+== 想定ユースケース
+* 後処理を設計、実装したい
+* 後処理コードを、エッジAIデバイスにデプロイ可能な形式に変換したい
+* 後処理コードを、エッジAIデバイスにデプロイする前にコードのデバッグを行いたい
+
+== 機能概要、アルゴリズム
+=== Functional Overview
+* C言語、または、C++言語で「**Edge Application**」を設計、実装できる
+* 「**Edge Application**」の出力をFlatBuffersでシリアライズできる
+** FlatBuffersのスキーマファイルからクラス定義ファイルを生成できる
+* C言語、または、C++言語で実装した「**Edge Application**」をWasmにビルドできる
+* 下記の「**Edge Application**」のサンプルコードが提供されている
+** Object Detection
+** Image Classification
+* 「**Edge Application**」のサンプルコードを使用してWasmビルドができる
+* デバッグ用にWasmビルドした「**Edge Application**」を、テストアプリを使用しSDK環境上でデバッグ実行できる
+* 「**Edge Application**」ファイルがエッジAIデバイスにデプロイ可能なサイズかどうかを確認できる
+* Textセクションなど、「**Edge Application**」を構成するセクションごとのサイズのリストを表示できる
+* 「**Edge Application**」を、SDK環境上でテストアプリを使用して実行しメモリ使用量を確認できる
+
+==== 「**Edge Application**」の作成フロー
+
+[source,mermaid, target="凡例"]
+----
+flowchart TD;
+    %% definition
+    classDef object fill:#FFE699, stroke:#FFD700
+    classDef external_service fill:#BFBFBF, stroke:#6b8e23, stroke-dasharray: 10 2
+    style legend fill:#FFFFFF,stroke:#000000
+
+    %% impl
+    subgraph legend["凡例"]
+        process(処理/ユーザーの行動)
+        object[入出力データ]:::object
+        extern[外部サービス]:::external_service
+    end
+----
+
+===== フロー
+
+[source,mermaid, target="フロー"]
+----
+flowchart TD
+    %% definition
+    classDef object fill:#FFE699, stroke:#FFD700
+    style console fill:#BFBFBF, stroke:#6b8e23, stroke-dasharray: 10 2
+
+    start((Start))
+    id1(Edge Applicationの出力のFlatBuffersスキーマ定義)
+    id2(クラス定義ファイル生成)
+    id3(Edge Application実装)
+    id3-1("デバッグ用入力データの準備 (Optional)")
+    id3-2("メモリ使用量出力APIの組み込み (Optional)")
+    id3-3("デバッグ用Wasmビルド (Optional)")
+    id3-4("Wasmデバッグ実行 (Optional)")
+    id4(リリース用Wasmビルド)
+    id4-1("Wasmデバッグ実行 (Optional)")
+    id5{Wasmサイズ確認}
+    subgraph console["Console for AITRIOS"]
+      id6(AOTコンパイル)
+    end
+    data1[FlatBuffersスキーマ]:::object
+    data2[クラス定義ファイル]:::object
+    data3[Edge Applicationのコード]:::object
+    data3-1["デバッグ用 Output Tensor, PPL Parameter (Optional), テストアプリ設定ファイル"]:::object
+    data3-2["デバッグ用 .wasm (Optional)"]:::object
+    data4[リリース用 .wasm]:::object
+    data5[.aot]:::object
+    finish(((Finish)))
+
+    %% impl
+    start --> id1
+    id1 --- data1
+    data1 --> id2
+    id2 --- data2
+    data2 --> id3
+    id3 --- data3
+    data3 --> id3-1
+    id3-1 --- data3-1
+    data3-1 --> id3-2
+    id3-2 --> id3-3
+    id3-3 --- data3-2
+    data3-2 --> id3-4
+    id3-4 --> id4
+    id4 --- data4
+    data4 --> id4-1
+    id4-1 --> id5
+    id5 -->|OK| id6
+    id5 -->|NG| id3
+    id6 --- data5
+    data5 --> finish
+----
+
+NOTE: SDK環境で作成したWasmファイルは「**Console for AITRIOS**」でAOTコンパイルを実施し、エッジAIデバイスにデプロイ可能な形式に変換する。 (デバッグ用ビルドは対象外)
+
+=== ビルド機能
+下記のビルド機能を提供する。
+
+* [[wasm-build]]リリース用Wasmビルド +
+    エッジAIデバイスにデプロイするために、Wasmファイル (.wasm) を生成する。
+** 「**Edge Application**」のコード (.c、または、.cpp) からWasmファイル (.wasm) を生成する
+*** なお、Wasmビルドの過程で中間生成物としてオブジェクトファイル (.o) を生成する
+
+* [[wasm-build-debug]]デバッグ用Wasmビルド +
+    エッジAIデバイスにデプロイする前に、コードのデバッグを行うために、Wasmファイル (.wasm) を生成する。
+** 「**Edge Application**」のコード (.c、または、.cpp) からWasmファイル (.wasm) を生成する
+*** なお、Wasmビルドの過程で中間生成物としてオブジェクトファイル (.o) を生成する
+
+=== デバッグ機能
+==== テストアプリを使用したデバッグ実行機能
+* LLDBライブラリとWAMR-IDEライブラリとVS Code UIによる下記のWasmデバッグ実行機能を利用できる。
+** breakpointを指定
+** ステップ実行 (ステップイン、ステップアウト、ステップオーバー) を指定
+** watch expressionを指定
+** variableを確認
+** call stackを確認
+** ターミナル上でログを確認
+
+* Wasmファイルの処理を呼び出すドライバとして、テストアプリを提供する。
+** Wasmに入力するパラメータ (Output Tensor、PPL Parameter) をテストアプリ実行時に指定できる
+** テストアプリ設定ファイルを修正することで、テストアプリの初期設定値を変更できる
+** テストアプリ実行完了時にメモリ使用量をログ出力する
+
+NOTE: WAMR-IDEのproject管理機能は本SDKでは非サポートとする。
+
+NOTE: Wasmデバッグの実現のため、下記のライブラリはMock化される。 +
+* <<dplspec,Data Pipeline API>> +
+* <<evpspec,EVP API>> +
+* <<senscordspec,SensCord API>>
+
+NOTE: Wasm実行時に任意のタイミングでメモリ使用量を確認できるよう、メモリ使用量出力用にWasmから呼び出し可能なNative APIを提供する（テストアプリ専用APIのため、実機には本APIがなく、実機で呼び出すと実行時エラーとなる）。
+
+== 操作性仕様、画面仕様
+=== How to start each function
+. SDK環境を立ち上げ、Topの `**README.md**` をプレビュー表示する
+. SDK環境Topの `**README.md**` に含まれるハイパーリンクから、 `**tutorials**` ディレクトリの `**README.md**` にジャンプする
+. `**tutorials**` ディレクトリの `**README.md**` に含まれるハイパーリンクから、`**4_prepare_application**` ディレクトリの `**README.md**` にジャンプする
+. `**4_prepare_application**` ディレクトリの `**README.md**` に含まれるハイパーリンクから、`**1_develop**` ディレクトリの `**README.md**` にジャンプする
+. `**1_develop**` ディレクトリの各ファイルから各機能に遷移する
+
+=== 「**Edge Application**」の設計・実装
+. `**README.md**` の手順に従って、「**Edge Application**」の出力のFlatBuffersスキーマファイルを作成する
+. `**README.md**` の手順に従って、VS Code UIからターミナルを開き、スキーマファイルからクラス定義のヘッダファイルを生成するコマンドを実行する +
+** スキーマファイルと同階層にクラス定義のヘッダファイルが生成される
+. 「**Edge Application**」の実装を行う
+** 実装はC言語、または、C++言語で行う
+** 実装に使用するソースファイルは新規作成するか、提供している「**Edge Application**」のサンプルコードを修正して使用する
+** 「2.」で生成されたクラス定義ファイルを使用して実装を行う
+** 提供している「**Edge Application**」のサンプルコードを参考に、<<edgeappif, 「**Edge Application**」のインタフェース>>を実装する
+** 任意で「**Edge Application**」の設計に必要なOSSや外部ライブラリをインストールし、「**Edge Application**」に組み込む +
+
+NOTE: ユーザーが任意で使用する、OSSや外部ライブラリのインストール、使用については本SDKでは保証しない。
+
+=== Wasmファイルのデバッグ用入力パラメータ編集
+
+NOTE: デバッグ機能を使用する場合のみ、本手順を実施する。
+
+. `**README.md**` の手順に従って、テスト実行時の入力パラメータ (Output Tensor、PPL Parameter、テストアプリ設定ファイル) を修正する
+
+=== 「**Edge Application**」のメモリ使用量出力APIの組み込み
+
+NOTE: 任意のタイミングでメモリ使用量を確認したい場合のみ、本手順を実施する。  
+
+NOTE: [[memory-consumption]]メモリ使用量について、下記のとおり。 +
+* アプリケーション開発・デバッグ環境と実機での実行時は条件が異なるため、本機能で出力するメモリ使用量は目安としてユーザに参照してもらうことを意図している  +
+* デバッグ用ビルドはリリース用ビルドよりメモリを多く消費する。実情に則したメモリ使用量を確認するにはリリース用ビルドを使用する +
+* メモリ使用量出力APIを使用した時点の実メモリの使用量ではなく、Wasmが起動してからAPIを使用するまでのメモリ使用量の最大値をログ出力する +
+* メモリ関連のエラーが発生したとき、本機能ではエラー発生直前のメモリ情報を出力する。例えば、動的メモリ確保でエラーが起きた場合、制限の超過を数値として見ることは出来ない +
+* 複数のメモリセクションの情報を出力する（コードサイズ、動的メモリサイズ、スタックなど）。メモリセクションの情報の委細について、 `**README.md**` を参照のこと
+
+. `**README.md**` の手順に従って、メモリ使用量出力APIを「**Edge Application**」のコードに追加する（実機で動作させる場合、追加したメモリ使用量出力APIのコードを削除すること）
+
+=== 「**Edge Application**」のコードからデバッグ用Wasmファイルを生成
+
+NOTE: デバッグ機能を使用する場合のみ、本手順を実施する。
+
+. `**README.md**` の手順に従って、「**Edge Application**」のコードのファイル格納場所やファイル名について `**Makefile**` を修正する
+. `**README.md**` の手順に従って、VS Code UIからターミナルを開き、デバッグ用Wasmビルドするコマンドを実行する +
+** Dev Container上にデバッグ用Wasmビルドとデバッグ環境用のDockerイメージが作成され、 `**README.md**` に記載のDev Container上のフォルダに `**debug**` フォルダが作成され、そのフォルダ内に.wasm形式のファイルが格納される
+
+=== Wasmファイルをデバッグ実行
+
+NOTE: デバッグ機能を使用する場合のみ、本手順を実施する。
+
+NOTE: リリース用Wasm、デバッグ用Wasmを実行できるが、リリース用Wasmではターミナル上でのログ確認だけができる。
+
+NOTE: メモリ使用量について、<<memory-consumption, NOTE>>を参照のこと。
+
+. `**README.md**` の手順に従って、デバッグ実行し、VS Code UIにてWasmソースコードを開きbreakpointを指定してステップ実行 (ステップイン、ステップアウト、ステップオーバー) を行う
+. `**README.md**` の手順に従って、デバッグ実行し、VS Code UIにてwatch expressionを指定し確認する
+. `**README.md**` の手順に従って、デバッグ実行し、VS Code UIにてvariable、call stackを確認する
+. `**README.md**` の手順に従って、デバッグ実行し、ターミナル上でログを確認する (実行終了時と、メモリ使用量出力APIを組み込んだ箇所の実行時に、メモリ使用量の情報がログに出力される)。
+
+=== 「**Edge Application**」のコードからWasmファイルを生成
+. `**README.md**` の手順に従って、「**Edge Application**」のコードのファイル格納場所やファイル名について `**Makefile**` を修正する
+. `**README.md**` の手順に従って、VS Code UIからターミナルを開き、Wasmビルドするコマンドを実行する +
+** Dev Container上にWasmビルド環境用のDockerイメージが作成され、 `**README.md**` に記載のDev Container上のフォルダに `**release**` フォルダが作成され、そのフォルダ内に.wasm形式のファイルが格納される
+
+** コマンド実行結果として、エッジAIデバイスにデプロイ可能なサイズかどうかの確認結果、また、セクションごとのサイズのリストがターミナルに出力される
+
+=== ビルド生成物の削除
+. `**README.md**` の手順に従って、VS Code UIからターミナルを開き、ビルド生成物を削除するコマンドを実行する
+** <<wasm-build, リリース用Wasmビルド>>、<<wasm-build-debug, デバッグ用Wasmビルド>>によって生成されたファイル (オブジェクトファイル、Wasmファイル) がすべてDev Container上から削除される
+
+=== ビルド生成物とWasmビルド環境用Dockerイメージの削除
+. `**README.md**` の手順に従って、VS Code UIからターミナルを開き、ビルド生成物とWasmビルド環境用のDockerイメージを削除するコマンドを実行する +
+** <<wasm-build, リリース用Wasmビルド>>、<<wasm-build-debug, デバッグ用Wasmビルド>>によって生成されたファイル (オブジェクトファイル、Wasmファイル) とWasmビルド環境用のDockerイメージがDev Container上からすべて削除される
+
+Wasmビルドやビルド生成物・ビルド環境用Dockerイメージを削除するコマンドを実行する際に、README.md に記載している以外のオプションをつけてコマンドを実行すると、コマンドの使用方法をターミナルに出力し、処理を中断する。
+
+[[edgeappif]]
+== 「**Edge Application**」のインタフェース
+「**Edge Application**」を設計する際は、「**Edge Application**」のインタフェースとなる関数群を使用して実装する必要がある。サンプルコードには、それらの関数の使用例を載せる。詳細は、別資料の<<dplspec,Data Pipeline API規格書>>、<<evpspec,EVP API規格書>>、<<senscordspec,SensCord API規格書>>を参照。
+各APIとSDKの関係は `**README.md**` に記載する。
+
+== 目標性能
+* ユーザビリティ
+** SDKの環境構築完了後、追加のインストール手順なしにFlatBuffersのクラス定義ファイルの生成、Wasmビルド、Wasmデバッグができること
+** UIの応答時間が1.2秒以内であること
+** 処理に5秒以上かかる場合は、処理中の表現を逐次更新表示できること
+
+== 制限事項
+* Wasmビルドについて、C言語、または、C++言語で実装した「**Edge Application**」のコードのみをサポートする
+* 「**Edge Application**」のサイズ確認について、実際に「**Edge Application**」をエッジAIデバイスへデプロイする際にエラーが発生するかどうかは「**Console for AITRIOS**」に依存する。
+* 「**Edge Application**」で、メモリ使用量に起因したエラーが生じるかはデバイスに依存する。
+
+== その他特記事項
+* SDKに付属する、「**Edge Application**」の開発に必要なツールのバージョン情報は下記から確認する
+** FlatBuffers: `**1_develop**` ディレクトリにある `**README.md**` に記載
+** その他のツール : `**1_develop/sdk**` ディレクトリにある `**Dockerfile**` に記載
+
+* エッジAIデバイスにデプロイ可能な「**Edge Application**」ファイルのサイズについては、`**1_develop**` ディレクトリにある `**README.md**` から確認する
+
+== 未決定事項
+なし

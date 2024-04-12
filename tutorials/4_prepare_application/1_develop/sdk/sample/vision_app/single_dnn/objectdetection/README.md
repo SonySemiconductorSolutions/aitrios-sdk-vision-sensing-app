@@ -1,15 +1,15 @@
-# Vision and Sensing Application Sample for Object Detection
-"**Vision and Sensing Application**" sample for Object Detection is post-processing of the AI model output to limit the output by setting the maximum number of detections and the threshold.
+# Edge Application Sample for Object Detection
+"**Edge Application**" sample for Object Detection is post-processing of the AI model output to limit the output by setting the maximum number of detections and the threshold.
 
 Supporting Object Detection models using SSD such as the following.
 - Custom Vision (available model on "**Console for AITRIOS**")
 
 ## Initialize process
-The PPL Parameter is used to process the "**Vision and Sensing Application**" and is passed by **`ConfigurationCallback`** to the "**Vision and Sensing Application**".
+The PPL Parameter is used to process the "**Edge Application**" and is passed by **`ConfigurationCallback`** to the "**Edge Application**".
 
 This function parses this value and sets it as a variable. Since PPL Parameter is in JSON format, it is parsed using [parson](../../../../third_party/parson/).
 
-The following parameters are used in the sample "**Vision and Sensing Application**" :
+The following parameters are used in the sample "**Edge Application**" :
 
 - **`header`**
   - **`id`**<br>
@@ -36,7 +36,7 @@ The following parameters are used in the sample "**Vision and Sensing Applicatio
   > For the Custom Vision model, set the value to 64.
 
 - **`max_detections`**<br>
-  Description: Threshold of detections number. The maximum number of detected Bounding boxes you want to get after "**Vision and Sensing Application**".
+  Description: Threshold of detections number. The maximum number of detected Bounding boxes you want to get after "**Edge Application**".
   > NOTE
   >
   > For the Custom Vision model, the value can be changed between 0 and 64. If an invalid value is entered, the default value is applied.

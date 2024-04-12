@@ -17,14 +17,18 @@ NAME_IMAGE='app_build_env:1.0.0';
 
 cd "$(dirname "$0")"
 
+BUILD_STATE_FILE=${PWD}/sdk/sample/build_state.dat
+
 usage_exit() {
     echo "usage	: ./build.sh <Options>"
     echo ""
     echo " <Options>"
-    echo "    -t : (optional) specify build Wasm type. value is [ic|od]."
+    echo "    -t : (optional) specify build Wasm type. value is [ic|od|switchdnn]."
     echo "    -d : (optional) build for debugging."
     echo "    -c : (optional) clean all Wasm object."
     echo "    -C : (optional) clean all Wasm object and Docker image."
+    echo "    -s : (optional) run AOT file size check (only release build available)"
+    echo "    -m : (optional) build with Memory consumption display API."
     echo ""
     echo " Note : If not specified, execute building ic and od Wasm as release build."
     echo ""
@@ -37,6 +41,7 @@ BUILD_TYPE=
 APP_TYPE=
 OUTPUT_TENSOR_FILE=
 PPL_PARAMETER_FILE=
+DUMP_MEMORY_CONSUMPTION=
 
 clean() {
     echo "clean"
@@ -59,13 +64,13 @@ builddockerimage() {
     fi
 }
 
-build_ic_od() {
-    echo "build_ic_od"
+build_all() {
+    echo "build_all (ic, od, switchdnn)"
     builddockerimage
     docker run --rm \
         -v $PWD/sdk/:$PWD/sdk/ \
         $NAME_IMAGE \
-        /bin/sh -c "cd ${PWD}/sdk/sample && make ${BUILD_TYPE}"
+        /bin/sh -c "cd ${PWD}/sdk/sample && make ${BUILD_TYPE} ${DUMP_MEMORY_CONSUMPTION} && touch ${BUILD_STATE_FILE}"
 }
 
 build_ic() {
@@ -74,7 +79,7 @@ build_ic() {
     docker run --rm \
         -v $PWD/sdk/:$PWD/sdk/ \
         $NAME_IMAGE \
-        /bin/sh -c "cd ${PWD}/sdk/sample && make ${BUILD_TYPE} APPTYPE=ic"
+        /bin/sh -c "cd ${PWD}/sdk/sample && make ${BUILD_TYPE} APPTYPE=ic ${DUMP_MEMORY_CONSUMPTION} && touch ${BUILD_STATE_FILE}"
 }
 
 build_od() {
@@ -83,11 +88,36 @@ build_od() {
     docker run --rm \
         -v $PWD/sdk/:$PWD/sdk/ \
         $NAME_IMAGE \
-        /bin/sh -c "cd ${PWD}/sdk/sample && make ${BUILD_TYPE} APPTYPE=od"
+        /bin/sh -c "cd ${PWD}/sdk/sample && make ${BUILD_TYPE} APPTYPE=od ${DUMP_MEMORY_CONSUMPTION} && touch ${BUILD_STATE_FILE}"
+}
+
+build_switch_dnn() {
+    echo "build_switch_dnn"
+    builddockerimage
+    docker run --rm \
+        -v $PWD/sdk/:$PWD/sdk/ \
+        $NAME_IMAGE \
+        /bin/sh -c "cd ${PWD}/sdk/sample && make ${BUILD_TYPE} APPTYPE=switchdnn ${DUMP_MEMORY_CONSUMPTION} && touch ${BUILD_STATE_FILE}"
+}
+
+check_app_size() {
+    release_dir="${PWD}/sdk/sample/build/release"
+    if [ "$APP_TYPE" = "od" ]; then
+        wasm_files="$release_dir/vision_app_objectdetection.wasm"
+    elif [ "$APP_TYPE" = "ic" ]; then
+        wasm_files="$release_dir/vision_app_classification.wasm"
+    elif [ "$APP_TYPE" = "switchdnn" ]; then
+        wasm_files="$release_dir/vision_app_switch_dnn.wasm"
+    else
+        wasm_files=`find $release_dir -type f -name "*.wasm"`
+    fi
+    for wasm in $wasm_files; do
+        ./check_size/run_check_size.sh $wasm
+    done
 }
 
 # while getopts ":AaCcdhlnpsvu-:" OPT
-while getopts ":cCdt:o:p:" OPT
+while getopts ":cCdmt:o:p:s" OPT
 do
     case $OPT in
         C)  cleanall
@@ -102,8 +132,10 @@ do
                 APP_TYPE=$OPTARG
             elif [ "$OPTARG" = "od" ]; then
                 APP_TYPE=$OPTARG
+            elif [ "$OPTARG" = "switchdnn" ]; then
+                APP_TYPE=$OPTARG
             else
-                echo "-t options must be ic or od."
+                echo "-t options must be ic, od or switchdnn."
                 exit 0
             fi;
             ;;
@@ -111,15 +143,30 @@ do
             ;;
         p)  
             ;;
+        s)  echo "run AOT file size check"
+            SIZE_CHECK=true
+            ;;
+        m)  echo "dump memory consumption"
+            DUMP_MEMORY_CONSUMPTION="TESTAPP_DUMP_MEMORY_CONSUMPTION=1"
+            ;;
         *) usage_exit ;;
         \?) usage_exit ;;
     esac
 done
 
+rm -f ${BUILD_STATE_FILE}
+
 if [ "$APP_TYPE" = "od" ]; then
     build_od
 elif [ "$APP_TYPE" = "ic" ]; then
     build_ic
+elif [ "$APP_TYPE" = "switchdnn" ]; then
+    build_switch_dnn
 else
-    build_ic_od
+    build_all
 fi;
+
+# only release build, do application size check  
+if [ "$BUILD_TYPE" != "DEBUG=1" ] && [ "$SIZE_CHECK" ]; then
+    check_app_size
+fi

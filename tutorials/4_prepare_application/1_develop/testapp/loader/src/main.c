@@ -63,7 +63,7 @@ int main(int argc, char *argv_main[]) {
     wasm_module_inst_t module_inst = NULL;
     wasm_exec_env_t exec_env = NULL;
 
-    while ((opt = getopt(argc, argv_main, "dhf:t:n:o:p:g::")) != -1) {
+    while ((opt = getopt(argc, argv_main, "dhmf:t:n:o:p:g::")) != -1) {
         switch (opt) {
             case 'f':
                 wasm_path = optarg; // wasm file path
@@ -84,6 +84,8 @@ int main(int argc, char *argv_main[]) {
                 is_debug = true;
                 break;
             case 'd':              // debug option(not used)
+                break;
+            case 'm':              // dump memory consumption(not used)
                 break;
             case 'h':
                 print_usage();
@@ -114,6 +116,9 @@ int main(int argc, char *argv_main[]) {
     printf("call PPL main\n");
     func_ret_val = PPL_main(&setup_wasm);
     printf("call PPL main result: %d\n", func_ret_val);
+
+    // Output memory dump when Wasm exits
+    wasm_runtime_dump_mem_consumption(exec_env);
 
     if (func_ret_val == 0) {
         ret_val = EXIT_SUCCESS;

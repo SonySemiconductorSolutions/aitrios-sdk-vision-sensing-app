@@ -1,0 +1,314 @@
+= Edge Application SDK pass:[<br/>] Application Development pass:[<br/>] Functional Specifications pass:[<br/>]
+:sectnums:
+:sectnumlevels: 1
+:author: Copyright 2022-2023 Sony Semiconductor Solutions Corporation
+:version-label: Version 
+:revnumber: x.x.x
+:revdate: YYYY - MM - DD
+:trademark-desc1: AITRIOS™ and AITRIOS logos are the registered trademarks or trademarks
+:trademark-desc2: of Sony Group Corporation or its affiliated companies.
+:toc:
+:toc-title: TOC
+:toclevels: 1
+:chapter-label:
+:lang: en
+
+== Change history
+
+|===
+|Date |What/Why
+
+|2022/11/16
+|Initial draft.
+
+|2023/01/30
+|Added post-processing debugging. Directory structure change. Updated the PDF build environment.
+
+|2023/05/26
+|Fixed the notation of tool names and parentheses. + 
+Made fixes associated with specification changes in post-processing code. + 
+Some environments do not render AsciiDoc's Mermaid diagrams, so modified to rendered image references. + 
+Added alternate text to images.
+
+|2023/11/10
+|Added function to check whether post-processing applications are of a size that can be deployed to edge AI devices. +
+Added function to check memory usage. +
+Added description of input parameters (test application settings file) for debugging.
+|===
+
+== Terms/Abbreviations
+|===
+|Terms/Abbreviations |Meaning 
+
+|"**Edge Application**"
+|Post-processing (processing of Output Tensor, which is the output of the AI model)
+
+|"**PPL**"
+|A module that processes the output of the AI model(Output Tensor) of edge AI devices
+
+|Wasm
+|WebAssembly. Binary instruction format for virtual machines
+
+|FlatBuffers
+|Serialization library
+
+|WAMR-IDE
+|An integrated development environment that supports running and debugging WebAssembly applications
+
+|PPL parameter
+|Parameters used to process the "**Edge Application**"
+
+|LLDB
+|Software debugger
+|===
+
+== Reference materials
+* Reference/Related documents
+** WebAssembly
+*** https://webassembly.org/
+** [[dplspec]]Data Pipeline API Specifications（for Edge Application version 1.1.0）
+*** https://developer.aitrios.sony-semicon.com/en/file/download/aitrios-apispec-datapipeline-v1-0-0-en
+** [[evpspec]]EVP API Specifications（for Edge Application version 1.1.0）
+*** https://developer.aitrios.sony-semicon.com/en/file/download/aitrios-apispec-evpsdk-v1-0-0-en
+** [[senscordspec]]SensCord API Specifications（for Edge Application version 1.1.0）
+*** https://developer.aitrios.sony-semicon.com/en/file/download/aitrios-apispec-senscordsdk-v1-0-1-en
+** FlatBuffers
+*** https://google.github.io/flatbuffers/
+** WebAssembly Micro Runtime (WAMR)
+*** https://github.com/bytecodealliance/wasm-micro-runtime/
+** LLDB
+*** https://lldb.llvm.org/
+
+== Expected use case
+* Design and implement post-processing
+* Convert post-processing code into a form that can be deployed to edge AI devices
+* Debug post-processing code before deploying it to edge AI devices
+
+== Functional overview/Algorithm
+=== Functional overview
+* Users can design and implement "**Edge Application**" in C or C++
+* Users can serialize "**Edge Application**" output with FlatBuffers
+** Users can generate class definition files from FlatBuffers schema files
+* Users can build a "**Edge Application**" implemented in C or C++ to a Wasm
+* The following "**Edge Application**" sample code is provided
+** Object Detection
+** Image Classification
+* Users can build a Wasm with "**Edge Application**" sample code
+* Users can build a "**Edge Application**" to a Wasm for debugging, and debug on SDK environment using test app
+* It is possible to verify whether the "**Edge Application**" file is of a size that can be deployed in Edge AI devices
+* It is possible to display a list of sizes for each section that constitutes "**Edge Application**" such as Text section
+* On running the "**Edge Application**" in SDK environment by using the test application, user can verify volume of memory used
+
+==== "**Edge Application**" creation flow
+
+[source,mermaid, target="Legend"]
+----
+flowchart TD;
+    %% definition
+    classDef object fill:#FFE699, stroke:#FFD700
+    classDef external_service fill:#BFBFBF, stroke:#6b8e23, stroke-dasharray: 10 2
+    style legend fill:#FFFFFF,stroke:#000000
+
+    %% impl
+    subgraph legend["Legend"]
+        process(Processing/User behavior)
+        object[Input/output data]:::object
+        extern[External services]:::external_service
+    end
+----
+
+===== Flow
+
+[source,mermaid, target="Flow"]
+----
+flowchart TD
+    %% definition
+    classDef object fill:#FFE699, stroke:#FFD700
+    style console fill:#BFBFBF, stroke:#6b8e23, stroke-dasharray: 10 2
+
+    start((Start))
+    id1(Define FlatBuffers schema for Edge Application output)
+    id2(Generate class definition file)
+    id3(Implement Edge Application)
+    id3-1("Prepare input data for debugging (Optional)")
+    id3-2("Implement Memory usage output API (Optional)")
+    id3-3("Build a Wasm for debugging (Optional)")
+    id3-4("Run Wasm debug (Optional)")
+    id4(Build a Wasm for release)
+    id4-1("Run Wasm debug (Optional)")
+    id5{Verify Wasm size}
+    subgraph console["Console for AITRIOS"]
+    id6(AOT compile)
+    end
+    data1[FlatBuffers schema]:::object
+    data2[Class definition file]:::object
+    data3[Edge Application code]:::object
+    data3-1["Output Tensor, PPL parameter for debugging (Optional), test app settings file"]:::object
+    data3-2[".wasm for debugging (Optional)"]:::object
+    data4[.wasm for release]:::object
+    data5[.aot]:::object
+    finish(((Finish)))
+
+    %% impl
+    start --> id1
+    id1 --- data1
+    data1 --> id2
+    id2 --- data2
+    data2 --> id3
+    id3 --- data3
+    data3 --> id3-1
+    id3-1 --- data3-1
+    data3-1 --> id3-2
+    id3-2 --> id3-3
+    id3-3 --- data3-2
+    data3-2 --> id3-4
+    id3-4 --> id4
+    id4 --- data4
+    data4 --> id4-1
+    id4-1 --> id5
+    id5 -->|OK| id6
+    id5 -->|NG| id3
+    id6 --- data5
+    data5 --> finish
+----
+
+NOTE: Wasm files created in the SDK environment are AOT compiled in "**Console for AITRIOS**" and converted into a form that can be deployed to edge AI devices. (You can't do that in a debug build)
+
+=== Build features
+Provides the following build features:
+
+* [[wasm-build]]Builds a Wasm for release +
+    Generates a Wasm file (.wasm) for deployment to edge AI devices
+** Generates a Wasm file (.wasm) from "**Edge Application**" code (.c, or .cpp)
+*** Object files (.o) are generated as intermediate files during the Wasm build process
+
+* [[wasm-build-debug]]Builds a Wasm for debugging +
+    Generates a Wasm file (.wasm) to debug code before deploying to edge AI devices
+** Generates a Wasm file (.wasm) from "**Edge Application**" code (.c, or .cpp)
+*** Object files (.o) are generated as intermediate files during the Wasm build process
+
+=== Debugging features
+==== Debugging feature using test app
+* The following Wasm debugging features are available through the LLDB and WAMR-IDE libraries and VS Code UI:
+** Specify breakpoint
+** Step execution (Step In, Step Out, Step Over)
+** Specify watch expression
+** Check variable
+** Check call stack
+** Check logs on terminal
+
+* Provides a test app as a driver to invoke the processing of Wasm files
+** You can specify parameters to input into a Wasm, such as Output Tensor, PPL parameter, when running the test app
+** By modifying the test application settings file, the initial settings value of the test application can be changed
+** Output the log showing volume of memory uses when test app execution is completed.
+
+NOTE: Does not support project management feature of WAMR-IDE
+
+NOTE: To achieve Wasm debugging, the following libraries are mocked: +
+* <<dplspec,Data Pipeline API>> +
+* <<evpspec,EVP API>> +
+* <<senscordspec,SensCord API>>
+
+NOTE: Provide a Native API that can be called from Wasm for memory usage output so that the memory usage can be checked at any timing when executing Wasm. (Since this API is dedicated for the test application, this API does not exist in the actual device, and if called on the actual device, it results in a runtime error.) 
+
+== User interface specifications
+=== How to start each function
+. Launch the SDK environment and preview the `**README.md**` in the top directory
+. Jump to the `**README.md**` in the `**tutorials**` directory from the hyperlink in the SDK environment top directory
+. Jump to the `**4_prepare_application**` directory from the hyperlink in the `**README.md**` in the `**tutorials**` directory
+. Jump to the `**1_develop**` directory from the hyperlink in the `**README.md**` in the `**4_prepare_application**` directory
+. Jump to each feature from each file in the `**1_develop**` directory
+
+=== Design and implement a "**Edge Application**"
+. Follow the procedures in the `**README.md**` to create the FlatBuffers schema file for "**Edge Application**" output
+. Follow the procedures in the `**README.md**` to open a terminal from the VS Code UI and run the command to generate a header file of class definitions from a schema file +
+** Class definition header file is generated on the same level as the schema file
+. Implement a "**Edge Application**"
+** Implement in C or C++
+** Implement source files either by creating a new one or modifying the provided sample code for the "**Edge Application**"
+** Implement using the class definition file generated by the "2."
+** Implement <<edgeappif, _"**Edge Application**" interface_>> using the "**Edge Application**"'s sample code
+** You can optionally install the OSS and external libraries needed to design your "**Edge Application**" and incorporate them into your "**Edge Application**" +
+
+NOTE: This SDK does not guarantee the installation or use of OSS or external libraries, which users may use at their discretion.
+
+=== Edit input parameters to debug a Wasm file
+
+NOTE: Follow this procedure only when using the debugging feature.
+
+. Follow the procedures in the `**README.md**` to modify the input parameters, such as Output Tensor, PPL parameter and test application settings file when executing the test
+
+===  Incorporate the API to output the memory usage of “**Edge Application**”
+
+NOTE: Execute this procedure only when checking the volume of memory used at any timing. 
+
+
+NOTE: [[memory-consumption]]Information on volume of memory used i.e. is as follows +
+* As the conditions are different between the application development/debug environment and the production device, the intention it for user to consider as reference the memory usage output by this function +
+* The debug build consumes more memory than the release build. To check the memory usage according to the actual situation, use the build for release  +
+* It logs the maximum memory usage from when Wasm is started until API is used, not the actual memory usage when the Memory usage output API is used +
+* When a memory related error occurs, this function outputs the memory information immediately before the error occurred. For example, when an error occurs in dynamic memory allocation, the excess of the limit cannot be viewed as a numerical value  +
+* Outputs information of multiple memory sections (code size, dynamic memory size, stack, etc.) Please refer to `**README.md**` for details on the memory section information
+
+. Following the procedure in `**README.md**`, add the memory usage output API to the code of "**Edge Application**". (When operating in production environment, delete the code of the added memory usage output API.) 
+
+=== Generate a Wasm file for debugging from "**Edge Application**" code
+
+NOTE: Follow this procedure only when using the debugging feature.
+
+. Follow the procedures in the `**README.md**` to modify the `**Makefile**` for the file location or filename of the "**Edge Application**" code
+. Follow the procedures in the `**README.md**` to open a terminal from the VS Code UI and run the command to build a Wasm for debugging +
+** A Docker image is created for the debugging environment, including a Wasm build for debugging, on the Dev Container, and a `**debug**` directory is created in the directory on the Dev Container described in the `**README.md **`, and the .wasm file is stored in that directory
+
+=== Debug a Wasm file
+
+NOTE: Follow this procedure only when using the debugging feature.
+
+NOTE: Wasm for release and Wasm for debug can be executed, but Wasm for release can only check the log on the terminal. 
+
+NOTE: As for the memory usage, please refer to <<memory-consumption, NOTE>>. 
+
+. Execute debug following the procedure described in `**README.md**`, open the Wasm source code in VS Code UI, specify breakpoint and perform step execution (step in, step out, step over) 
+. Execute debug following the procedure described in `**README.md**` and specify and check the watch expression in VS Code UI 
+. Execute debug following the procedure described in `**README.md**` and check the variable and call stack in VS Code UI 
+. Execute debug following the procedure described in `**README.md**` and verify the log in the terminal. (When the execution is ended and when the part where the memory usage output API is embedded is executed, the memory usage information is output to the log.) 
+
+=== Generate a Wasm file from "**Edge Application**" code
+. Follow the procedures in the `**README.md**` to modify the `**Makefile**` for the file location and filename of the "**Edge Application**" code
+. Follow the procedures in the `**README.md**` to open a terminal from the VS Code UI and run the command to remove build a Wasm
+** A Docker image for the environment to build a Wasm are created on the Dev Container, and a `**release**` directory is created in the directory on the Dev Container described in the `**README.md **`, and the .wasm file is stored in that directory
+** As a result of executing the command, it displays on the terminal the results of verifying whether it is of a size that can be deployed to the Edge AI device or not and also displays the list of sizes for each section
+
+=== Remove build generation files
+. Follow the procedures in the `**README.md**` to open a terminal from the VS Code UI and run the command to remove build generation files
+** All files generated by the Wasm build (object files, Wasm files) are removed from the Dev Container. See <<wasm-build, _Builds a Wasm for release_>> and <<wasm-build, _Builds a Wasm for debugging_>> for builds.
+
+=== Remove build generation files and the Docker image for environment to build a Wasm
+. Follow the procedures in the `**README.md**` to open a terminal from the VS Code UI, and run the command to remove build generation files and the Docker image for environment to build a Wasm +
+** All files generated by the Wasm build (object files, Wasm files) are removed from the Dev Container. See <<wasm-build, _Builds a Wasm for release_>> and <<wasm-build, _Builds a Wasm for debugging_>> for builds.
+
+When you run a command to remove a Wasm build or build generation files or a Docker image for the build environment, if you run the command with an option other than what is listed in README.md, it will print command usage information to the terminal and interrupt processing.
+
+[[edgeappif]]
+== "**Edge Application**" interface
+When you design a "**Edge Application**", you need to implement using a set of functions that interface with the "**Edge Application**". Sample code includes examples of their use. See <<dplspec,Data Pipeline API Specifications>>, <<evpspec,EVP API Specifications>>, <<senscordspec,SensCord API Specifications>> in the separate document for details. The relationship between each API and the SDK is described in `**README.md**`.
+
+== Target performances/Impact on performances
+* Usability
+** When the SDK environment is built, users can generate class definition file for FlatBuffers, build a Wasm, and debug a Wasm without any additional installation steps
+** UI response time of 1.2 seconds or less
+** If processing takes more than 5 seconds, indicates that processing is in progress with successive updates
+
+== Assumption/Restriction
+* Supports only "**Edge Application**" code implemented in C or C++ for Wasm builds
+* When verifying the size of "**Edge Application**", whether an error occurs or not while deploying the "**Edge Application**" to edge AI device depends on the "**Console for AITRIOS**"
+* In "**Edge Application**", whether an error occurs due to memory usage depends on the device. 
+
+== Remarks
+* Check the following version information for the tools needed to develop "**Edge Application**" that comes with the SDK
+** FlatBuffers: Described in the `**README.md**` in the `**1_develop**` directory
+** Other tools: Described in the `**Dockerfile**` in the `**1_develop/sdk**` directory
+* Regarding the "**Edge Application**" file size that can be deployed in the Edge AI device, verify it from the `**README.md**` file available in the `**1_develop**`` directory
+
+== Unconfirmed items
+None

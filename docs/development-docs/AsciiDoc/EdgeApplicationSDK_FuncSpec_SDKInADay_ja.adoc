@@ -1,0 +1,538 @@
+= Edge Application SDK pass:[<br/>] 1日で分かるSDK pass:[<br/>] 機能仕様書 pass:[<br/>]
+:sectnums:
+:sectnumlevels: 1
+:author: Copyright 2023 Sony Semiconductor Solutions Corporation
+:version-label: Version 
+:revnumber: x.x.x
+:revdate: YYYY - MM - DD
+:trademark-desc: AITRIOS™、およびそのロゴは、ソニーグループ株式会社またはその関連会社の登録商標または商標です。
+:toc:
+:toc-title: 目次
+:toclevels: 1
+:chapter-label:
+:lang: ja
+
+== 更新履歴
+
+|===
+|Date |What/Why
+
+|2023/05/26
+|初版作成
+
+|2023/11/10
+|・2. 用語・略語 から記載を削除: SavedModel、TFLite、SAS
+
+・3. 参照資料 から記載を削除: TensorFlow 1 Detection Model Zoo、Colab tutorials for Coral
+
+・Functional Overview の記載を修正
+
+・フロー概要、詳細、6. 操作性仕様、画面仕様 の記載を修正
+
+・6. 操作性仕様、画面仕様 の補足から記載を削除: AIモデルの転移学習中、推論実行中はTensorFlowライブラリによるログを表示する
+
+・8. 制限事項 の記載を修正
+
+・9. その他特記事項 の記載を修正
+
+. 「**Vision and Sensing Application**」への表現変更に伴う修正
+|===
+
+== 用語・略語
+|===
+|Terms/Abbreviations |Meaning 
+
+|TFRecord
+|TensorFlowのデータセットのフォーマットの一種
+
+|Wasm
+|WebAssemblyの略。仮想マシン用のバイナリ命令形式
+
+|IoU
+|Intersection over Unionの略。領域の重なりの度合い
+
+|「**Zone Detection**」
+|「**Cloud SDK**」が提供するサンプルアプリケーション
+
+|「**Console Access Library**」
+|「**Console for AITRIOS**」が提供するREST APIの各機能を使用するためのライブラリ。Python用とTypeScript用が存在するが、本書ではPython用を指すものとする。
+
+|デプロイConfig
+|「**Console for AITRIOS**」に登録するデプロイ設定。 + 
+デプロイするAIモデルなどを指定したもの。 AIモデルのデプロイ実行は、デプロイConfigを指定して実行する。 + 
+Notebook実行に使用する `**configuration.json**` とは別物であることに注意
+
+|「**Edge Application**」
+|エッジAIデバイスのAIモデルの出力 (Output Tensor) を加工処理するモジュール
+
+|PPL Parameter
+|「**Edge Application**」の処理に使用するパラメータ
+
+|推論結果メタデータ
+|「**Edge Application**」が出力するデータ
+
+|Command Parameter File
+|PPL Parameterをデバイスに適用する際に使用するjsonファイル
+
+|サンプル画像
+|「**Cloud SDK**」のGitHubリポジトリに格納されている、「**Zone Detection**」のサンプルとしてエッジAIデバイスで撮影した画像
+
+|===
+
+== 参照資料
+
+* Reference/Related documents (関連資料)
+** APIリファレンス
+*** https://developer.aitrios.sony-semicon.com/development-guides/reference/api-references/
+
+== 想定ユースケース
+
+* SDKの概要を1日で理解できるように、サンプルアプリケーションの「**Zone Detection**」を例として、SDKの一連のワークフローを1つのNotebookで実行できるようにする + 
+ただし、Codespaces上で実行できない部分はドキュメントでカバーする
+
+== 機能概要、アルゴリズム
+
+=== Functional Overview
+
+* 下記のフローで、サンプルアプリケーションの「**Zone Detection**」を例としてSDKが提供する機能を1つのNotebookで実行できる
+
+* NotebookのCellを1つずつ実行していくことを推奨する
+
+* NotebookのCellのうち時間がかかる箇所にはおよその所要時間を記載する
+
+* SDKに「**Zone Detection**」のサンプルとしてエッジAIデバイスで撮影した画像をアノテーションしたCVATプロジェクトのバックアップデータを同梱する
+
+* SDKに「**Zone Detection**」のサンプルとしてエッジAIデバイスで撮影した画像をアノテーションしたTFRecord形式のデータセットを同梱する
+
+* SDKに「**Zone Detection**」のサンプルとして転移学習した量子化済みAIモデルで推論実行したOutput Tensor情報を同梱する
+
+* 「**Edge Application**」をビルドし、PPL Parameter情報を編集し、Output Tensor情報を使用して「**Edge Application**」をデバッグ実行し、シリアライズされた推論結果メタデータを出力できる
+
+* シリアライズされた推論結果メタデータをデシリアライズし、画像に推論結果を重畳して表示できる
+
+* 「**Edge Application**」を「**Console for AITRIOS**」にインポートし、AIモデルと「**Edge Application**」をエッジAIデバイスにデプロイできる
+
+NOTE: エッジAIデバイスにデプロイするAIモデルは、「**Console UI**」を使用して作成する
+
+* SDKにてサポートする画像フォーマットはJPEGとする
+
+* フロー概要
+
+[source,mermaid, target="凡例"]
+----
+flowchart TD;
+    %% definition
+    classDef object fill:#FFE699, stroke:#FFD700
+    style legend fill:#FFFFFF, stroke:#000000
+
+    %% impl
+    subgraph legend["凡例"]
+        process(処理/ユーザーの行動)
+    end
+----
+
+[source,mermaid, target="フロー概要"]
+----
+flowchart TD
+    start((Start)) --> id1("1.インプットとして使用する画像を用意する")
+    id1 --> id2("2.Console UIを使用してAIモデルを作成する")
+    id2 --> id3("3.Edge Applicationをビルド・実行し画像に推論結果を重畳して表示する")
+    id3 --> id4("4.PPL Parameterを編集し、<br>Edge Applicationを実行し画像に推論結果を重畳して表示する")
+    id4 --> id5("5.Console for AITRIOSにEdge Applicationをインポートし、<br>AIモデルとEdge Applicationをデバイスにデプロイする")
+    id5 --> finish(((Finish)))
+----
+
+* フロー詳細
+
+. インプットとして使用する画像を用意する
+
+** 「**Cloud SDK**」のGitHubリポジトリに格納されている、エッジAIデバイスで撮影したサンプル画像を含むzipファイルを展開する
+
+. 「**Console UI**」を使用してAIモデルを作成する
+
+** 「**Console UI**」を使用してAIモデルを作成する手順のリンクを示す
+
+. 「**Edge Application**」をビルド・実行し画像に推論結果を重畳して表示する
+
+** 「**Edge Application**」、PPL Parameter、シリアライズの概要を説明する
+** 「**Edge Application**」をビルドする
+** サンプル画像のデータセットを使用して転移学習した量子化済みAIモデルによる推論結果であるサンプルOutput Tensorと、編集前のPPL Parameterを使用して「**Edge Application**」を実行しシリアライズされた推論結果メタデータを取得する
+** 推論結果メタデータをデシリアライズする
+** サンプル画像に推論結果を重畳して表示する
+
+. PPL Parameterを編集し、「**Edge Application**」を実行し画像に推論結果を重畳して表示する
+
+** サンプル画像のデータセットを使用して転移学習した量子化済みAIモデルによる推論結果であるサンプルOutput Tensorと、編集後のPPL Parameterを使用して「**Edge Application**」を実行しシリアライズされた推論結果メタデータを取得する
+** 推論結果メタデータをデシリアライズする
+** サンプル画像に推論結果を重畳して表示する
+
+. 「**Console for AITRIOS**」に「**Edge Application**」をインポートし、AIモデルと「**Edge Application**」をデバイスにデプロイする
+
+** 「**Console for AITRIOS**」にインポート、また、エッジAIデバイスにデプロイするために、AIモデル、「**Edge Application**」、デバイスのID等のパラメータを設定する
+** 「**Console Access Library**」を使用して「**Edge Application**」を「**Console for AITRIOS**」にインポートする
+** 「**Console Access Library**」を使用してAIモデルと「**Edge Application**」をデバイスにデプロイする
+** Command Parameter Fileを作成し、「**Console for AITRIOS**」にインポートしデバイスに適用する手順を示す
+
+== 操作性仕様、画面仕様
+=== How to start each function
+. SDK環境を立ち上げ、Topの `**README.md**` をプレビュー表示する
+. SDK環境Topの `**README.md**` に含まれるハイパーリンクから、 `**samples**` ディレクトリの `**README.md**` にジャンプする
+. `**samples**` ディレクトリの `**README.md**` に含まれるハイパーリンクから、`**zone_detection**` ディレクトリの `**README.md**` にジャンプする
+. `**zone_detection**` ディレクトリの `**README.md**` に含まれるハイパーリンクから、 `**sdk_in_a_day.ipynb**` にジャンプする
+
+=== インプットとして使用する画像を用意する
+. 「**Cloud SDK**」のGitHubリポジトリに格納されている、エッジAIデバイスで撮影したサンプル画像を含むzipファイルを `**dataset/images/training**` と `**dataset/images/validation**` フォルダに展開する
+
+=== 「**Console UI**」を使用してAIモデルを作成する
+
+. 「**Console UI**」を使用してAIモデルを作成する手順のリンクを示す
+
+=== 「**Edge Application**」をビルド・実行し画像に推論結果を重畳して表示する
+
+. 「**Edge Application**」、PPL Parameterの概要を説明する
+
+** 「**Zone Detection**」用の「**Edge Application**」は、SDKが提供するObject Detection向け「**Edge Application**」のサンプルコードをベースに作成したものであり、物体検出する閾値をPPL Parameterにより設定できるとともに、侵入禁止エリアをPPL Parameterにより指定し、侵入禁止エリア内に物体があるかを判定できる
+
+. 「**Edge Application**」をビルドする
+
+** Wasmファイルを `**application/vision_app_zonedetection.wasm**` ファイルとして生成する
+
+. サンプルOutput Tensorと、編集前のPPL Parameterを使用して「**Edge Application**」を実行し、シリアライズされた推論結果メタデータを取得する
+
+** 編集前のPPL Parameterは `**application/ppl_parameter_before.json**` として保存したものを使用する
+** シリアライズされた推論結果メタデータを `**deserialize/ppl_output_before.bin**` として保存する
+
+. 推論結果メタデータをデシリアライズする
+
+** デシリアライズした推論結果メタデータを `**deserialize/ppl_output_before.json**` として保存する
+
+. サンプル画像に推論結果を重畳して表示する
+
+** サンプル画像に推論結果のバウンディングボックスとAccuracy (%) とIoU (%) と侵入禁止エリアのバウンディングボックスを重畳して表示する
+
+=== PPL Parameterを編集し、「**Edge Application**」を実行し画像に推論結果を重畳して表示する
+
+. サンプルOutput Tensorと、編集後のPPL Parameterを使用して「**Edge Application**」を実行し、シリアライズされた推論結果メタデータを取得する
+
+** PPL Parameterの物体検出する閾値を編集した `**application/ppl_parameter_after.json**` として保存したものを使用する
+** シリアライズされた推論結果メタデータを `**deserialize/ppl_output_after.bin**` として保存する
+
+. 推論結果メタデータをデシリアライズする
+
+** デシリアライズした推論結果メタデータを `**deserialize/ppl_output_after.json**` として保存する
+
+. サンプル画像に推論結果を重畳して表示する
+
+** サンプル画像に推論結果のバウンディングボックスとAccuracy (%) とIoU (%) と侵入禁止エリアのバウンディングボックスを重畳して表示する
+
+=== 「**Console for AITRIOS**」に「**Edge Application**」をインポートし、AIモデルと「**Edge Application**」をデバイスにデプロイする
+
+. 「**Portal for AITRIOS**」からユーザー登録し、AITRIOSのプロジェクトに参加する手順のリンクを示す
+
+. 「**Console for AITRIOS**」にインポート、また、エッジAIデバイスにデプロイするために、AIモデル、「**Edge Application**」、デバイスのID等のパラメータを設定する
+
+** SDK実行環境の `**tutorials/_common/set_up_console_client/configuration.json**` を新規作成し各パラメータを設定する
++
+[cols="1,1,1,1a"]
+|===
+|Configuration |Meaning |Range |Remarks
+
+|`**console_endpoint**`
+|APIサーバ ベースURL
+|文字列 +
+詳細は「**Console Access Library**」APIの仕様に従う。
+|省略不可 +
+下記の「**Console Access Library**」APIに使用される。
+
+* `**common.config.Config**`
+
+|`**portal_authorization_endpoint**`
+|認証サーバURL
+|文字列 +
+詳細は「**Console Access Library**」APIの仕様に従う。
+|省略不可 +
+下記の「**Console Access Library**」APIに使用される。
+
+* `**common.config.Config**`
+
+|`**client_id**`
+|認証に必要なクライアントID
+|文字列 +
+詳細は「**Console Access Library**」APIの仕様に従う。
+|省略不可 +
+下記の「**Console Access Library**」APIに使用される。
+
+* `**common.config.Config**`
+
+|`**client_secret**`
+|認証に必要なシークレット
+|文字列 +
+詳細は「**Console Access Library**」APIの仕様に従う。
+|省略不可 +
+下記の「**Console Access Library**」APIに使用される。
+
+* `**common.config.Config**`
+
+|===
+
+** `**configuration.json**` を新規作成し各パラメータを設定する
++
+NOTE: 特別な記載がある場合を除き、原則として大文字小文字を区別する。
++
+NOTE: 原則としてシンボリックリンクのフォルダパス、ファイルパスは使用不可。
++
+
+|===
+|Configuration |Meaning |Range |Remarks
+
+|`**import_app**`
+|「**Edge Application**」をインポートするための設定
+|<<import_app>> を参照
+|省略不可
+
+|`**deploy_model**`
+|AIモデルをデプロイするための設定
+|<<deploy_model>> を参照
+|省略不可
+
+|`**deploy_app**`
+|「**Edge Application**」をデプロイするための設定
+|<<deploy_app>> を参照
+|省略不可
+
+|`**command_parameter_file_name**`
+|SDK実行環境上に保存するCommand Parameter Fileのファイル名
+|文字列
+|省略不可
+
+|===
+
+*** import_app [[import_app]]
++
+[cols="1,1,1,1a"]
+|===
+|Configuration |Meaning |Range |Remarks
+
+|`**ppl_file**`
+|「**Edge Application**」ファイルのパス
+|絶対パスまたはNotebook (*.ipynb) からの相対パス
+|省略不可
+
+
+|`**app_name**`
+|「**Edge Application**」名
+|文字列 +
+詳細は「**Console Access Library**」APIの仕様に従う。
+|省略不可 +
+下記の「**Console Access Library**」APIに使用される。
+
+* `**deployment.deployment.Deployment.import_device_app**`
+
+|`**version_number**`
+|「**Edge Application**」バージョン
+|文字列 +
+詳細は「**Console Access Library**」APIの仕様に従う。
+|省略不可 +
+下記の「**Console Access Library**」APIに使用される。
+
+* `**deployment.deployment.Deployment.import_device_app**`
+
+|`**comment**`
+|「**Edge Application**」説明
+|文字列 +
+詳細は「**Console Access Library**」APIの仕様に従う。
+|省略可 +
+指定なしの場合、コメントなし +
+下記の「**Console Access Library**」APIに使用される。
+
+* `**deployment.deployment.Deployment.import_device_app**`
+
+|===
+
+*** deploy_model [[deploy_model]]
++
+[cols="1,1,1a,1a,1a"]
+|===
+|Configuration | |Meaning |Range |Remarks
+
+|`**should_create_deploy_config**`
+|
+|デプロイConfigを新規登録するかどうか
+|true or false +
+true:デプロイConfig新規登録 +
+false:登録済みデプロイConfigを使用
+|省略不可
+
+|`**config_id**`
+|
+|デプロイConfigのID
+
+* デプロイConfigを新規登録する場合は任意の文字列を指定する
+* 登録済みデプロイConfigを使用する場合は使用するデプロイConfigのconfig_idを指定する
+
+|文字列 +
+詳細は「**Console Access Library**」APIの仕様に従う。
+|省略不可
+
+下記の「**Console Access Library**」APIに使用される。
+
+* `**deployment.deployment.Deployment.create_deploy_configuration**`
+* `**deployment.deployment.Deployment.deploy_by_configuration**`
+
+|`**create_config**`
+|`**comment**`
+|新規登録するデプロイConfigの説明
+|文字列 +
+詳細は「**Console Access Library**」APIの仕様に従う。
+|省略可
+
+* デプロイConfig新規登録の場合のみ使用される。
+
+下記の「**Console Access Library**」APIに使用される。
+
+* `**deployment.deployment.Deployment.create_deploy_configuration**`
+
+|
+|`**model_id**`
+|デプロイするAIモデルのID +
+インポート済みAIモデルのIDを指定する
+|文字列 +
+詳細は「**Console Access Library**」APIの仕様に従う。
+|省略可。ただし、デプロイConfig新規登録の場合は省略不可。
+
+* デプロイConfig新規登録の場合のみ使用される。
+
+下記の「**Console Access Library**」APIに使用される。
+
+* `**deployment.deployment.Deployment.create_deploy_configuration**`
+
+|
+|`**model_version_number**`
+|デプロイするAIモデルのバージョン +
+インポート済みAIモデルのバージョンを指定する
+|文字列 +
+詳細は「**Console Access Library**」APIの仕様に従う。
+|省略可
+
+* デプロイConfig新規登録の場合のみ使用される。
+
+下記の「**Console Access Library**」APIに使用される。
+
+* `**deployment.deployment.Deployment.create_deploy_configuration**`
+
+|`**device_ids**`
+|
+|モデルをデプロイするデバイスのID
+|文字列のリスト
+|省略不可
+
+下記の「**Console Access Library**」APIに使用される。
+
+* `**deployment.deployment.Deployment.deploy_by_configuration**`
+
+|`**replace_model_id**`
+|
+|入れ替え対象モデルID + 
+デバイスにデプロイ済みのモデルのうち、デプロイ時に入れ替え (上書き) するモデルのIDを指定する
+|文字列 +
+詳細は「**Console Access Library**」APIの仕様に従う。
+|省略可 +
+モデルを入れ替えない場合は省略可。ただし、デバイスにデプロイされたモデルの数が上限の場合、本パラメータで入れ替えるモデルIDを指定する必要がある。 + 
+(デプロイ済みモデルが上限に達しており、かつreplace_model_idの指定がない場合、デプロイ実行がエラーとなる)
+
+下記の「**Console Access Library**」APIに使用される。
+
+* `**deployment.deployment.Deployment.deploy_by_configuration**`
+
+|`**comment**`
+|
+|デプロイの説明
+|文字列 +
+詳細は「**Console Access Library**」APIの仕様に従う。
+|省略可
+
+下記の「**Console Access Library**」APIに使用される。
+
+* `**deployment.deployment.Deployment.deploy_by_configuration**`
+
+|===
+
+*** deploy_app [[deploy_app]]
++
+[cols="1,1,1,1a"]
+|===
+|Configuration |Meaning |Range |Remarks
+
+|`**app_name**`
+|デプロイする「**Edge Application**」名
+|文字列 +
+詳細は「**Console Access Library**」APIの仕様に従う。
+|省略不可
+
+下記の「**Console Access Library**」APIに使用される。
+
+* `**deployment.deployment.Deployment.deploy_device_app**`
+* `**deployment.deployment.Deployment.get_device_app_deploys**`
+
+|`**version_number**`
+|デプロイする「**Edge Application**」のバージョン
+|文字列 +
+詳細は「**Console Access Library**」APIの仕様に従う。
+|省略不可
+
+下記の「**Console Access Library**」APIに使用される。
+
+* `**deployment.deployment.Deployment.deploy_device_app**`
+* `**deployment.deployment.Deployment.get_device_app_deploys**`
+
+|`**device_ids**`
+|「**Edge Application**」をデプロイするデバイスのID
+|文字列のリスト
+|省略不可
+
+下記の「**Console Access Library**」APIに使用される。
+
+* `**deployment.deployment.Deployment.deploy_device_app**`
+
+|`**comment**`
+|「**Edge Application**」デプロイの説明
+|文字列 +
+詳細は「**Console Access Library**」APIの仕様に従う。
+|省略可
+
+下記の「**Console Access Library**」APIに使用される。
+
+* `**deployment.deployment.Deployment.deploy_device_app**`
+
+|===
+
+. 「**Console Access Library**」を使用して「**Edge Application**」を「**Console for AITRIOS**」にインポートする
+
+. 「**Console Access Library**」を使用してAIモデルと「**Edge Application**」をデバイスにデプロイする
+
+. Command Parameter Fileを作成する
+
+. Command Parameter Fileを「**Console for AITRIOS**」にインポートしデバイスに適用する手順を示す
+
+=== 補足
+
+** OpenCVなどの外製ソフトでエラー発生時は、外製ソフトが出力するエラーを表示し、中断する
+** 処理中でもNotebook Cell機能のStop Cell Executionで中断できる
+
+== 目標性能
+** SDKの環境構築完了後、追加のインストール手順なしに、Notebookを実行できること
+** UIの応答時間が1.2秒以内であること
+** 処理に5秒以上かかる場合は、処理中の表現を逐次更新表示できること
+
+== 制限事項
+なし
+
+== その他特記事項
+* Notebookで使用するOSSライブラリ
+** Matplotlib
+** OpenCV
+** NumPy
+
+== 未決定事項
+
+なし

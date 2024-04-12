@@ -1,0 +1,310 @@
+= Edge Application SDK pass:[<br/>] Development Container pass:[<br/>] 機能仕様書 pass:[<br/>]
+:sectnums:
+:sectnumlevels: 1
+:author: Copyright 2022-2023 Sony Semiconductor Solutions Corporation
+:version-label: Version 
+:revnumber: x.x.x
+:revdate: YYYY - MM - DD
+:trademark-desc: AITRIOS™、およびそのロゴは、ソニーグループ株式会社またはその関連会社の登録商標または商標です。
+:toc:
+:toc-title: 目次
+:toclevels: 1
+:chapter-label:
+:lang: ja
+
+== 更新履歴
+
+|===
+|Date |What/Why
+
+|2022/11/16
+|初版作成
+
+|2023/01/30
+|フォルダ構成変更。SDKが提供する機能の追加・変更。PDFビルド環境更新。
+
+|2023/05/26
+|ツール名と括弧の表記の修正 + 
+一部環境でAsciiDocのMermaid図が表示されないため、レンダリング後の画像参照に修正 + 
+図の代替テキスト追加
+|===
+
+== 用語・略語
+|===
+|Terms/Abbreviations |Meaning 
+
+|Dev Container
+|GitHub CodespacesやVS Codeで利用できる、ソフトウェア開発環境を備えたDockerコンテナ。本SDKはDev Containerをベースとして提供される
+
+|「**Cloud App**」
+|「**Edge Application**」で処理したデータを入力とした、Cloudで動作するAIアプリケーション
+
+|===
+
+== 参照資料
+* Reference/Related documents (関連資料)
+** Codespaces
+*** https://docs.github.com/ja/codespaces
+** VS Code Remote Development
+*** https://code.visualstudio.com/docs/remote/remote-overview
+** [[codespaces-extension]]VS Code Codespaces extension
+*** https://marketplace.visualstudio.com/items?itemName=GitHub.codespaces
+** [[remote-development]]VS Code Remote Development Extension Pack
+*** https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.vscode-remote-extensionpack
+** CVAT
+*** https://github.com/opencv/cvat
+** 「**MCT**」
+*** https://github.com/sony/model_optimization
+** COCO
+*** https://cocodataset.org/#home
+
+== 想定ユースケース
+* 開発に必要なコンポーネントが既に含まれている環境を使用することで、手間を減らしたい
+* 他の環境に依存しない環境を利用したい
+* チームで同じ環境を使用したい
+* AIアプリケーション開発について、ワークフロー全体の概要をサンプルコードで試して理解したい
+* AIアプリケーション開発について知識がない状態でもスムーズに開発を行いたい
+
+== 機能概要、アルゴリズム
+=== Functional Overview
+* AIアプリケーションを開発するためのコンテナ環境を提供する +
+** コンテナ環境は下記の方法で利用できる
+*** Codespacesを利用する
+**** UIとして、BrowserとVS Code desktopの2種類がある
+
+*** Local PCにコンテナ環境を構築し、VS Codeから利用する
+
+** コンテナ環境には下記が含まれる
+*** AIアプリケーション開発の各ワークフローで利用できるツールおよび動作環境
+*** 各ワークフローの手順
+*** サンプルコード
+**** 詳細は、後述の<<workflow, AIアプリケーション開発ワークフローと提供する機能>>を参照 +
+
+NOTE: コンテナに含まれる各機能の具体的内容に関しては、本書ではなく各機能の機能仕様書にて記載する。
+
+* AIアプリケーション開発に必要な情報を取得できる
+** AIアプリケーション開発の各ワークフローのドキュメントを閲覧できる
+** 機能仕様書を閲覧できる
+
+=== Others Exclusive conditions / specifications
+* Dockerイメージは提供しない
+* エッジAIデバイスのファームウェアのビルド環境は提供しない
+* サンプルの「**Cloud App**」は参照となるリンクを提供する
+
+[[workflow]]
+=== AIアプリケーション開発ワークフローと提供する機能
+
+[source,mermaid, target="凡例"]
+----
+flowchart TD;
+    %% definition
+    classDef object fill:#FFE699, stroke:#FFD700
+    classDef external_service fill:#BFBFBF, stroke:#6b8e23, stroke-dasharray: 10 2
+    style legend fill:#FFFFFF, stroke:#000000
+
+    %% impl
+    subgraph legend[凡例]
+    process(処理/ユーザーの行動)
+    end
+----
+
+
+[source,mermaid, target="AIアプリケーション開発ワークフロー"]
+----
+flowchart TB
+    id0((Start))
+    id1(プロジェクト初期処理)
+    id2(データセット準備)
+    id3(AIモデル作成)
+    id4(AIモデル量子化)
+    id5(後処理開発)
+    id6("AIモデル・後処理のデプロイ")
+    id7(評価)
+    id8(((Finish)))
+    id0 -->id1
+    id1 -->id2
+    id2 -->id3
+    id3 -->id4
+    id4 -->id5
+    id5 -->id6
+    id6 -->id7
+    id7 -->id8
+----
+
+==== SDKが提供する機能
+
+[cols="1,2a,2a"]
+|===
+|ワークフロー |提供物 (ドキュメント) |提供物 (実行環境、サンプル)
+
+|プロジェクト初期処理
+|
+* 「**Console for AITRIOS**」手順
+|-
+
+|データセット準備
+|
+* CVATを使用してアノテーションを実施する手順
+* 「**Console for AITRIOS**」手順
+|
+* CVATを使用できる環境
+* COCOから画像をダウンロードするNotebook
+* CVATからデータセットをインポート・エクスポートするNotebook
+* データセットをTrain用/Validate用に分割するNotebook
+
+|AIモデルの作成
+|
+* AIモデル (Image Classification) を転移学習する手順
+* 「**Console for AITRIOS**」手順
+|
+* AIモデル (Image Classification) を転移学習するサンプルNotebook
+
+|AIモデル量子化
+|
+* ユーザーが作成したAIモデル (Image Classification) を「**MCT**」を使用して量子化する手順
+* ユーザーが作成したAIモデル (Image Classification) の量子化前後の精度評価する手順
+|
+* 「**MCT**」を使用して量子化できる環境
+* AIモデルの評価環境
+* AIモデル (Image Classification) を量子化するサンプルNotebook
+* 下記のAIモデル (Image Classification) を評価するサンプルNotebook
+** Keras
+** TFLite
+** TFLite (量子化済み)
+
+|後処理開発
+|
+* 後処理を実装、デバッグし、Wasmファイルにビルドする手順
+|
+* 後処理をWasmビルドする環境
+* 後処理のサンプルコード (C、C++)
+* 後処理コードをデバッグする環境
+
+
+|AIモデル・後処理を「**Console for AITRIOS**」にインポート
+|
+* Notebookを使ってAIモデル・後処理を「**Console for AITRIOS**」にインポートする手順
+* 「**Console for AITRIOS**」手順
+|* AIモデル・後処理を「**Console for AITRIOS**」にインポートするNotebook
+
+|AIモデル・後処理をエッジAIデバイスにデプロイ
+|
+* Notebookを使ってAIモデル・後処理をエッジAIデバイスにデプロイする手順
+* 「**Console for AITRIOS**」手順
+|* AIモデル・後処理をエッジAIデバイスにデプロイするNotebook
+
+|評価
+|
+* 「**Console for AITRIOS**」手順
+|-
+|===
+
+[cols="1,2a,2a"]
+|===
+|その他機能 |提供物 (ドキュメント) |提供物 (実行環境、サンプル)
+
+|バージョン管理
+|
+* バージョン管理例
+|-
+|===
+
+[[folder-structure]]
+=== コンテナのフォルダ構成
+----
+/tutorials
+	/_common
+	/1_initialize 
+	/2_prepare_dataset
+	/3_prepare_model
+	/4_prepare_application
+	/5_evaluate
+/docs/development-docs
+/.devcontainer
+/README.md
+----
+
+== 操作性仕様、画面仕様
+=== 前提条件
+* Codespacesの場合、Codespacesを使用できる状態になっていること
+** Codespaces (VS Code desktop) の場合、<<codespaces-extension, VS Code Codespaces extension>>をインストールしていること
+* Local PCでVS Codeを利用する場合、<<remote-development, VS Code Remote Development Extension Pack>>をインストールしていること
+
+=== コンテナの起動
+下記手順により、開発環境を起動する。
+
+* Codespaces (Browser)
+. SDKのリポジトリにおいて [**Code**] の [**Codespaces**] タブから [**Create codespace on <ブランチ名>**] を押下する
+* Codespaces (VS Code desktop)
+. SDKのリポジトリにおいて、 [**Code**] の [**Codespaces**] タブから[**Create codespace on <ブランチ名>**] を押下する
+. Codespace起動後、Codespaceのブラウザの左下にある [**Codespaces**] を押下する
+. ドロップダウンリストの中から [**VS Codeで開く**] を選択する
+* Local PC
+. GitHub上から本SDKのリポジトリにアクセスし、ユーザーの環境に本SDKのリポジトリをクローンし、VS Codeで開く
+. VS Codeの左下の [**><**] マークを押下、または、「Ctrl + Shift + P」でコマンドパレットを開き、[**Reopen in Container**] を選択する
+
+[NOTE]
+====
+コンテナ起動途中で中断する際は、下記の手順で行う。
+
+* Codespaces (Browser) の場合
+** ブラウザの [**×**] ボタンを押下する
+* Codespaces (VS Code desktop) の場合、またはLocal PCでVS Codeを利用する場合
+** VS Codeの [**×**] ボタン押下する
+====
+
+[NOTE]
+====
+コンテナ起動の進捗を確認する際は、下記の手順で行う。
+
+* Codespaces (Browser) の場合
+** Codespacesのブラウザにおいて [**View logs**] が表示されたら押下する + 
+* Codespaces (VS Code desktop) の場合、またはLocal PCでVS Codeを利用する場合
+** VS Code画面右下のNotificationから [**Starting Dev Container (show log) **] を押下する
+====
+
+=== AIアプリケーション開発に必要な情報の取得
+下記のドキュメントを参照できる。
+
+* AIアプリケーション開発の各ワークフローの手順書 (README)
+. リポジトリトップの `**README.md**` から、<<folder-structure, コンテナのフォルダ構成>>の `**tutorials**` フォルダの `**README.md**` へリンクで遷移する
+.  `**tutorials**` フォルダの `**README.md**` から `**1_initialize**` といった各機能フォルダ配下の `**README.md**` へリンクで遷移する
+* 機能仕様書
+. リポジトリトップの `**README.md**` から機能仕様書へリンクで遷移する
+
+== 目標性能
+* ユーザビリティ
+** SDKの環境構築完了後、追加のインストールなしに、AIアプリケーションを開発するためのコンテナが利用できること
+** コンテナ環境内をVS Code UIで操作できること
+
+== 制限事項
+* CodespacesやLocal PCのスペックによっては、SDKで提供する機能が正常に動作しない場合がある
+    ** Codespacesの場合、Machine typeが4-core以上を推奨
+
+== その他特記事項
+* SDK内で定義するエラーコード、メッセージはなし
+* コンテナ起動時のUIの応答時間について、Codespacesの場合はユーザーのネットワーク環境、Local PCの場合はユーザーのDocker動作環境に影響されるため明記しない
+** ただし、Codespaces、Local PCともに、起動時は実績として10秒以内にUIの応答がある
+*** 実績は下記条件にて計測
+**** Codespaces: Machine type 4-coreを選択
+**** Local PC: 下記スペックのマシンで起動
+
+
+|===
+|項目 |内容
+
+|CPU
+|Intel(R) Core(TM) i7-8665U CPU @ 1.90GHz   2.11 GHz
+
+|RAM
+|16.0 GB
+
+|OS
+|Windows 10 バージョン 21H2
+
+|WSL2
+|Ubuntu-20.04
+|===
+	
+== 未決定事項
+* なし

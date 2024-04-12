@@ -32,6 +32,7 @@ extern "C" {
 #define SENSCORD_CHANNEL_ID_OUTPUT_TENSOR (0x80000001)
 #define SENSCORD_RAW_DATA_TYPE_OUTPUT_TENSOR "OutputTensor"
 #define SENSCORD_PROPERTY_KEY_DEWARP_CROP "devicesdk_imx500_input_tensor_dewarp_crop_property"
+#define SENSCORD_PROPERTY_KEY_DNN         "devicesdk_imx500_dnn_property"
 
 #define SESS_SEND_MAX_SIZE 90112 /**< 88KB */
 
@@ -40,6 +41,11 @@ struct input_tensor_dewarp_crop_property {
   uint16_t top;        /**< start ypoint */
   uint16_t width;      /**< width */
   uint16_t height;     /**< height */
+};
+
+struct senscord_dnn_property {
+  uint32_t network_id; /**< network id */
+  uint8_t network_ordinal; /**< network ordinal */
 };
 
 typedef void* senscord_core_t;

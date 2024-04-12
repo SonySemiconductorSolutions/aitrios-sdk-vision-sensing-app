@@ -1,0 +1,231 @@
+= Edge Application SDK pass:[<br/>] Console API Initialize pass:[<br/>] 機能仕様書 pass:[<br/>]
+:sectnums:
+:sectnumlevels: 1
+:author: Copyright 2022-2023 Sony Semiconductor Solutions Corporation
+:version-label: Version 
+:revnumber: x.x.x
+:revdate: YYYY - MM - DD
+:trademark-desc: AITRIOS™、およびそのロゴは、ソニーグループ株式会社またはその関連会社の登録商標または商標です。
+:toc:
+:toc-title: 目次
+:toclevels: 1
+:chapter-label:
+:lang: ja
+
+== 更新履歴
+
+|===
+|Date |What/Why
+
+|2023/01/30
+|初版作成
+
+|2023/05/26
+|ツール名と括弧の表記の修正 + 
+一部環境でAsciiDocのMermaid図が表示されないため、レンダリング後の画像参照に修正 + 
+図の代替テキスト追加
+|===
+
+== 用語・略語
+|===
+|Terms/Abbreviations |Meaning 
+
+|「**Console REST API**」
+|「**Console for AITRIOS**」が提供するREST API
+
+|「**Console Access Library**」
+|「**Console REST API**」の各機能を使用するためのライブラリ。Python用とTypeScript用が存在するが、本書ではPython用を指すものとする。
+
+
+|===
+
+== 参照資料
+
+* 「**Portal ユーザーマニュアル**」 +
+** https://developer.aitrios.sony-semicon.com/en/documents/portal-user-manual
+
+[[anchor-ref]]
+* APIリファレンス
+** https://developer.aitrios.sony-semicon.com/development-guides/reference/api-references/
+
+* 「**Console Access Library**」機能仕様書
+** https://developer.aitrios.sony-semicon.com/development-guides/documents/specifications/
+
+== 想定ユースケース
+* 「**Console for AITRIOS**」を、API経由で利用したい
+** 例：AI Modelや「**Edge Application**」のインポートおよびデプロイ
+* APIを使用する上で必要な認証処理を簡単に行いたい
+
+[[anchor-operation]]
+== 機能概要、アルゴリズム
+=== Functional Overview
+* SDKが提供するNotebookを実行することにより、「**Console for AITRIOS**」のシステムクライアント認証を行うことができる
+
+[source,mermaid, target="凡例"]
+----
+flowchart TD;
+    %% definition
+    classDef object fill:#FFE699, stroke:#FFD700
+    style legend fill:#FFFFFF, stroke:#000000
+
+    %% impl
+    subgraph legend["凡例"]
+        process(処理/ユーザーの行動)
+    end
+----
+
+
+* フロー概要
++
+[source,mermaid, target="フロー概要"]
+----
+flowchart TD
+    start((Start)) --> id1(1.接続情報の取得)
+    id1 --> id2("2.設定ファイルの作成・編集")
+    id2 --> id3(3.Notebook実行)
+    id3 --> finish(((Finish)))
+----
+
+
+. 接続情報の取得
+** AITRIOSへの接続に必要な認証情報を取得する
+
+. 設定ファイルの作成・編集
+** 設定ファイルを作成し、1で取得した情報を反映する
+
+. Notebook実行
+** AITRIOSへの認証処理を行うためのNotebookを実行する
+
+* 各フローの詳細は次章を参照
+
+== 操作性仕様、画面仕様
+=== 前提条件
+* 「**Portal for AITRIOS**」からユーザー登録し、AITRIOSのプロジェクトに参加していること
+
+=== How to start each function
+. 「**Console Access Library**」を使用する各機能のディレクトリの `**README.md**` に含まれるハイパーリンクから、`**set_up_console_client**` ディレクトリの `**README.md**` にジャンプする
+
+=== 接続情報の取得
+APIを使用して「**Console for AITRIOS**」に接続するため、下記の情報を取得する。 +
+これらの情報は、次項の<<anchor-edit, 設定ファイルの作成・編集>>にて使用する。
+
+* サーバURL +
+本機能のドキュメント ( `**README.md**` ) より、下記を確認する。
+** APIサーバ ベースURL
+** 認証サーバURL
+
+* クライアントアプリ詳細情報 +
+「**Portal for AITRIOS**」のクライアントアプリ一覧から、下記を取得する。 +
+詳細は https://developer.aitrios.sony-semicon.com/en/documents/portal-user-manual[「**Portal ユーザーマニュアル**」] を参照。
+
+** クライアントID
+** シークレット 
+
+[[anchor-edit]]
+=== 設定ファイルの作成・編集
+`**set_up_console_client**` ディレクトリに<<anchor-conf, 設定ファイル>>を作成し、上記で取得した接続情報を反映する。
+
+NOTE: 下記のパラメータはいずれも省略不可。
+
+NOTE:「**Console Access Library**」APIに渡されるパラメータについては、<<anchor-ref, 「**Console Access Library**」API>>の仕様に従う。
+
+[[anchor-conf]]
+[cols="1,1,1,1a"]
+|===
+|Configuration |Meaning |Range |Remarks
+
+|`**console_endpoint**`
+|APIサーバ ベースURL
+|文字列 +
+詳細は「**Console Access Library**」APIの仕様に従う。
+|省略不可 +
+下記の「**Console Access Library**」APIに使用される。 +
+
+* `**common.config.Config**`
+
+|`**portal_authorization_endpoint**`
+|認証サーバURL
+|文字列 +
+詳細は「**Console Access Library**」APIの仕様に従う。
+|省略不可 +
+下記の「**Console Access Library**」APIに使用される。 +
+
+* `**common.config.Config**`
+
+|`**client_id**`
+|認証に必要なクライアントID
+|文字列 +
+詳細は「**Console Access Library**」APIの仕様に従う。
+|省略不可 +
+下記の「**Console Access Library**」APIに使用される。 +
+
+* `**common.config.Config**`
+
+|`**client_secret**`
+|認証に必要なシークレット
+|文字列 +
+詳細は「**Console Access Library**」APIの仕様に従う。
+|省略不可 +
+下記の「**Console Access Library**」APIに使用される。 +
+
+* `**common.config.Config**`
+
+|===
+
+=== Notebook実行
+. commonディレクトリ配下のクライアント認証ディレクトリにてNotebook (*.ipynb) を開き、その中のPythonスクリプトを実行する
+** その後下記の動作をする
+*** 実行ディレクトリの <<anchor-conf, 設定ファイル>> の存在をチェックする
+**** エラー発生時はその内容を表示し、中断する
+*** <<anchor-conf, 設定ファイル>> の各パラメータの存在をチェックする
+**** エラー発生時はその内容を表示し、中断する
+*** <<anchor-conf, 設定ファイル>> の各パラメータの値を読み取り、システムクライアント認証に必要なAPIを呼び出す
+**** エラー発生時はその内容を表示し、中断する
+**** 認証に成功し、クライアントインスタンスの生成に成功した場合は、成功した旨のメッセージを表示する
+*** クライアントインスタンスをSDK内の他のNotebookからも使用できるよう保存する
+** エラーや応答時間の詳細については、 https://developer.aitrios.sony-semicon.com/development-guides/documents/specifications/[「**Console Access Library**」機能仕様書]参照
+
+=== シーケンス
+
+[source,mermaid, target="シーケンス"]
+----
+%%{init:{'themeVariables':{'fontSize':'20px'}, 'themeCSS':'text.actor {font-size:18px !important;} .messageText {font-size:18px !important;}'}}%%
+sequenceDiagram
+    participant user as User
+    participant portal as Portal<br>for AITRIOS
+    participant container as Dev Container
+    participant access_lib as Console Access<br>Library
+    participant auth_server as 認証サーバー
+
+    user ->>portal : Web UIに<br>アクセス
+    portal ->>user : Client ID/<br>Secret表示
+    user->>container: 設定ファイル作成・編集
+    user->>container: Notebook実行
+    container->> access_lib: Config<br>インスタンス生成
+    access_lib-->>container: レスポンス<br>※成功の場合<br>Configインスタンス
+    container->> access_lib: アクセストークン<br>取得API呼び出し
+    access_lib->>auth_server: 認証リクエスト
+    auth_server-->>access_lib: レスポンス
+    access_lib-->>container: レスポンス
+    container->>user: 結果表示<br> (アクセストークン取得成功/失敗)
+    container->>access_lib: Client<br>インスタンス生成
+    access_lib-->>container: レスポンス<br>※成功の場合<br>Clientインスタンス
+    container->>user: 結果表示<br> (クライアント生成成功/失敗)
+----
+
+
+== 目標性能
+* ユーザーが、「**Console for AITRIOS**」の内部動作を意識することなく、簡単にAPIの各機能を利用する準備ができること
+* UIの応答時間が1.2秒以内であること
+* 処理に5秒以上かかる場合は、処理中の表現を逐次更新表示できること
+* 利用ツールやバージョンの情報にユーザーがアクセスできるようドキュメントを提供すること
+
+== 制限事項
+* なし
+
+== その他特記事項
+* なし
+
+== 未決定事項
+* なし
+

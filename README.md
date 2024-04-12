@@ -1,14 +1,14 @@
-# "**Vision and Sensing Application SDK**" for AITRIOS&trade;
+# "**Edge Application SDK**" for AITRIOS&trade;
 
 ## Contents <!-- omit in toc -->
-- ["**Vision and Sensing Application SDK**" for AITRIOS™](#vision-and-sensing-application-sdk-for-aitrios)
+- ["**Edge Application SDK**" for AITRIOS™](#edge-application-sdk-for-aitrios)
   - [Overview](#overview)
-    - [What you can do with the "**Vision and Sensing Application SDK**"](#what-you-can-do-with-the-vision-and-sensing-application-sdk)
+    - [What you can do with the "**Edge Application SDK**"](#what-you-can-do-with-the-edge-application-sdk)
     - [Components](#components)
       - [Workflow for developing AI models](#workflow-for-developing-ai-models)
-      - [Workflow for developing Vision and Sensing Applications](#workflow-for-developing-vision-and-sensing-applications)
+      - [Workflow for developing Edge Applications](#workflow-for-developing-edge-applications)
     - [Restrictions](#restrictions)
-      - [About "**Vision and Sensing Application SDK**"](#about-vision-and-sensing-application-sdk)
+      - [About "**Edge Application SDK**"](#about-edge-application-sdk)
       - [About AITRIOS](#about-aitrios)
       - [About GitHub Codespaces](#about-github-codespaces)
   - [Installation Guide](#installation-guide)
@@ -26,12 +26,12 @@
   - [Branch](#branch)
 
 ## Overview
-"**Vision and Sensing Application SDK**" for AITRIOS is a toolkit for developing AI models and post-processing applications that can be installed on Edge AI Devices. Post-processing applications are called "**Vision and Sensing Applications**".
-The models and "**Vision and Sensing Applications**" can be deployed to Edge AI Devices through "**Console for AITRIOS**".
+"**Edge Application SDK**" for AITRIOS is a toolkit for developing AI models and post-processing applications that can be installed on Edge AI Devices. Post-processing applications are called "**Edge Applications**".
+The models and "**Edge Applications**" can be deployed to Edge AI Devices through "**Console for AITRIOS**".
 
 ![overview](./Images_README/overview.png)
 
-### What you can do with the "**Vision and Sensing Application SDK**"
+### What you can do with the "**Edge Application SDK**"
 - Use GitHub Codespaces (Dev Container) as development environment.
   - You don't need to install any additional tools in your environment.
 <br>
@@ -39,13 +39,13 @@ The models and "**Vision and Sensing Applications**" can be deployed to Edge AI 
 - Develop your AI models in the container.
 <br>
 
-- Develop "**Vision and Sensing Applications**" using build environment and sample code included in the container.
+- Develop "**Edge Applications**" using build environment and sample code included in the container.
 <br>
 
-- Import AI models and "**Vision and Sensing Applications**" to "**Console for AITRIOS**" and deploy them to Edge AI Devices.
+- Import AI models and "**Edge Applications**" to "**Console for AITRIOS**" and deploy them to Edge AI Devices.
 
 ### Components
-"**Vision and Sensing Application SDK**" is provided as Development Container (Dev Container) that runs on GitHub Codespaces or Docker environment on Local PC.
+"**Edge Application SDK**" is provided as Development Container (Dev Container) that runs on GitHub Codespaces or Docker environment on Local PC.
 This container includes tools and jupyter notebooks that can be used for development.
 
 <!-- mermaid alt text: Legend -->
@@ -126,7 +126,7 @@ graph TB;
     deploy_console --> device
     device --> eval_console
 
-    subgraph DevContainer[Vision and Sensing Application SDK Dev Container]
+    subgraph DevContainer[Edge Application SDK Dev Container]
         prepare_sdk --> img_sdk
         img_sdk --> prepare_sdk
         prepare_sdk --> data_sdk
@@ -147,8 +147,8 @@ graph TB;
 
 ```
 
-#### Workflow for developing "**Vision and Sensing Applications**"
-<!-- mermaid alt text: Workflow for developing Vision and Sensing Applications -->
+#### Workflow for developing "**Edge Applications**"
+<!-- mermaid alt text: Workflow for developing Edge Applications -->
 ```mermaid
 %%{init: {'theme': 'default'}}%%
 graph TB;
@@ -166,7 +166,7 @@ graph TB;
     aot[Application<br>.aot]:::object
     eval_result[Evaluation<br>Result]:::object
 
-    develop(Develop Vision and Sensing Application)
+    develop(Develop Edge Application)
     build_wasm(Build)
     debug_wasm(Run / Debug)
     compile_aot(Compile)
@@ -175,7 +175,7 @@ graph TB;
 
     device[Edge AI Device]:::device
 
-    subgraph DevContainer[Vision and Sensing Application SDK Dev Container]
+    subgraph DevContainer[Edge Application SDK Dev Container]
         develop --> ppl_code
         ppl_code --> build_wasm
         build_wasm --> wasm
@@ -204,8 +204,8 @@ Following functions are available on "**Console for AITRIOS**":
     - upload image from device
     - import image from your local PC or storages
     - import AI model
-    - import "**Vision and Sensing Application**"
-    - deploy model and "**Vision and Sensing Application**" to device
+    - import "**Edge Application**"
+    - deploy model and "**Edge Application**" to device
     - create model
     - annotate image (for AI model created on "**Console for AITRIOS**")
     - train model (for AI model created on "**Console for AITRIOS**")
@@ -224,14 +224,14 @@ Following functions are available on Dev Container.
     - Jupyter notebook for importing models to "**Console for AITRIOS**"
     - Jupyter notebook for deploying models to Edge AI Devices
   - Prepare applications:
-    - Tools for developing, building and debugging "**Vision and Sensing Applications**"
-    - Jupyter notebook for importing "**Vision and Sensing Applications**" to "**Console for AITRIOS**"
-    - Jupyter notebook for deploying "**Vision and Sensing Applications**" to Edge AI Devices
+    - Tools for developing, building and debugging "**Edge Applications**"
+    - Jupyter notebook for importing "**Edge Applications**" to "**Console for AITRIOS**"
+    - Jupyter notebook for deploying "**Edge Applications**" to Edge AI Devices
   - See [Tutorials](./tutorials/README.md) for details on each notebook and tool.
 
 ### Restrictions
 
-#### About "**Vision and Sensing Application SDK**"
+#### About "**Edge Application SDK**"
 
 - AI model training
     - Datasets for Object Detection created on the Dev Container cannot be used for training base AI models (only for training user's custom AI models).
@@ -277,61 +277,55 @@ See [Development Environment Setup Guide](https://developer.aitrios.sony-semicon
 
 ## Samples
 You can learn the development workflow using the samples in a day. <br>
-See ["**Vision and Sensing Application SDK**" samples](./samples/README.md).
-
-> **NOTE**
->
-> To complete all steps, Azure Blob Storage is required when importing AI model to "**Console for AITRIOS**".
-This is because "**Console Access Library**" used in the sample notebook does not support importing AI model from a local environment.
-This sample is intended to execute all steps with python scripts.
+See ["**Edge Application SDK**" samples](./samples/README.md).
 
 ## Tutorials
 You can start the development workflow using the tutorial. <br>
-See ["**Vision and Sensing Application SDK**" tutorials](./tutorials/README.md).
+See ["**Edge Application SDK**" tutorials](./tutorials/README.md).
 
 >**NOTE**
 >
-> If you are unfamiliar with "**Vision and Sensing Application SDK**", it's recommended to learn with [Samples](#samples) first.
+> If you are unfamiliar with "**Edge Application SDK**", it's recommended to learn with [Samples](#samples) first.
 
 ## Migration Guide
 
 ### From SDK v0.2 to v1.0
 
-If you have already developed the "**Vision and Sensing Application**" using SDK v0.2,
-you need to modify the "**Vision and Sensing Application**" source code to migrate to SDK v1.0.
+If you have already developed the "**Edge Application**" using SDK v0.2,
+you need to modify the "**Edge Application**" source code to migrate to SDK v1.0.
 
-See ["**Vision and Sensing Application**" Migration Guide from SDK v0.2 to v1.0](./tutorials/4_prepare_application/1_develop/README_migration_0.2_1.0.md).
+See ["**Edge Application**" Migration Guide from SDK v0.2 to v1.0](./tutorials/4_prepare_application/1_develop/README_migration_0.2_1.0.md).
 
 ## Documentation
 ### SDK Functional Specifications
 - Prepare dataset
-    - ["**Image Download Functional Specifications**"](./docs/development-docs/AsciiDoc/VisionandSensingApplicationSDK_FuncSpec_ImageDownload.adoc)
-    - ["**Image Annotation CVAT Functional Specifications**"](./docs/development-docs/AsciiDoc/VisionandSensingApplicationSDK_FuncSpec_ImageAnnotationCvat.adoc)
+    - ["**Image Download Functional Specifications**"](./docs/development-docs/AsciiDoc/EdgeApplicationSDK_FuncSpec_ImageDownload.adoc)
+    - ["**Image Annotation CVAT Functional Specifications**"](./docs/development-docs/AsciiDoc/EdgeApplicationSDK_FuncSpec_ImageAnnotationCvat.adoc)
 
 - Prepare model
-    - ["**Model Training Functional Specifications**"](./docs/development-docs/AsciiDoc/VisionandSensingApplicationSDK_FuncSpec_ModelTraining.adoc)
-    - ["**Model Quantization Functional Specifications**"](./docs/development-docs/AsciiDoc/VisionandSensingApplicationSDK_FuncSpec_ModelQuantization.adoc)
+    - ["**Model Training Functional Specifications**"](./docs/development-docs/AsciiDoc/EdgeApplicationSDK_FuncSpec_ModelTraining.adoc)
+    - ["**Model Quantization Functional Specifications**"](./docs/development-docs/AsciiDoc/EdgeApplicationSDK_FuncSpec_ModelQuantization.adoc)
 
 - Prepare application
-    - ["**Application Development Functional Specifications**"](./docs/development-docs/AsciiDoc/VisionandSensingApplicationSDK_FuncSpec_ApplicationDevelopment.adoc)
+    - ["**Application Development Functional Specifications**"](./docs/development-docs/AsciiDoc/EdgeApplicationSDK_FuncSpec_ApplicationDevelopment.adoc)
 
 - Setup "**Console Access Library**"
-    - ["**Console API Initialize Functional Specifications**"](./docs/development-docs/AsciiDoc/VisionandSensingApplicationSDK_FuncSpec_APIInitialize.adoc) 
+    - ["**Console API Initialize Functional Specifications**"](./docs/development-docs/AsciiDoc/EdgeApplicationSDK_FuncSpec_APIInitialize.adoc) 
 
-- Import AI model and "**Vision and Sensing Applications**" to "**Console for AITRIOS**"
-    - ["**AI model and application Import Functional Specifications**"](./docs/development-docs/AsciiDoc/VisionandSensingApplicationSDK_FuncSpec_ModelAndPPLImport.adoc)
+- Import AI model and "**Edge Applications**" to "**Console for AITRIOS**"
+    - ["**AI model and application Import Functional Specifications**"](./docs/development-docs/AsciiDoc/EdgeApplicationSDK_FuncSpec_ModelAndPPLImport.adoc)
 
-- Deploy AI model and "**Vision and Sensing Applications**" to Edge AI Device
-    - ["**AI model and application Deploy Functional Specifications**"](./docs/development-docs/AsciiDoc/VisionandSensingApplicationSDK_FuncSpec_ModelAndPPLDeploy.adoc)
+- Deploy AI model and "**Edge Applications**" to Edge AI Device
+    - ["**AI model and application Deploy Functional Specifications**"](./docs/development-docs/AsciiDoc/EdgeApplicationSDK_FuncSpec_ModelAndPPLDeploy.adoc)
 
 - Development container
-    - ["**Development Container Functional Specifications**"](./docs/development-docs/AsciiDoc/VisionandSensingApplicationSDK_FuncSpec_DevelopmentContainer.adoc)
+    - ["**Development Container Functional Specifications**"](./docs/development-docs/AsciiDoc/EdgeApplicationSDK_FuncSpec_DevelopmentContainer.adoc)
 
 - Version control
-    - ["**Version Control Functional Specifications**"](./docs/development-docs/AsciiDoc/VisionandSensingApplicationSDK_FuncSpec_VersionControl.adoc)
+    - ["**Version Control Functional Specifications**"](./docs/development-docs/AsciiDoc/EdgeApplicationSDK_FuncSpec_VersionControl.adoc)
 
 - Deserialize
-    - ["**Deserialize Functional Specifications**"](./docs/development-docs/AsciiDoc/VisionandSensingApplicationSDK_FuncSpec_Deserialize.adoc)
+    - ["**Deserialize Functional Specifications**"](./docs/development-docs/AsciiDoc/EdgeApplicationSDK_FuncSpec_Deserialize.adoc)
 
 ## Get support
 - [Contact us](https://developer.aitrios.sony-semicon.com/contact-us/)

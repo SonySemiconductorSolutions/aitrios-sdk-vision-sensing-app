@@ -52,4 +52,4 @@ You can run all cells at once, or you can run the cells one by one.
 
 ## References
 - [FlatBuffers](https://google.github.io/flatbuffers/index.html)<br>
-The version of FlatBuffers used in "**Vision and Sensing Application SDK**" is 23.1.21.
+The version of FlatBuffers used in "**Edge Application SDK**" is 23.1.21.

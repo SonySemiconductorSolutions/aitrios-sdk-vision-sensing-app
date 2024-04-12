@@ -1,0 +1,140 @@
+{
+    "$schema": "https://json-schema.org/draft-07/schema",
+    "type": "object",
+    "required": [
+        "models"
+    ],
+    "properties": {
+        "header": {
+            "$ref": "#/definitions/header"
+        },
+        "models": {
+            "$ref": "#/definitions/models"
+        }
+    },
+    "definitions": {
+        "header": {
+            "type": "object",
+            "description": "If you use the sample, the id and version values must match the values hard-coded in the sample code. You can also omit the header parameter.",
+            "required": [
+                "id",
+                "version"
+            ],
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "pattern": "[0-9][0-9]",
+                    "description": "id."
+                },
+                "version": {
+                    "type": "string",
+                    "pattern": "[0-9][0-9][.][0-9][0-9][.][0-9][0-9]",
+                    "description": "version."
+                }
+            }
+        },
+        "models": {
+            "description" : "Parameters for each DNN models. The property key is an identifier for validation of linking Wasm implementation and PPL Parameter.",
+            "type": "object",
+            "required": [
+                "detection_bird",
+                "classification_bird"
+            ],
+            "properties": {
+                "detection_bird": {
+                    "$ref": "#/definitions/detection_param"
+                },
+                "classification_bird": {
+                    "$ref": "#/definitions/classification_param"
+                }
+            }
+        },
+        "detection_param": {
+            "description" : "Parameters for Object Detection model.",
+            "type": "object",
+            "required": [
+                "network_id",
+                "param"
+            ],
+            "properties": {
+                "network_id": {
+                    "description": "network id for Object Detection model. The network_id can be obtained from the Console UI.",
+                    "type": "string",
+                    "minLength": 6,
+                    "maxLength": 6
+                },
+                "param": {
+                    "description" : "PPL Parameter for Object Detection model.",
+                    "type": "object",
+                    "required": [
+                        "dnn_output_detections",
+                        "max_detections",
+                        "threshold",
+                        "input_width",
+                        "input_height"
+                    ],
+                    "properties": {
+                        "dnn_output_detections": {
+                            "description": "The maximum number of Bounding boxes which can be detected by Object Detection AI Model. The value of the parameter depends on the AI model. For SSD MobileNet V1, set the value to 10.",
+                            "type": "number"
+                        },
+                        "max_detections": {
+                            "description": "Threshold of detections number. The maximum number of detected Bounding boxes you want to get after Vision and Sensing Application. For SSD MobileNet V1, the value can be changed between 0 and 10.",
+                            "type": "number"
+                        },
+                        "threshold": {
+                            "description": "Score threshold.",
+                            "type": "number",
+                            "minimum": 0.0,
+                            "maximum": 1.0
+                        },
+                        "input_width": {
+                            "description": "Width of AI model's input tensor. The value of the parameter depends on the AI model.",
+                            "type": "number",
+                            "minimum": 1
+                        },
+                        "input_height": {
+                            "description": "Height of AI model's input tensor. The value of the parameter depends on the AI model.",
+                            "type": "number",
+                            "minimum": 1
+                        }
+                    }
+                }
+            }
+        },
+        "classification_param": {
+            "description" : "Parameters for Image Classification model.",
+            "type": "object",
+            "required": [
+                "network_id",
+                "param"
+            ],
+            "properties": {
+                "network_id": {
+                    "description": "network id for Image Classification model. The network_id can be obtained from the Console UI.",
+                    "type": "string",
+                    "minLength": 6,
+                    "maxLength": 6
+                },
+                "param": {
+                    "description" : "PPL Parameter for Image Classification model.",
+                    "type": "object",
+                    "required": [
+                        "dnn_output_classes",
+                        "max_predictions"
+                    ],
+                    "properties": {
+                        "dnn_output_classes": {
+                            "description": "The total number of classes in AI model output. The value of the parameter depends on the AI model. For MobileNet V2, set the value to 1001.",
+                            "type": "number"
+                        },
+                        "max_predictions": {
+                            "description": "Threshold of predictions number. The maximum number of predictions you want to get after Vision and Sensing Application. For MobileNet V2, it can be changed from 0 to 1001.",
+                            "type": "number"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
