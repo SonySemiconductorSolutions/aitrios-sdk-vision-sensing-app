@@ -14,11 +14,11 @@ In the development environment,
 
 2. Place JPEG images for calibration of quantization (for example, **`../../../../_common/dataset/training`** folder). It is recommended to place the images used in learning or validating your custom AI model. A typical number of images is 300. Accuracy of the quantized AI model depends on the images you placed.
 
-    JPEG image format is supported in "**Vision and Sensing Application SDK**". Other formats depend on [TensorFlow](https://www.tensorflow.org/api_docs/python/tf/io/decode_jpeg) and ["**MCT**"](https://sony.github.io/model_optimization/docs/api/experimental_api_docs/classes/FolderImageLoader.html?highlight=folderimageloader#default-file-types-to-scan).
+    JPEG image format is supported in "**Edge Application SDK**". Other formats depend on [TensorFlow](https://www.tensorflow.org/api_docs/python/tf/io/decode_jpeg) and ["**MCT**"](https://sony.github.io/model_optimization/docs/api/experimental_api_docs/classes/FolderImageLoader.html?highlight=folderimageloader#default-file-types-to-scan).
 
 3. Place JPEG images for evaluation after quantization (for example, **`../../../../_common/dataset/validation`** folder).
 
-    JPEG image format is supported in "**Vision and Sensing Application SDK**". Other formats depend on [TensorFlow](https://www.tensorflow.org/api_docs/python/tf/io/decode_jpeg) and ["**MCT**"](https://sony.github.io/model_optimization/docs/api/experimental_api_docs/classes/FolderImageLoader.html?highlight=folderimageloader#default-file-types-to-scan).
+    JPEG image format is supported in "**Edge Application SDK**". Other formats depend on [TensorFlow](https://www.tensorflow.org/api_docs/python/tf/io/decode_jpeg) and ["**MCT**"](https://sony.github.io/model_optimization/docs/api/experimental_api_docs/classes/FolderImageLoader.html?highlight=folderimageloader#default-file-types-to-scan).
 
 4. Place label file for evaluation after quantization (for example, **`../../../../_common/dataset/labels.json`** file). Supported label file format is a dictionary with key as label name and value as class id.
 

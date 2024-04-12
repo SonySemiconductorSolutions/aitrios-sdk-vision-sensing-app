@@ -1,0 +1,12 @@
+{
+    "input_tensor_dewarp_crop_property": {
+        "left": 0,
+        "top": 0,
+        "width": 4056,
+        "height": 3040
+    },
+    "senscord_dnn_property": {
+        "network_id": 1,
+        "network_ordinal": 0
+    }
+}

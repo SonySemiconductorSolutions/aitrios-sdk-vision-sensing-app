@@ -1,0 +1,311 @@
+= Edge Application SDK pass:[<br/>] Development Container pass:[<br/>] Functional Specifications pass:[<br/>]
+:sectnums:
+:sectnumlevels: 1
+:author: Copyright 2022-2023 Sony Semiconductor Solutions Corporation
+:version-label: Version 
+:revnumber: x.x.x
+:revdate: YYYY - MM - DD
+:trademark-desc1: AITRIOS™ and AITRIOS logos are the registered trademarks or trademarks
+:trademark-desc2: of Sony Group Corporation or its affiliated companies.
+:toc:
+:toc-title: TOC
+:toclevels: 1
+:chapter-label:
+:lang: en
+
+== Change history
+
+|===
+|Date |What/Why
+
+|2022/11/16
+|Initial draft.
+
+|2023/01/30
+|Directory structure change. Added or modified features provided by the SDK. Updated the PDF build environment.
+
+|2023/05/26
+|Fixed the notation of tool names and parentheses. + 
+Some environments do not render AsciiDoc's Mermaid diagrams, so modified to rendered image references. + 
+Added alternate text to images.
+|===
+
+== Terms/Abbreviations
+|===
+|Terms/Abbreviations |Meaning 
+
+|Dev Container
+|A Docker container with a software development environment available in GitHub Codespaces and VS Code. This SDK is provided based on Dev Container
+
+|"**Cloud App**"
+|AI application running in Cloud with data processed by "**Edge Application**" as input
+
+|===
+
+== Reference materials
+* Reference/Related documents
+** Codespaces
+*** https://docs.github.com/ja/codespaces
+** VS Code Remote Development
+*** https://code.visualstudio.com/docs/remote/remote-overview
+** [[codespaces-extension]]VS Code Codespaces extension
+*** https://marketplace.visualstudio.com/items?itemName=GitHub.codespaces
+** [[remote-development]]VS Code Remote Development Extension Pack
+*** https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.vscode-remote-extensionpack
+** CVAT
+*** https://github.com/opencv/cvat
+** "**MCT**"
+*** https://github.com/sony/model_optimization
+** COCO
+*** https://cocodataset.org/#home
+
+== Expected use case
+* Reduce the effort by using an environment that already contains the components needed for development
+* Use an environment that doesn't depend on other environments
+* Teams use the same environment
+* Understand an overview of the entire workflow for AI application development by trying it out with sample code
+* Develop smoothly even without knowledge of AI application development
+
+== Functional overview/Algorithm
+=== Functional overview
+* Provides a container environment for developing AI applications +
+** The container environment can be used in the following ways:
+*** Using Codespaces
+**** There are two types of UI: Browser and VS Code desktop
+
+*** Build a container environment on your Local PC and use it from VS Code
+
+** The container environment includes:
+*** Tools and operating environments available for each AI application development workflow
+*** Procedure in each workflow
+*** Sample code
+**** See the following <<workflow,_AI application development workflows and features to provide_>> for details +
+
+NOTE: Specific details of each function contained in a container are described in the functional specifications of each function, not in this document.
+
+* Users can get information needed to develop AI applications
+** Users can view documentation for each workflow in AI application development
+** Users can view functional specifications
+
+=== Others Exclusive conditions / specifications
+* No Docker images are included
+* No build environment for firmware of edge AI devices is included
+* Provides reference links for the sample "**Cloud App**"
+
+[[workflow]]
+=== AI application development workflows and features to provide
+
+[source,mermaid, target="Legend"]
+----
+flowchart TD;
+    %% definition
+    classDef object fill:#FFE699, stroke:#FFD700
+    classDef external_service fill:#BFBFBF, stroke:#6b8e23, stroke-dasharray: 10 2
+    style legend fill:#FFFFFF, stroke:#000000
+
+    %% impl
+    subgraph legend["Legend"]
+        process(Processing/User behavior)
+    end
+----
+
+
+[source,mermaid, target="AI application development workflows"]
+----
+flowchart TB
+    id0((Start))
+    id1(Project initial processing)
+    id2(Prepare dataset)
+    id3(Create an AI model)
+    id4(Quantize an AI model)
+    id5(Develop post-processing)
+    id6("Deploy an AI model and post-processing")
+    id7(Evaluation)
+    id8(((Finish)))
+    id0 -->id1
+    id1 -->id2
+    id2 -->id3
+    id3 -->id4
+    id4 -->id5
+    id5 -->id6
+    id6 -->id7
+    id7 -->id8
+----
+
+==== Features provided by the SDK
+
+[cols="1,2a,2a"]
+|===
+|Workflow |Deliverables (documents) |Deliverables (runtime environment, sample)
+
+|Project initial processing
+|
+* "**Console for AITRIOS**" procedure
+|-
+
+|Prepare dataset
+|
+* Procedure for annotating using CVAT
+* "**Console for AITRIOS**" procedure
+|
+* Environment where CVAT can be used
+* Notebook to download images from COCO
+* Notebook importing and exporting datasets from CVAT
+* Notebook that splits datasets for train/validate
+
+|Create an AI model
+|
+* Procedure for transfer learning an AI model (Image Classification)
+* "**Console for AITRIOS**" procedure
+|
+* Sample notebook for transfer learning an AI model (Image Classification)
+
+|Quantize an AI model
+|
+* Procedure for quantizing a user-created AI model (Image Classification) using "**MCT**"
+* Procedure for evaluating the accuracy of a user-created AI model (Image Classification) before and after quantization
+|
+* Environment for quantization using "**MCT**"
+* AI model evaluation environment
+* Sample notebook quantizing an AI model (Image Classification)
+* Sample notebook evaluating the following types of AI models (Image Classification)
+** Keras
+** TFLite
+** TFLite (quantized)
+
+|Develop post-processing
+|
+* Procedure to implement and debug post-processing and build it to a Wasm file
+|
+* Environment to build post-processing to a Wasm file
+* Sample code for post-processing (C, C++)
+* Environment to debug post-processing code
+
+
+|Import an AI model and post-processing into "**Console for AITRIOS**"
+|
+* Procedure to import AI models and post-processing into "**Console for AITRIOS**" using notebooks
+* "**Console for AITRIOS**" procedure
+|* Notebook to import AI models and post-processing into "**Console for AITRIOS**"
+
+|Deploy an AI model and post-processing to edge AI devices
+|
+* Procedure to deploy AI models and post-processing to edge AI devices using notebooks
+* "**Console for AITRIOS**" procedure
+|* Notebook to deploy AI models and post-processing to edge AI devices
+
+|Evaluation
+|
+* "**Console for AITRIOS**" procedure
+|-
+|===
+
+[cols="1,2a,2a"]
+|===
+|Other features |Deliverables (documents) |Deliverables (runtime environment, sample)
+
+|Version control
+|
+* Version control examples
+|-
+|===
+
+[[folder-structure]]
+=== Directory structure for the container
+----
+/tutorials
+	/_common
+	/1_initialize 
+	/2_prepare_dataset
+	/3_prepare_model
+	/4_prepare_application
+	/5_evaluate
+/docs/development-docs
+/.devcontainer
+/README.md
+----
+
+== User interface specifications
+=== Prerequisite
+* If you want to use Codespaces, be prepared to use it
+** If you want to use Codespaces (VS Code desktop), install <<codespaces-extension,_VS Code Codespaces extension_>>
+* If you want to use VS Code on your Local PC, intall <<remote-development,_VS Code Remote Development Extension Pack_>>
+
+=== Start container
+Start the development environment by the following procedure.
+
+* Codespaces (Browser)
+. Press the [**Create codespace on <branch name>**] from the [**Codespaces**] tab of the [**Code**] in the SDK repository
+* Codespaces (VS Code desktop)
+. Press the [**Create codespace on <branch name>**] from the [**Codespaces**] tab of the [**Code**] in the SDK repository
+. After creating Codespace, press the [**Codespaces**] in the bottom left of the Codespace browser
+. Select the [**Open with VS Code**] from the drop-down list
+* Local PC
+. Access the SDK repository from GitHub, clone the SDK repository to your environment, and open it in VS Code
+. Press the [**><**] mark at the bottom left of VS Code, or press the "Ctrl + Shift + P" to open the command palette and click the [**Reopen in Container**]
+
+[NOTE]
+====
+To interrupt the container during startup, follow the procedure:
+
+* Codespaces (Browser)
+** Press the [**×**] button in your browser
+* Codespaces (VS Code desktop) or using VS Code on a Local PC
+** Press the VS Code's [**×**] button
+====
+
+[NOTE]
+====
+To check container startup progress, follow the procedure:
+
+* Codespaces (Browser)
+** Press the [**View logs**] when it appears in the Codespaces browser +
+* Codespaces (VS Code desktop) or using VS Code on a Local PC
+** Press the [**Starting Dev Container (show log) **] from notification in bottom right of VS Code screen
+====
+
+=== Get information needed to develop AI applications
+The following documents are available:
+
+* Procedure for each workflow of AI application development (README)
+. Jump from the link in the repository top `**README.md**` to the `**README.md**` in the `**tutorials**` directory of the <<directory-structure, _Directory structure for the container_>>
+.  Jump from the link in the `**README.md**` in the `**tutorials**` directory to the `**README.md**` under each feature directory such as `**1_initialize**`
+* Functional specifications
+. Jump from the link in the repository top `**README.md**` to the functional specifications
+
+== Target performances/Impact on performances
+* Usability
+** When the SDK environment is built, the container is available for developing AI applications without any additional installation steps
+** Users must be able to navigate the container environment with the VS Code UI
+
+== Assumption/Restriction
+* Features provided by the SDK may not work properly depending on the specs of Codespaces or Local PC
+** For Codespaces, a Machine Type of 4-core or higher is recommended
+
+== Remarks
+* No error codes and messages are defined in the SDK
+* Does not specify the UI response time on container startup, as it is affected by the user's network environment for Codespaces and the user's Docker operating environment for Local PC
+** However, both Codespaces and Local PC have a proven UI response within 10 seconds on startup
+*** Performance was measured under the following conditions:
+**** Codespaces: Select Machine Type 4-core
+**** Local PC: Start on a machine with the following specs:
+
+
+|===
+|Item |Description
+
+|CPU
+|Intel(R) Core(TM) i7-8665U CPU @ 1.90GHz   2.11 GHz
+
+|RAM
+|16.0 GB
+
+|OS
+|Windows 10 version 21H2
+
+|WSL2
+|Ubuntu-20.04
+|===
+	
+== Unconfirmed items
+* None

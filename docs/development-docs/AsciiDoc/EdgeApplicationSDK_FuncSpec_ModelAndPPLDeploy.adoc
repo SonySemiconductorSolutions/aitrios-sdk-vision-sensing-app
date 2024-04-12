@@ -1,0 +1,901 @@
+= Edge Application SDK pass:[<br/>] AI Model and PPL Deploy pass:[<br/>] Functional Specifications pass:[<br/>]
+:sectnums:
+:sectnumlevels: 1
+:author: Copyright 2022-2023 Sony Semiconductor Solutions Corporation
+:version-label: Version 
+:revnumber: x.x.x
+:revdate: YYYY - MM - DD
+:trademark-desc1: AITRIOS™ and AITRIOS logos are the registered trademarks or trademarks
+:trademark-desc2: of Sony Group Corporation or its affiliated companies.
+:toc:
+:toc-title: TOC
+:toclevels: 1
+:chapter-label:
+:lang: en
+
+== Change history
+
+|===
+|Date |What/Why
+
+|2023/01/30
+|Initial draft.
+
+|2023/05/26
+|Fixed the notation of tool names and parentheses. + 
+Some environments do not render AsciiDoc's Mermaid diagrams, so modified to rendered image references. + 
+Added alternate text to images.
+|===
+
+== Terms/Abbreviations
+|===
+|Terms/Abbreviations |Meaning 
+
+|Deployment configuration
+|Used to deploy AI models. + 
+ Specify the AI model to deploy, etc. and register it in "**Console for AITRIOS**". + 
+Run a deployment by specifying a registered deployment configuration. + 
+Note that it is separate from the `**configuration.json**` to configure notebook runtime settings.
+
+|"**PPL**"
+|A module that processes the output of the AI model (Output Tensor) of edge AI devices
+
+|===
+
+== Reference materials
+
+[[anchor-ref]]
+* Reference/Related documents
+** API Reference
+*** https://developer.aitrios.sony-semicon.com/development-guides/reference/api-references/
+** "**Console User Manual**"
+*** https://developer.aitrios.sony-semicon.com/en/documents/console-user-manual
+
+
+== Expected use case
+
+* Deploy an AI model imported into "**Console for AITRIOS**" to edge AI devices
+
+* Deploy a "**PPL**" imported into "**Console for AITRIOS**" to edge AI devices
+
+* Check AI model or "**PPL**" deployment state
+
+== Functional overview/Algorithm
+
+=== Functional overview
+
+* Users can use "**Console Access Library**" in the SDK's Dev Container (Local PC or Codespaces)
+
+** Users can do the following through the "**Console Access Library**":
+
+*** Get device information for deployment
+*** Register a new deployment configuration to deploy AI model
+*** Get a list of registered deployment configurations
+*** Delete a registered deployment configuration
+*** Deploy an AI model to edge AI devices
+*** Deploy a "**PPL**" to edge AI devices
+
+[NOTE]
+====
+To run inference after deploying an AI model, + 
+set the model ID using command parameter of the "**Console for AITRIOS**". + 
+These are beyond the scope of this book. + 
+See <<anchor-ref, _"**Console User Manual**"_>> for details.
+====
+
+=== Flow
+
+[source,mermaid, target="Legend"]
+----
+flowchart TD;
+    %% definition
+    classDef object fill:#FFE699, stroke:#FFD700
+    classDef external_service fill:#BFBFBF, stroke:#6b8e23, stroke-dasharray: 10 2
+    style legend fill:#FFFFFF,stroke:#000000
+
+    %% impl
+    subgraph legend["Legend"]
+        process(Processing/User behavior)
+    end
+----
+
+
+[[anchor-model-deploy]]
+
+==== Deploy AI model
+
+* Flow
+
+[source,mermaid, target="Flow to deploy AI model"]
+----
+flowchart TD
+    %% definition
+    classDef object fill:#FFE699, stroke:#FFD700
+
+    start((Start))
+    id2(Run the notebook for system client authentication)
+    id3(Run the notebook to get imported AI model list)
+    id4(Run the notebook to get a list of edge AI devices)
+    id5(Run the notebook to get deployment configuration list)
+    id6(Create and edit the configuration file to deploy AI model)
+    id7(Run the notebook to deploy AI model)
+    finish(((Finish)))
+
+    %% impl
+    start --> id2
+    id2 --> id3
+    id3 --> id4
+    id4 --> id5
+    id5 --> id6
+    id6 --> id7
+    id7 --> finish
+----
+
+* Flow details
+. Run the notebook for system client authentication
+
+. Run the notebook to get imported AI model list
+
+** Run the notebook to get a list of AI models that have been imported into "**Console for AITRIOS**", and get settings in the configuration file, `**model_id**`. + 
+*** See <<anchor-conf, _configuration.json_>> for details.
+
+. Run the notebook to get a list of edge AI devices
+** Run the notebook to get a list of edge AI devices registered in "**Console for AITRIOS**", and get settings in the configuration file, `**device_id**`, `**model_id**`, and `**model_version**`. + 
+*** See <<anchor-conf, _configuration.json_>> for details.
+
+. Run the notebook to get deployment configuration list
+** Get deployment configuration to deploy AI model
+*** Run the notebook to get a list of deployment configurations registered in "**Console for AITRIOS**", and get settings in the configuration file, `**config_id**`. + 
+See <<anchor-conf, _configuration.json_>> for details.
+
+. Create and edit the configuration file to deploy AI model
+
+** Create and edit the configuration file <<anchor-conf, _configuration.json_>> to configure notebook runtime settings
+
+. Run the notebook to deploy AI model
+
+==== Cancel AI model deployment state
+
+* Flow
+
+[NOTE]
+====
+"Cancel AI model deployment state" is to reset state on the database. + 
+Use when a edge AI device stops responding after deploying AI model, leaving deployment state "running" on database. + 
+You can't rerun deployment in this state and must cancel. + 
+(Do not rerun the notebook to deploy AI model in this state.) + 
+You can't cancel deployment to edge AI devices. + 
+You can't recover that edge AI device stops responding by SDK. + 
+Restart or reset by other means.
+====
+
+[source,mermaid, target="Flow to cancel AI model deployment state"]
+----
+flowchart TD
+    %% definition
+    classDef object fill:#FFE699, stroke:#FFD700
+
+    start((Start))
+    id1("Run the notebook to deploy AI model <br> ※Omit detailed flow")
+    id2(Check AI model deployment state)
+    id3(Create and edit the configuration file to cancel AI model deployment state)
+    id4(Run the notebook to cancel AI model deployment state)
+    finish(((Finish)))
+
+    %% impl
+    start --> id1
+    id1 --> id2
+    id2 --> id3
+    id3 --> id4
+    id4 --> finish
+----
+
+* Flow details
+. Run the notebook to deploy AI model
+** See <<anchor-model-deploy , _flow_>> for details
+
+. Check AI model deployment state
+** Run the notebook to deploy AI model and check the deployment results
+
+. Create and edit the configuration file to cancel AI model deployment state
+
+** Create and edit the configuration file <<anchor-conf-cancel, _configuration.json_>> to configure notebook runtime settings
+
+. Run the notebook to cancel AI model deployment state
+
+
+
+==== Delete deployment configuration
+* Flow
+
+[source,mermaid, target="Flow to delete deployment configuration"]
+----
+flowchart TD
+    %% definition
+    classDef object fill:#FFE699, stroke:#FFD700
+
+    start((Start))
+    id1(Run the notebook for system client authentication)
+    id2(Run the notebook to get deployment configuration list)
+    id3(Create and edit the configuration file for running the notebook to delete deployment configuration)
+    id4(Run the notebook to delete deployment configuration)
+    finish(((Finish)))
+
+    %% impl
+    start --> id1
+    id1 --> id2
+    id2 --> id3
+    id3 --> id4
+    id4 --> finish
+----
+
+* Flow details
+. Run the notebook for system client authentication
+
+. Run the notebook to get deployment configuration list
+
+** Run the notebook to get a list of deployment configurations registered in "**Console for AITRIOS**", and get settings in the configuration file, `**config_id**`. 
+
+. Create and edit the configuration file for running the notebook to delete deployment configuration
+
+** Create and edit the configuration file <<anchor-conf-del, _configuration.json_>> to configure notebook runtime settings
+
+. Run the notebook to delete deployment configuration
+
+** Run the notebook to delete deployment configuration specified in the configuration file from "**Console for AITRIOS**"
+
+
+
+==== Deploy "**PPL**"
+* Flow
+
+[source,mermaid, target="Flow to deploy PPL"]
+----
+flowchart TD
+    %% definition
+    classDef object fill:#FFE699, stroke:#FFD700
+
+    start((Start))
+    id1(Run the notebook for system client authentication)
+    id2(Run the notebook to get imported PPL list)
+    id3(Run the notebook to get a list of edge AI devices)
+    id4(Create and edit the configuration file for running the notebook to deploy PPL)
+    id5(Run the notebook to deploy PPL)
+    finish(((Finish)))
+
+    %% impl
+    start --> id1
+    id1 --> id2
+    id2 --> id3
+    id3 --> id4
+    id4 --> id5
+    id5 --> finish
+----
+
+* Flow details
+
+. Run the notebook for system client authentication
+
+. Run the notebook to get imported "**PPL**" list
+** Run the notebook to get a list of "**PPL**" that have been imported into "**Console for AITRIOS**", and get settings in the configuration file, `**app_name**` and `**version_number**`.
+*** See <<anchor-conf-ppl, _configuration.json_>> for details. 
+
+. Run the notebook to get a list of edge AI devices
+** Run the notebook to get a list of edge AI devices registered in "**Console for AITRIOS**", and get settings in the configuration file, `**device_id**`.
+*** See <<anchor-conf-ppl, _configuration.json_>> for details.
+
+. Create and edit the configuration file for running the notebook to deploy "**PPL**"
+** Create and edit the configuration file <<anchor-conf-ppl, _configuration.json_>> to configure notebook runtime settings
+
+. Run the notebook to deploy "**PPL**"
+
+=== Sequence
+
+==== Deploy AI model
+
+[source,mermaid, target="Sequence to deploy AI model"]
+----
+%%{init:{'themeCSS':'text.actor {font-size:18px !important;} .messageText {font-size:18px !important;} .labelText {font-size:18px !important;} .loopText {font-size:18px !important;} .noteText {font-size:18px !important;}'}}%%
+sequenceDiagram
+  participant User
+  participant Dev Container
+  participant Console as Console <br> for AITRIOS
+
+  User->>Dev Container: Run the notebook <br> for system client authentication
+  opt Run arbitrarily <br> to get information needed for deployment
+    User->>Dev Container: Run the notebook <br> to get imported AI model list
+    Dev Container->>Console: Run the API <br> to get AI model list
+    Console-->>Dev Container: Response
+    Dev Container-->>User: AI model list
+    User->>Dev Container: Run the notebook <br> to get a list of edge AI devices
+    Dev Container->>Console: Run the API <br> to get a list edge AI devices
+    Console-->>Dev Container: Response
+    Dev Container-->>User: A list of edge AI devices
+    User->>Dev Container: Run the notebook <br> to get deployment <br> configuration list
+    Dev Container->>Console: Run the API <br> to get deployment <br> configuration list
+    Console-->>Dev Container: Response
+    Dev Container-->>User: Deployment configuration list
+  end
+
+  User->>Dev Container: Create and edit <br> the configuration file <br> to deploy AI model
+  User->>Dev Container: Run the notebook <br> to deploy AI model
+  opt To register a new deployment configuration <br> (Specify true/false in the configuration file)
+    Dev Container->>Console: Run the API <br> to register deployment configuration
+    Console-->>Dev Container: Response
+    Dev Container-->>User: Results
+  end
+  Dev Container->>Console: Run the API to deploy
+  Console-->>Dev Container: Response
+  Dev Container-->>User: Results
+  Dev Container->>Console: Run the API <br> to get deployment results
+  Console-->>Dev Container: Response
+  Dev Container-->>User: Results
+
+  Note over User, Console: The API to deploy AI model is asynchronous, <br> the response is returned before the deployment is complete. <br> Run the cell to get deployment results, <br> to check the success or failure of the deployment
+
+  opt Run arbitrarily multiple times <br> to check deployment state
+    User->>Dev Container: Run the notebook <br> to deploy AI mode <br> (Run the cell to get <br> deployment results only)
+    Dev Container->>Console: Run the API <br> to get deployment results
+    Console-->>Dev Container: Response
+    Dev Container-->>User: Results
+  end
+----
+
+==== Cancel AI model deployment state
+
+[source,mermaid, target="Sequence to cancel AI model deployment state"]
+----
+%%{init:{'themeCSS':'text.actor {font-size:18px !important;} .messageText {font-size:18px !important;} .labelText {font-size:18px !important;} .loopText {font-size:18px !important;} .noteText {font-size:18px !important;}'}}%%
+sequenceDiagram
+  participant User
+  participant Dev Container
+  participant Console as Console <br> for AITRIOS
+
+  Note over User, Dev Container: Run when you see <br> an edge AI device <br> stops responding <br> after deploying an AI model
+
+  User->>Dev Container: Run the notebook <br> to deploy AI mode <br> (Run the cell to get <br> deployment results only)
+  Dev Container->>Console: Run the API <br> to get deployment results
+  Console-->>Dev Container: Response
+  Dev Container-->>User: Results
+
+  User->>Dev Container: Create and edit <br> the configuration file <br> to cancel AI model <br> deployment state
+  User->>Dev Container: Run the notebook <br> to cancel AI model <br> deployment state
+
+  Dev Container->>Console: Run the API <br> to cancel AI model <br> deployment state
+  Console-->>Dev Container: Response
+  Dev Container-->>User: Results
+----
+
+==== Delete deployment configuration
+
+[source,mermaid, target="Sequence to delete deployment configuration"]
+----
+%%{init:{'themeCSS':'text.actor {font-size:18px !important;} .messageText {font-size:18px !important;} .labelText {font-size:18px !important;} .loopText {font-size:18px !important;} .noteText {font-size:18px !important;}'}}%%
+sequenceDiagram
+  participant User
+  participant Dev Container
+  participant Console as Console <br> for AITRIOS
+
+  User->>Dev Container: Run the notebook <br> for system client authentication
+  opt Run arbitrarily <br> to get information you need
+    User->>Dev Container: Run the notebook <br> to get deployment <br> configuration list
+    Dev Container->>Console: Run the API <br> to get deployment <br> configuration list
+    Console-->>Dev Container: Response
+    Dev Container-->>User: Deployment configuration list
+  end
+  User->>Dev Container: Create and edit <br> the configuration file <br> to delete deployment <br> configuration
+  User->>Dev Container: Run the notebook <br> to delete deployment <br> configuration
+
+  Dev Container->>Console: Run the API <br> to delete deployment <br> configuration
+  Console-->>Dev Container: Response
+  Dev Container-->>User: Results
+----
+
+==== Deploy "**PPL**"
+
+[source,mermaid, target="Sequence to deploy PPL"]
+----
+%%{init:{'themeCSS':'text.actor {font-size:18px !important;} .messageText {font-size:18px !important;} .labelText {font-size:18px !important;} .loopText {font-size:18px !important;} .noteText {font-size:18px !important;}'}}%%
+sequenceDiagram
+  participant User
+  participant Dev Container
+  participant Console as Console <br> for AITRIOS
+
+  User->>Dev Container: Run the notebook <br> for system client authentication
+  
+  opt Run arbitrarily <br> to get information needed for deployment
+    User->>Dev Container:Run the notebook <br> to get imported PPL list
+    Dev Container->>Console:Run the API <br> to get PPL list
+    Console-->>Dev Container: Response
+    Dev Container-->>User: PPL list
+    User->>Dev Container: Run the notebook <br> to get a list of edge AI devices
+    Dev Container->>Console:Run the API <br> to get a list edge AI devices
+    Console-->>Dev Container: Response
+    Dev Container-->>User: A list of edge AI devices
+  end
+
+  User->>Dev Container: Create and edit <br> the configuration file <br> to deploy PPL
+  User->>Dev Container: Run the notebook <br> to deploy PPL
+  Dev Container->>Console: Run the API <br> to deploy PPL
+  Console-->>Dev Container: Response
+  Dev Container-->>User: Results
+  Dev Container->>Console: Run the API <br> to get deployment results
+  Console-->>Dev Container: Response
+  Dev Container-->>User: Results
+      Note over User, Console: The API to deploy PPL is asynchronous, <br> the response is returned before the deployment is complete. <br> Run the cell to get deployment results, <br> to check the success or failure of the deployment
+  
+  opt Run arbitrarily multiple times <br> to check deployment state
+    User->>Dev Container: Run the notebook <br> to deploy PPL <br> (Run the cell to get <br> deployment results only)
+    Dev Container->>Console: Run the API <br> to get deployment results
+    Console-->>Dev Container: Response
+    Dev Container-->>User: Results
+  end
+----
+
+== User interface specifications (Deploy AI model)
+=== Prerequisite
+* You have registered as a user through "**Portal for AITRIOS**" and participated in the AITRIOS project
+
+* You have uploaded an AI model to the "**Console for AITRIOS**"
+
+=== How to start each function
+. Launch the SDK environment and preview the `**README.md**` in the top directory
+. Jump to the `**README.md**` in the `**tutorials**` directory from the hyperlink in the SDK environment top directory
+. Jump to the `**README.md**` in the `**3_prepare_model**` directory from the hyperlink in the `**README.md**` in the `**tutorials**` directory
+. Jump to the `**README.md**` in the `**develop_on_sdk**` directory from the hyperlink in the `**README.md**` in the `**3_prepare_model**` directory
+. Jump to the `**README.md**` in the `**4_deploy_to_device**` directory from the hyperlink in the `**README.md**` in the `**develop_on_sdk**` directory
+. Jump to the `**README.md**` in the `**deploy_to_device**` directory from the hyperlink in the `**README.md**` in the `**4_deploy_to_device**` directory
+. Jump to each feature from each file in the `**deploy_to_device**` directory
+
+
+=== Run the notebook for system client authentication
+. Jump to the `**README.md**` in the `**set_up_console_client**` directory from the hyperlink in the `**README.md**` in the `**deploy_to_device**` directory
+. Open the notebook for system client authentication, _*.ipynb_, in the `**set_up_console_client**` directory, and run the python scripts in it
+
+=== Run the notebook to get imported AI model list
+. Jump to the `**README.md**` in the `**get_model_list**` directory from the hyperlink in the `**README.md**` in the `**deploy_to_device**` directory
+. Open the notebook to get AI model list, _*.ipynb_, in the `**get_model_list**` directory, and run the python scripts in it
+** If successful, information about the AI models imported into "**Console for AITRIOS**", such as model ID, version, etc., is displayed in the notebook
+
+=== Run the notebook to get a list of edge AI devices
+. Jump to the `**README.md**` in the `**get_device_list**` directory from the hyperlink in the `**README.md**` in the `**deploy_to_device**` directory
+. Open the notebook to get a list of edge AI devices, _*.ipynb_, in the `**get_device_list**` directory, and run the python scripts in it
+** If successful, information about the edge AI devices registered in "**Console for AITRIOS**", such as device ID, deployed model ID, etc., is displayed in the notebook
+
+=== Run the notebook to get deployment configuration list
+. Jump to the `**README.md**` in the `**get_deploy_config**` directory from the hyperlink in the `**README.md**` in the `**deploy_to_device**` directory
+. Open the notebook to get deployment configuration list, _*.ipynb_, in the `**get_deploy_config**` directory, and run the python scripts in it
+** If successful, information about the deployment configurations registered in "**Console for AITRIOS**", such as config ID, etc., is displayed in the notebook
+
+=== Create and edit the configuration file to deploy AI model
+NOTE: All parameters are required, unless otherwise indicated.
+
+NOTE: All values are case sensitive, unless otherwise indicated.
+
+NOTE: The parameters passed to the "**Console Access Library**" API are as specified in the <<anchor-ref, _"**Console Access Library**" API_>>.
+
+. Create and edit the configuration file, `**configuration.json**`, in the `**deploy_to_device**` directory.
+
+[[anchor-conf]]
+[cols="2,2,3a,3a,4a"]
+|===
+|Configuration | |Meaning |Range |Remarks
+
+|`**should_create_deploy_config**`
+|
+|Whether to register new deployment configuration
+|true or false +
+true:New registration +
+false:Use registered
+|Don't abbreviate
+
+|`**config_id**`
+|
+|ID of the deployment configuration
+
+* Specify any character string for new registration +
+* If using registered, specify its ID
+
+|String +
+Details follow the "**Console Access Library**" API specification.
+|Don't abbreviate
+
+Used for the following "**Console Access Library**" API.
+
+* `**deployment.deployment.Deployment.create_deploy_configuration**`
+* `**deployment.deployment.Deployment.deploy_by_configuration**`
+
+|`**create_config**`
+|`**comment**`
+|Description of the newly registered deployment configuration
+|String +
+Details follow the "**Console Access Library**" API specification.
+|Optional
+
+* Use to register a new deployment configuration.
+
+Used for the following "**Console Access Library**" API.
+
+* `**deployment.deployment.Deployment.create_deploy_configuration**`
+
+|
+|`**model_id**`
+|ID of the AI model to deploy +
+Specify the ID of an imported AI model
+|String +
+Details follow the "**Console Access Library**" API specification.
+|Optional. But don't abbreviate this to register a new deployment configuration.
+
+* Use to register a new deployment configuration.
+
+
+Used for the following "**Console Access Library**" API.
+
+* `**deployment.deployment.Deployment.create_deploy_configuration**`
+
+|
+|`**model_version_number**`
+|Version of the AI model to deploy +
+Specify the version of an imported AI model 
+|String +
+Details follow the "**Console Access Library**" API specification.
+|Optional
+
+* Use to register a new deployment configuration.
+
+Used for the following "**Console Access Library**" API.
+
+* `**deployment.deployment.Deployment.create_deploy_configuration**`
+
+|`**device_ids**`
+|
+|ID of the edge AI devices to deploy AI model
+|List of strings
+|Don't abbreviate
+
+Used for the following "**Console Access Library**" API.
+
+* `**deployment.deployment.Deployment.deploy_by_configuration**`
+
+|`**replace_model_id**`
+|
+|ID of the AI model to be replaced + 
+Specify the ID of the AI model to replace (overwrite) among the models deployed on the device
+|String +
+Details follow the "**Console Access Library**" API specification.
+|Optional +
+Optional if you don't replace the AI model. + 
+(If not specified when the number of models deployed on the edge AI device has reached the limit, an error occurs.)
+
+Used for the following "**Console Access Library**" API.
+
+* `**deployment.deployment.Deployment.deploy_by_configuration**`
+
+|`**comment**`
+|
+|Deployment description
+|String +
+Details follow the "**Console Access Library**" API specification.
+|Optional
+
+Used for the following "**Console Access Library**" API.
+
+* `**deployment.deployment.Deployment.deploy_by_configuration**`
+
+|===
+
+
+=== Run the notebook to deploy AI model
+. Open the notebook, `**deploy_to_device.ipynb**`, in the `**deploy_to_device**` directory, and run the python scripts in it
+
+** The scripts do the following:
+
+*** Checks that <<anchor-conf, _configuration.json_>> exists in the `**deploy_to_device**` directory
+**** If an error occurs, the error description is displayed and running is interrupted.
+
+*** Checks the contents of <<anchor-conf, _configuration.json_>>
+**** If an error occurs, the error description is displayed and running is interrupted.
+
+*** Checks the contents of `**configuration.json**` for `**should_create_deploy_config**`
+**** If true, run the API to register deployment configuration
+***** If the deployment configuration is successfully registered, `**deploy_to_device.ipynb**` displays a successful message
+***** If an error occurs, the error description is displayed and running is interrupted.
+
+*** Run the API to deploy AI model
+**** If API execution is successful, `**deploy_to_device.ipynb**` displays a successful message
+**** If an error occurs, the error description is displayed and running is interrupted.
+
+*** Run the API to get AI model deployment results
+**** If results are gotten successfully, `**deploy_to_device.ipynb**` displays a successful message and deployment results
+**** If an error occurs, the error description is displayed and running is interrupted.
+
+**** See https://developer.aitrios.sony-semicon.com/development-guides/documents/specifications/["**Cloud SDK Console Access Library (Python) Functional Specifications**"] for details on errors and response times
+
+== User interface specifications (Cancel AI model deployment state)
+
+[NOTE]
+====
+Use when a edge AI device stops responding after an AI model deployment and the deployment state on the database remains "running". + 
+Operation is not guaranteed when this function is executed under normal conditions.
+====
+
+
+=== Prerequisite
+* You have registered as a user through "**Portal for AITRIOS**" and participated in the AITRIOS project
+
+* After deploying an AI model, check the deployment state to determine whether to cancel the deployment state
+
+=== How to start each function
+. Launch the SDK environment and preview the `**README.md**` in the top directory
+. Jump to the `**README.md**` in the `**tutorials**` directory from the hyperlink in the SDK environment top directory
+. Jump to the `**README.md**` in the `**3_prepare_model**` directory from the hyperlink in the `**README.md**` in the `**tutorials**` directory
+. Jump to the `**README.md**` in the `**develop_on_sdk**` directory from the hyperlink in the `**README.md**` in the `**3_prepare_model**` directory
+. Jump to the `**README.md**` in the `**4_deploy_to_device**` directory from the hyperlink in the `**README.md**` in the `**develop_on_sdk**` directory
+. Jump to the `**README.md**` in the `**cancel_deploy_state**` directory from the hyperlink in the `**README.md**` in the `**4_deploy_to_device**` directory
+. Jump to each feature from each file in the `**cancel_deploy_state**` directory
+
+
+=== Create and edit the configuration file to cancel AI model deployment state
+
+NOTE: All parameters are required, unless otherwise indicated.
+
+NOTE: The parameters passed to the "**Console Access Library**" API are as specified in the <<anchor-ref, _"**Console Access Library**" API_>>.
+
+. Create and edit the configuration file, `**configuration.json**`, in the `**cancel_deploy_state**` directory.
+
+[[anchor-conf-cancel]]
+[cols="2,2,2,3a"]
+|===
+|Configuration |Meaning |Range |Remarks
+
+|`**device_id**`
+|ID of the edge AI device to cancel deployment state
+|String +
+Details follow the "**Console Access Library**" API specification.
+|Don't abbreviate
+
+Used for the following "**Console Access Library**" API.
+
+* `**deployment.deployment.Deployment.cancel_deployment**`
+
+|`**deploy_id**`
+|Deployment ID to cancel deployment state
+|String +
+Details follow the "**Console Access Library**" API specification.
+|Don't abbreviate
+
+Used for the following "**Console Access Library**" API.
+
+* `**deployment.deployment.Deployment.cancel_deployment**`
+
+|===
+
+[NOTE]
+====
+After running the notebook to deploy AI model, deployment results and state are displayed. Get settings in the configuration file, `**device_id**` and `**deploy_id**` from them.
+====
+
+
+=== Run the notebook to cancel AI model deployment state
+. Open the notebook, `**cancel_deploy_state.ipynb**`, in the `**cancel_deploy_state**` directory, and run the python scripts in it
+
+** The scripts do the following:
+
+*** Checks that <<anchor-conf-cancel, _configuration.json_>> exists in the `**cancel_deploy_state**` directory
+**** If an error occurs, the error description is displayed and running is interrupted.
+
+*** Checks the contents of <<anchor-conf-cancel, _configuration.json_>>
+**** If an error occurs, the error description is displayed and running is interrupted.
+
+*** Run the API to cancel AI model deployment state
+**** If API execution is successful, `**cancel_deploy_state.ipynb**` displays a successful message
+**** If an error occurs, the error description is displayed and running is interrupted.
+
+NOTE: When the API is executed, the deployment state on the "**Console**" transitions from "Running" to "Canceled".
+
+
+== User interface specifications (Delete deployment configuration)
+=== Prerequisite
+* You have registered as a user through "**Portal for AITRIOS**" and participated in the AITRIOS project
+
+* You have registered a deployment configuration in the "**Console for AITRIOS**"
+
+
+=== How to start each function
+. Launch the SDK environment and preview the `**README.md**` in the top directory
+. Jump to the `**README.md**` in the `**tutorials**` directory from the hyperlink in the SDK environment top directory
+. Jump to the `**README.md**` in the `**3_prepare_model**` directory from the hyperlink in the `**README.md**` in the `**tutorials**` directory
+. Jump to the `**README.md**` in the `**develop_on_sdk**` directory from the hyperlink in the `**README.md**` in the `**3_prepare_model**` directory
+. Jump to the `**README.md**` in the `**4_deploy_to_device**` directory from the hyperlink in the `**README.md**` in the `**develop_on_sdk**` directory
+. Jump to the `**README.md**` in the `**delete_deploy_config**` directory from the hyperlink in the `**README.md**` in the `**4_deploy_to_device**` directory
+. Jump to each feature from each file in the `**delete_deploy_config**` directory
+
+=== Run the notebook for system client authentication
+. Jump to the `**README.md**` in the `**set_up_console_client**` directory from the hyperlink in the `**README.md**` in the `**delete_deploy_config**` directory
+. Open the notebook for system client authentication, _*.ipynb_, in the `**set_up_console_client**` directory, and run the python scripts in it
+
+
+=== Run the notebook to get deployment configuration list
+. Jump to the `**README.md**` in the `**get_deploy_config**` directory from the hyperlink in the `**README.md**` in the `**delete_deploy_config**` directory
+. Open the notebook to get deployment configuration list, _*.ipynb_, in the `**get_deploy_config**` directory, and run the python scripts in it
+** If successful, information about the deployment configurations registered in "**Console for AITRIOS**", such as config ID, etc., is displayed in the notebook
+
+=== Create and edit the configuration file for running the notebook to delete deployment configuration
+NOTE: All parameters are required, unless otherwise indicated.
+
+NOTE: The parameters passed to the "**Console Access Library**" API are as specified in the <<anchor-ref, _"**Console Access Library**" API_>>.
+
+. Create and edit the configuration file, `**configuration.json**`, in the `**delete_deploy_config**` directory.
+
+[[anchor-conf-del]]
+[cols="2,2,2,3a"]
+|===
+|Configuration |Meaning |Range |Remarks
+
+|`**config_id**`
+|ID of the deployment configuration to delete
+|String +
+Details follow the "**Console Access Library**" API specification.
+|Don't abbreviate
+
+Used for the following "**Console Access Library**" API.
+
+* `**deployment.deployment.Deployment.delete_deploy_configuration**`
+
+|===
+
+
+=== Run the notebook to delete deployment configuration
+. Open the notebook, `**delete_deploy_config.ipynb**`, in the `**delete_deploy_config**` directory, and run the python scripts in it
+
+** The scripts do the following:
+
+*** Checks that <<anchor-conf-del, _configuration.json_>> exists in the `**delete_deploy_config**` directory
+
+**** If an error occurs, the error description is displayed and running is interrupted.
+
+*** Checks the contents of <<anchor-conf-del, _configuration.json_>>
+
+**** If an error occurs, the error description is displayed and running is interrupted.
+
+*** Runs the API to delete deployment configuration
+
+**** If deletion is successful, `**delete_deploy_config.ipynb**` displays a successful message
+
+** If an error occurs, the error description is displayed in the `**delete_deploy_config.ipynb**` and running is interrupted.
+
+*** See https://developer.aitrios.sony-semicon.com/development-guides/documents/specifications/["**Cloud SDK Console Access Library (Python) Functional Specifications**"] for details on errors and response times
+
+
+
+
+
+== User interface specifications (Deploy "**PPL**")
+=== Prerequisite
+* You have registered as a user through "**Portal for AITRIOS**" and participated in the AITRIOS project
+
+* You have uploaded a "**PPL**" to the "**Console for AITRIOS**"
+
+=== How to start each function
+. Launch the SDK environment and preview the `**README.md**` in the top directory
+. Jump to the `**README.md**` in the `**tutorials**` directory from the hyperlink in the SDK environment top directory
+. Jump to the `**4_prepare_application**` directory from the hyperlink in the `**README.md**` in the `**tutorials**` directory
+. Jump to the `**README.md**` in the `**3_deploy_to_device**` directory from the hyperlink in the `**README.md**` in the `**4_prepare_application**` directory
+. Jump to each feature from each file in the `**3_deploy_to_device**` directory
+
+
+=== Run the notebook for system client authentication
+. Jump to the `**README.md**` in the `**set_up_console_client**` directory from the hyperlink in the `**README.md**` in the `**3_deploy_to_device**` directory
+. Open the notebook for system client authentication, _*.ipynb_, in the `**set_up_console_client**` directory, and run the python scripts in it
+
+=== Run the notebook to get imported "**PPL**" list
+. Jump to the `**README.md**` in the `**get_application_list**` directory from the hyperlink in the `**README.md**` in the `**3_deploy_to_device**` directory
+. Open the notebook to get "**PPL**" information list, _*.ipynb_, in the `**get_application_list**` directory, and run the python scripts in it
+** If successful, information about the "**PPL**" imported into "**Console for AITRIOS**", such as application name, version, etc., is displayed in the notebook
+
+=== Run the notebook to get a list of edge AI devices
+. Jump to the `**README.md**` in the `**get_device_list**` directory from the hyperlink in the `**README.md**` in the `**3_deploy_to_device**` directory
+. Open the notebook to get a list of edge AI devices, _*.ipynb_, in the `**get_device_list**` directory, and run the python scripts in it
+** If successful, information about the edge AI devices registered in "**Console for AITRIOS**", such as device ID, etc., is displayed in the notebook
+
+
+=== Create and edit the configuration file for running the notebook to deploy "**PPL**"
+NOTE: All parameters are required, unless otherwise indicated.
+
+NOTE: The parameters passed to the "**Console Access Library**" API are as specified in the <<anchor-ref, _"**Console Access Library**" API_>>.
+
+. Create and edit the configuration file, `**configuration.json**`, in the `**3_deploy_to_device**` directory.
+
+[[anchor-conf-ppl]]
+[cols="2,2,2,3a"]
+|===
+|Configuration |Meaning |Range |Remarks
+
+|`**app_name**`
+|Name of the "**PPL**" to deploy
+|String +
+Details follow the "**Console Access Library**" API specification.
+|Don't abbreviate
+
+Used for the following "**Console Access Library**" API.
+
+* `**deployment.deployment.Deployment.deploy_device_app**`
+* `**deployment.deployment.Deployment.get_device_app_deploys**`
+
+|`**version_number**`
+|Version of the "**PPL**" to deploy
+|String +
+Details follow the "**Console Access Library**" API specification.
+|Don't abbreviate
+
+Used for the following "**Console Access Library**" API.
+
+* `**deployment.deployment.Deployment.deploy_device_app**`
+* `**deployment.deployment.Deployment.get_device_app_deploys**`
+
+|`**device_ids**`
+|ID of edge AI device to deploy "**PPL**"
+|List of strings
+|Don't abbreviate
+
+Used for the following "**Console Access Library**" API.
+
+* `**deployment.deployment.Deployment.deploy_device_app**`
+
+|`**comment**`
+|"**PPL**" deployment description
+|String +
+Details follow the "**Console Access Library**" API specification.
+|Optional
+
+Used for the following "**Console Access Library**" API.
+
+* `**deployment.deployment.Deployment.deploy_device_app**`
+
+|===
+
+
+=== Run the notebook to deploy "**PPL**"
+
+. Open the notebook, `**deploy_to_device.ipynb**`, in the `**3_deploy_to_device**` directory, and run the python scripts in it
+
+** The scripts do the following:
+
+*** Checks that <<anchor-conf-ppl, _configuration.json_>> exists in the `**3_deploy_to_device**` directory
+**** If an error occurs, the error description is displayed and running is interrupted.
+
+*** Checks the contents of <<anchor-conf-ppl, _configuration.json_>>
+**** If an error occurs, the error description is displayed and running is interrupted.
+
+*** Run the API to deploy "**PPL**"
+**** If API execution is successful, `**deploy_to_device.ipynb**` displays a successful message
+**** If an error occurs, the error description is displayed and running is interrupted.
+
+*** Run the API to get "**PPL**" deployment results
+**** If results are gotten successfully, `**deploy_to_device.ipynb**` displays a successful message and deployment results
+**** If an error occurs, the error description is displayed and running is interrupted.
+
+**** See https://developer.aitrios.sony-semicon.com/development-guides/documents/specifications/["**Cloud SDK Console Access Library (Python) Functional Specifications**"] for details on errors and response times
+
+
+
+== Target performances/Impact on performances
+* Usability
+
+** When the SDK environment is built, AI models and "**PPL**" can be deployed from "**Console for AITRIOS**" to edge AI devices without any additional installation steps
+
+** UI response time of 1.2 seconds or less
+** If processing takes more than 5 seconds, indicates that processing is in progress with successive updates
+** Provides users with documentation of usage tools and version information
+
+== Assumption/Restriction
+* You can't cancel deployment or deletion of deployment configuration halfway
+* If you cancel and restart notebooks, start each process from the beginning instead of resuming in the middle
+
+== Remarks
+* None
+
+== Unconfirmed items
+* None
+
+

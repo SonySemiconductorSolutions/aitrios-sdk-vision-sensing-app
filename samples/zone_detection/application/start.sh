@@ -42,6 +42,7 @@ LOAD_PGM=none
 DEBUGGER=""
 PPL_PARAMETER_FILE=
 OUTPUT_TENSOR_FILE=
+TESTAPP_CONFIG_FILE="${PWD}/tutorials/4_prepare_application/1_develop/testapp/configuration/testapp_configuration.json"
 USER_WASM_FILE=
 
 while getopts do:p:f:t: option
@@ -81,6 +82,7 @@ fi
 LOADER_DIR="${PWD}/${VNS_ENV}/testapp/build/loader"
 DST_PPL_PARAMETER_FILE="$LOADER_DIR/ppl_parameter.json"
 DST_OUTPUT_TENSOR_FILE="$LOADER_DIR/output_tensor.jsonc"
+DST_TESTAPP_CONFIG_FILE="$LOADER_DIR/testapp_configuration.json"
 
 NATIVE_LIBS_ARGS=" -n libdev_mock.so"
 
@@ -128,8 +130,16 @@ else
     fi
 fi
 
+cp -f $TESTAPP_CONFIG_FILE $DST_TESTAPP_CONFIG_FILE
+if [ $? -gt 0 ]; then
+    rm -rf "$DST_PPL_PARAMETER_FILE"
+    rm -rf "$DST_OUTPUT_TENSOR_FILE"
+    exit 1
+fi
+
 # Run test application with Wasm
 docker run --rm -v $MOUNT_DIRECTORY:$MOUNT_DIRECTORY --network host $INTERACTIVE_OPTION -t $NAME_IMAGE /bin/sh -c "cd $MOUNT_DIRECTORY/$VNS_ENV/testapp/ && ./run.sh $PARM_ALL"
 
 rm -rf "$DST_PPL_PARAMETER_FILE"
 rm -rf "$DST_OUTPUT_TENSOR_FILE"
+rm -rf "$DST_TESTAPP_CONFIG_FILE"

@@ -2,7 +2,7 @@
 
 This tutorial shows you how to annotate your images using [CVAT](https://github.com/opencv/cvat).
 
-You can generate object detection dataset used for transfer learning in "**Vision and Sensing Application SDK**".
+You can generate object detection dataset used for transfer learning in "**Edge Application SDK**".
 
 ## 1. Start up CVAT
 
@@ -50,7 +50,7 @@ You can generate object detection dataset used for transfer learning in "**Visio
 
 The procedure is described below. See the [CVAT Documentation](https://opencv.github.io/cvat/docs/) for details.
 
-JPEG image format is supported in "**Vision and Sensing Application SDK**".
+JPEG image format is supported in "**Edge Application SDK**".
 
 A number of images each label is recommended at least 10 to use for training AI Model.
 
@@ -64,10 +64,14 @@ Please see details on [Getting started in CVAT](https://opencv.github.io/cvat/do
 
 1. In CVAT Web UI, create new project.
 2. Open the project, and add labels.
-3. In the project, create new job.
-4. In the job, create new task.
-5. Select images or zip file to import.
-6. Press "Submit" button.
+3. In the project, create new task.
+4. Select images or zip file to import.
+5. Press "Submit & Open" button.
+
+> **NOTE**
+> 
+> There is a following restriction when opening Codespaces in web browser.
+> - Importing file larger than 2MB will fail. As workaround, please open Codespaces in VS Code or do following [Import images from Codespaces (devcontainer)](#import-images-from-codespaces-devcontainer).
 
 ### Import images from Codespaces (devcontainer)
 

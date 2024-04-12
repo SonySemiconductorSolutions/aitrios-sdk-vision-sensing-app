@@ -1,0 +1,540 @@
+= Edge Application SDK pass:[<br/>] In a Day pass:[<br/>] Functional Specifications pass:[<br/>]
+:sectnums:
+:sectnumlevels: 1
+:author: Copyright 2023 Sony Semiconductor Solutions Corporation
+:version-label: Version 
+:revnumber: x.x.x
+:revdate: YYYY - MM - DD
+:trademark-desc1: AITRIOS™ and AITRIOS logos are the registered trademarks or trademarks
+:trademark-desc2: of Sony Group Corporation or its affiliated companies.
+:toc:
+:toc-title: TOC
+:toclevels: 1
+:chapter-label:
+:lang: en
+
+== Change history
+
+|===
+|Date |What/Why
+
+|2023/05/26
+|Initial draft.
+
+|2023/11/10
+|Deleted the description from 2.Terms/Abbreviations: SavedModel, TFLite, SAS +
+
+Deleted the description from 3.Reference materials: TensorFlow 1 Detection Model Zoo, Colab tutorials for Coral +
+
+Fixed the description of Functional Overview. +
+
+Fixed the description of Flow overview, Flow details, and 6.User interface specifications. +
+
+Deleted the description from 6.User interface specifications: Displays logs from TensorFlow library while AI model is transfer learning and running inference +
+
+Fixed the description of 8.Assumption/Restriction. +
+
+Fixed the description of 9.Remarks. +
+
+Made fixes associated with the change in expression to "**Vision and Sensing Application**". + 
+|===
+
+== Terms/Abbreviations
+|===
+|Terms/Abbreviations |Meaning 
+
+|TFRecord
+|A type of TensorFlow dataset format
+
+|Wasm
+|WebAssembly. Binary instruction format for virtual machines
+
+|IoU
+|Intersection over Union. The degree to which regions overlap
+
+|"**Zone Detection**"
+|Sample application provided by "**Cloud SDK**"
+
+|"**Console Access Library**"
+|Libraries for using the features of the "**Console REST API**". There is one for Python and another for TypeScript, but for the purposes of this document, it is meant for Python.
+
+|Deployment configuration
+|Used to deploy AI models. + 
+ Specify the AI model to deploy, etc. and register it in "**Console for AITRIOS**". + 
+Run a deployment by specifying a registered deployment configuration. + 
+Note that it is separate from the `**configuration.json**` to configure notebook runtime settings.
+
+|"**Edge Application**"
+|A module that processes the output of the AI model(Output Tensor) of edge AI devices
+
+|PPL parameter
+|Parameters used to process the "**Edge Application**"
+
+|Inference result metadata
+|Data output by the "**Edge Application**"
+
+|Command Parameter File
+|json file used to apply PPL parameter to devices
+
+|Sample images
+|Images taken with an edge AI device as a sample of "**Zone Detection**" stored in the "**Cloud SDK**" GitHub repository
+
+|===
+
+== Reference materials
+
+* Reference/Related documents
+** API Reference
+*** https://developer.aitrios.sony-semicon.com/development-guides/reference/api-references/
+
+== Expected use case
+
+* To give you an overview of the SDK in a day, let you run a series of SDK workflows in the single notebook, using the example of the sample application "**Zone Detection**" + 
+However, parts you can't run on Codespaces provide documentation instead
+
+== Functional overview/Algorithm
+
+=== Functional overview
+
+* In the following flow, using the sample application "**Zone Detection**" as an example, the features provided by the SDK can be performed in the single notebook
+
+* It is recommended to run the cell of the notebook one by one
+
+* Indicates approximate time for notebook cells that take longer
+
+* SDK includes backup data of CVAT project annotating images taken with an edge AI device as a sample of "**Zone Detection**"
+
+* SDK includes a TFRecord format dataset annotated with images taken with an edge AI device as a sample of "**Zone Detection**"
+
+* In the SDK, include the Output Tensor information inferenced in the quantized AI model for which transfer learning is done with the "**Zone Detection**" sample
+
+* Users can build the "**Edge Application**", edit PPL parameter information, use Output Tensor information to debug the "**Edge Application**" and output serialized inference result metadata
+
+* Users can deserialize serialized inference result metadata and display images overlaid with inference results
+
+* By importing the "**Edge Application**" into "**Console for AITRIOS**", the AI model and "**Edge Application**" can be deployed in the Edge AI device
+
+NOTE: The AI model to be deployed in the Edge AI device can be created using the "**Console UI**"
+
+* The image format supported by the SDK is JPEG
+
+* Flow overview
+
+[source,mermaid, target="Legend"]
+----
+flowchart TD;
+    %% definition
+    classDef object fill:#FFE699, stroke:#FFD700
+    style legend fill:#FFFFFF, stroke:#000000
+
+    %% impl
+    subgraph legend["Legend"]
+        process(Processing/User behavior)
+    end
+----
+
+[source,mermaid, target="Flow overview"]
+----
+flowchart TD
+    start((Start)) --> id1(1.Prepare images to use as input)
+    id1 --> id2(2.Create the AI model by using Console UI)
+    id2 --> id3(3.Build and run the Edge Application. Display by superimposing the inference results on the image)
+    id3 --> id4(4.Edit the PPL Parameter, run the Edge Application, and display by superimposing the inference results on the image)
+    id4 --> id5(5.Import the Edge Application into Console for AITRIOS,
+and deploy the AI model & Edge Application to the device)
+    id5 --> finish(((Finish)))
+----
+
+* Flow details
+
+. Prepare images to use as input
+
+** Extract the zip file containing sample images taken with an edge AI device stored in the "**Cloud SDK**" GitHub repository
+
+. Create the AI model by using the "**Console UI**"
+
+** Display a link for the procedure to create an AI model by using "**Console UI**"
+
+. Build and run the "**Edge Application**" and display images overlaid with inference results
+
+** Provides an overview of "**Edge Application**", PPL parameters and Serialization
+** Build the "**Edge Application**"
+** Execute "**Edge Application**" using the sample Output Tensor which is the inference result by the quantized AI model that is transfer learned using the sample image dataset and the PPL parameter before editing to obtain the serialized inference result metadata
+** Deserialize inference result metadata
+** Display sample images overlaid with inference results
+
+. Edit PPL parameter and run the "**Edge Application**" to display images overlaid with inference results
+
+** Execute "**Edge Application**" using the sample Output Tensor which is the inference result by the quantized AI model that is transfer learned using the sample image dataset and the edited PPL parameter to obtain the serialized inference result metadata
+** Deserialize inference result metadata
+** Display sample images overlaid with inference results
+
+. Import the "**Edge Application**" into the "**Console for AITRIOS **"and deploy the AI model and "**Edge Application**" to the device
+
+** In order to import it to "**Console for AITRIOS **" and deploy it to the Edge AI device, set the parameters such as AI model, "**Edge Application**", device ID and such
+** Import the "**Edge Application**" into "**Console for AITRIOS**" using "**Console Access Library**"
+** Deploy AI model and "**Edge Application**" to devices using "**Console Access Library**"
+** Explains how to create a Command Parameter File and import it into "**Console for AITRIOS**" and apply it to devices
+
+== User interface specifications
+=== How to start each function
+. Launch the SDK environment and preview the `**README.md**` in the top directory
+. Jump to the `**README.md**` in the `**samples**` directory from the hyperlink in the SDK environment top directory.
+. Jump to the `**README.md**` in the `**zone_detection**` directory from the hyperlink in the `**README.md**` in the `**samples**` directory
+. Jump to the `**README.md**` in the `**sdk_in_a_day.ipynb**` directory from the hyperlink in the `**README.md**` in the `**zone_detection**` directory
+
+=== Prepare images to use as input
+. Extract the zip file containing sample images taken with an edge AI device stored in the "**Cloud SDK**" GitHub repository to the directory `**dataset/images/training**` and `**dataset/images/validation**`
+
+=== Create an AI model using the "**Console UI**"
+
+. Add a link for procedure to create an AI model using the "**Console UI**"
+
+=== Build and run the "**Edge Application**" and display images overlaid with inference results
+
+. Provides an overview of "**Edge Application**" and PPL parameter
+
+** The "**Edge Application**" for "**Zone Detection**" was created based on the sample code for "**Edge Application**" for Object Detection provided by the SDK, and it is possible to set the threshold value for detecting objects using PPL parameter, and to specify a zone detection area using PPL parameter to determine whether objects are in the zone detection area
+
+. Build the "**Edge Application**"
+
+** Generates the Wasm file as an `**application/vision_app_zonedetection.wasm**`
+
+. Run the "**Edge Application**" by using the sample Output Tensor and non-edited PPL Parameter, and then fetch the serialized inference results metadata
+
+** Use the pre-edited PPL parameter saved as `**application/ppl_parameter_before.json**`
+** Saves serialized inference result metadata as `**deserialize/ppl_output_before.bin**`
+
+. Deserialize inference result metadata
+
+** Saves deserialized inference result metadata as `**deserialize/ppl_output_before.json**`
+
+. Display sample images overlaid with inference results
+
+** Displays sample images overlaid with the bounding box of the inference result, Accuracy (%), IoU (%) and the bounding box of the zone detection area
+
+=== Edit PPL parameter and run the "**Edge Application**" to display images overlaid with inference results
+
+. Run the "**Edge Application**" by using the sample Output Tensor, edited PPL Parameter and then fetch the serialized inference results metadata
+
+** Edit the object detection threshold of the PPL parameter, save it as `**application/ppl_parameter_after.json**`, and use it
+** Saves serialized inference result metadata as `**deserialize/ppl_output_after.bin**`
+
+. Deserialize inference result metadata
+
+** Saves deserialized inference result metadata as `**deserialize/ppl_output_after.json**`
+
+. Display sample images overlaid with inference results
+
+** Displays sample images overlaid with the bounding box of the inference result, Accuracy (%), IoU (%) and the bounding box of the zone detection area
+
+=== Import the "**Edge Application**" into "**Console for AITRIOS**", and deploy the AI model and "**Edge Application**" to the device
+
+. Provides a link to the procedures on how to register and participate in AITRIOS projects from "**Portal for AITRIOS**"
+
+. In order to import it into "**Console for AITRIOS**" and deploy it to Edge AI device, set the parameters such as AI model, "**Edge Application**", and device ID or such 
+
+** Create a new configuration file, `**tutorials/_common/set_up_console_client/configuration.json**`, in the SDK runtime environment and set each parameter
++
+[cols="1,1,1,1a"]
+|===
+|Configuration |Meaning |Range |Remarks
+
+|`**console_endpoint**`
+|API server base URL
+|String +
+Details follow the "**Console Access Library**" API specification.
+|Don't abbreviate +
+Used for the following "**Console Access Library**" API.
+
+* `**common.config.Config**`
+
+|`**portal_authorization_endpoint**`
+|Authentication server URL
+|String +
+Details follow the "**Console Access Library**" API specification.
+|Don't abbreviate +
+Used for the following "**Console Access Library**" API.
+
+* `**common.config.Config**`
+
+|`**client_id**`
+|Client ID required for authentication
+|String +
+Details follow the "**Console Access Library**" API specification.
+|Don't abbreviate +
+Used for the following "**Console Access Library**" API.
+
+* `**common.config.Config**`
+
+|`**client_secret**`
+|Secret required for authentication
+|String +
+Details follow the "**Console Access Library**" API specification.
+|Don't abbreviate +
+Used for the following "**Console Access Library**" API.
+
+* `**common.config.Config**`
+
+|===
+
+** Create a new configuration file, `**configuration.json**`, and set each parameter
++
+NOTE: All values are case sensitive, unless otherwise indicated.
++
+NOTE: Do not use symbolic links to files and directories.
++
+
+|===
+|Configuration |Meaning |Range |Remarks
+
+|`**import_app**`
+|Configurations for importing "**Edge Application**"
+|See the <<import_app>>
+|Don't abbreviate
+
+|`**deploy_model**`
+|Settings for deploying AI models
+|See the <<deploy_model>>
+|Don't abbreviate
+
+|`**deploy_app**`
+|Settings for deploying "**Edge Application**"
+|See the <<deploy_app>>
+|Don't abbreviate
+
+|`**command_parameter_file_name**`
+|File name of the Command Parameter File to save on the SDK execution environment
+|String
+|Don't abbreviate
+
+|===
+
+*** import_app [[import_app]]
++
+[cols="1,1,1,1a"]
+|===
+|Configuration |Meaning |Range |Remarks
+
+|`**ppl_file**`
+|"**Edge Application**" file path
+|Absolute path or relative to the notebook (*.ipynb)
+|Don't abbreviate
+
+
+|`**app_name**`
+|"**Edge Application**" name
+|String +
+Details follow the "**Console Access Library**" API specification.
+|Don't abbreviate +
+Used for the following "**Console Access Library**" API.
+
+* `**deployment.deployment.Deployment.import_device_app**`
+
+|`**version_number**`
+|"**Edge Application**" version
+|String +
+Details follow the "**Console Access Library**" API specification.
+|Don't abbreviate +
+Used for the following "**Console Access Library**" API.
+
+* `**deployment.deployment.Deployment.import_device_app**`
+
+|`**comment**`
+|"**Edge Application**" description
+|String +
+Details follow the "**Console Access Library**" API specification.
+|Optional +
+If omitted, no comment +
+Used for the following "**Console Access Library**" API.
+
+* `**deployment.deployment.Deployment.import_device_app**`
+
+|===
+
+*** deploy_model [[deploy_model]]
++
+[cols="1,1,1a,1a,1a"]
+|===
+|Configuration | |Meaning |Range |Remarks
+
+|`**should_create_deploy_config**`
+|
+|Whether to register new deployment configuration
+|true or false +
+true:New registration +
+false:Use registered
+|Don't abbreviate
+
+|`**config_id**`
+|
+|ID of the deployment configuration
+
+* Specify any character string for new registration
+* If using registered, specify its ID
+
+|String +
+Details follow the "**Console Access Library**" API specification.
+|Don't abbreviate
+
+Used for the following "**Console Access Library**" API.
+
+* `**deployment.deployment.Deployment.create_deploy_configuration**`
+* `**deployment.deployment.Deployment.deploy_by_configuration**`
+
+|`**create_config**`
+|`**comment**`
+|Description of the newly registered deployment configuration|String +
+Details follow the "**Console Access Library**" API specification.
+|Optional
+
+* Use to register a new deployment configuration
+
+Used for the following "**Console Access Library**" API.
+
+* `**deployment.deployment.Deployment.create_deploy_configuration**`
+
+|
+|`**model_id**`
+|ID of the AI model to deploy +
+Specify the ID of an imported AI model
+|String +
+Details follow the "**Console Access Library**" API specification.
+|Optional. But don't abbreviate this to register a new deployment configuration.
+
+* Use to register a new deployment configuration
+
+Used for the following "**Console Access Library**" API.
+
+* `**deployment.deployment.Deployment.create_deploy_configuration**`
+
+|
+|`**model_version_number**`
+|Version of the AI model to deploy +
+Specify the version of an imported AI model
+|String +
+Details follow the "**Console Access Library**" API specification.
+|Optional
+
+* Use to register a new deployment configuration
+
+Used for the following "**Console Access Library**" API.
+
+* `**deployment.deployment.Deployment.create_deploy_configuration**`
+
+|`**device_ids**`
+|
+|ID of the edge AI devices to deploy AI model
+|List of strings
+|Don't abbreviate
+
+Used for the following "**Console Access Library**" API.
+
+* `**deployment.deployment.Deployment.deploy_by_configuration**`
+
+|`**replace_model_id**`
+|
+|ID of the AI model to be replaced + 
+Specify the ID of the AI model to replace (overwrite) among the models deployed on the device
+|String +
+Details follow the "**Console Access Library**" API specification.
+|Optional +
+Optional if you don't replace the AI model. + 
+(If not specified when the number of models deployed on the edge AI device has reached the limit, an error occurs.)
+
+Used for the following "**Console Access Library**" API.
+
+* `**deployment.deployment.Deployment.deploy_by_configuration**`
+
+|`**comment**`
+|
+|Deployment description
+|String +
+Details follow the "**Console Access Library**" API specification.
+|Optional
+
+Used for the following "**Console Access Library**" API.
+
+* `**deployment.deployment.Deployment.deploy_by_configuration**`
+
+|===
+
+*** deploy_app [[deploy_app]]
++
+[cols="1,1,1,1a"]
+|===
+|Configuration |Meaning |Range |Remarks
+
+|`**app_name**`
+|Name of the "**Edge Application**" to deploy
+|String +
+Details follow the "**Console Access Library**" API specification.
+|Don't abbreviate
+
+Used for the following "**Console Access Library**" API.
+
+* `**deployment.deployment.Deployment.deploy_device_app**`
+* `**deployment.deployment.Deployment.get_device_app_deploys**`
+
+|`**version_number**`
+|Version of the "**Edge Application**" to deploy
+|String +
+Details follow the "**Console Access Library**" API specification.
+|Don't abbreviate
+
+Used for the following "**Console Access Library**" API.
+
+* `**deployment.deployment.Deployment.deploy_device_app**`
+* `**deployment.deployment.Deployment.get_device_app_deploys**`
+
+|`**device_ids**`
+|ID of edge AI device to deploy the "**Edge Application**"
+|List of strings
+|Don't abbreviate
+
+Used for the following "**Console Access Library**" API.
+
+* `**deployment.deployment.Deployment.deploy_device_app**`
+
+|`**comment**`
+|"**Edge Application**" deployment description
+|String +
+Details follow the "**Console Access Library**" API specification.
+|Optional
+
+Used for the following "**Console Access Library**" API.
+
+* `**deployment.deployment.Deployment.deploy_device_app**`
+
+|===
+
+. Import the "**Edge Application**" into "**Console for AITRIOS**" using "**Console Access Library**"
+
+. Deploy AI model and "**Edge Application**" to devices using "**Console Access Library**"
+
+. Create a Command Parameter File
+
+. Explains how to import a Command Parameter File into "**Console for AITRIOS**" and apply it to a device
+
+=== Supplement
+
+** In case of an error occurrence in external software such as OpenCV, display the error thrown by the software and suspend it
+** While processing, you can interrupt with the Stop Cell Execution of notebook cell function
+
+== Target performances/Impact on performances
+** When the SDK environment is built, users can run the notebook without any additional installation steps
+** UI response time of 1.2 seconds or less
+** If processing takes more than 5 seconds, indicates that processing is in progress with successive updates
+
+== Assumption/Restriction
+None
+
+== Remarks
+* OSS libraries used by the notebook
+** Matplotlib
+** OpenCV
+** NumPy
+
+== Unconfirmed items
+
+None

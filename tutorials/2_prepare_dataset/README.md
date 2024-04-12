@@ -18,4 +18,4 @@ See [README](./annotate_images/README.md) to get started.
 >**NOTE**
 >
 >"**Console for AITRIOS**" doesn't support importing annotation data.
->So the tagged annotation data is useful for training your custom AI model on "**Vision and Sensing Application SDK**" or your own environment.
+>So the tagged annotation data is useful for training your custom AI model on "**Edge Application SDK**" or your own environment.

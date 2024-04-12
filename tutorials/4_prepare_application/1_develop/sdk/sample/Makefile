@@ -21,8 +21,13 @@ else
 ifeq ($(APPTYPE),ic)
 	SUBDIRS += vision_app/single_dnn/classification
 else
+ifeq ($(APPTYPE),switchdnn)
+	SUBDIRS += vision_app/switch_dnn/switch_od_ic
+else
 	SUBDIRS += vision_app/single_dnn/objectdetection
 	SUBDIRS += vision_app/single_dnn/classification
+	SUBDIRS += vision_app/switch_dnn/switch_od_ic
+endif
 endif
 endif
 

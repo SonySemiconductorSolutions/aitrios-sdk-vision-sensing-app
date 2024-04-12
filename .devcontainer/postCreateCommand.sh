@@ -21,7 +21,7 @@ if [ ! -d $CVAT_DIR ]
 then
   echo "downloading cvat."
   cd .devcontainer/cvat/
-  git clone --depth 1 https://github.com/opencv/cvat -b v2.4.0
+  git clone --depth 1 https://github.com/opencv/cvat -b v2.6.1
   echo "downloading cvat completed."
 else
   echo "cvat already downloaded."

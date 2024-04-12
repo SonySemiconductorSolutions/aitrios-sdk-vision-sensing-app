@@ -1,0 +1,465 @@
+= Edge Application SDK pass:[<br/>] CVAT Image Annotation pass:[<br/>] Functional Specifications pass:[<br/>]
+:sectnums:
+:sectnumlevels: 1
+:author: Copyright 2022-2023 Sony Semiconductor Solutions Corporation
+:version-label: Version 
+:revnumber: x.x.x
+:revdate: YYYY - MM - DD
+:trademark-desc1: AITRIOS™ and AITRIOS logos are the registered trademarks or trademarks
+:trademark-desc2: of Sony Group Corporation or its affiliated companies.
+:toc:
+:toc-title: TOC
+:toclevels: 1
+:chapter-label:
+:lang: en
+
+== Change history
+
+|===
+|Date |What/Why
+
+|2023/01/30
+|Initial draft.
+
+|2023/05/26
+|Fixed the notation of parentheses. + 
+Some environments do not render AsciiDoc's Mermaid diagrams, so modified to rendered image references. + 
+Added alternate text to images.
+|===
+
+== Terms/Abbreviations
+|===
+|Terms/Abbreviations |Meaning 
+
+|Tag
+|Label
+
+|Annotation
+|Label information, Labeling
+
+|Annotation information
+|Metadata for images
+
+|Dataset
+|A collection of image and annotation data for learning and model evaluation
+
+|===
+
+== Reference materials
+* Reference/Related documents
+** [[portforward]]Codespaces port forwarding
+*** https://docs.github.com/en/codespaces/codespaces-reference/security-in-codespaces#port-forwarding
+
+** CVAT
+*** https://github.com/opencv/cvat
+
+== Expected use case
+* Create dataset
+** Image classification task
+*** Output dataset from CVAT on Dev Container and create AI model of image classification seamlessly
+
+** Object detection task
+*** Annotate your own image data
+*** Customize dataset by adding data, editing tags, etc.
+
+== Functional overview/Algorithm
+=== Functional overview
+* Users can start CVAT in the SDK's Dev Container (Local PC or Codespaces) +
+* Users can use CVAT to manually annotate data, and add and edit data annotations
+* Users can import image data from local file system or Codespaces into CVAT
+** The storage locations where images can be imported are as follows:
+*** SDK supports "Local PC" or "Codespaces"
+*** Users import images from Codespaces using CVAT API in notebooks
+
+
+* Users can export annotation information from CVAT to local file system or Codespaces
+** Users can select any export format with CVAT
+*** For image classification, the SDK only supports "ImageNet 1.0"
+*** For object detection, only formats with annotation information are supported
+
+|===
+|Export formats supported by CVAT |SDK support
+
+|CamVid 1.0
+|Yes
+
+|Cityscapes 1.0
+|Yes
+
+|COCO 1.0
+|Yes
+
+|COCO Keypoints 1.0
+|Yes
+
+|CVAT for images 1.1
+|Yes
+
+|CVAT for video 1.1
+|Yes
+
+|Datumaro 1.0
+|Yes
+
+|ICDAR Localization 1.0
+|Yes
+
+|ICDAR Recognition 1.0
+|No
+
+|ICDAR Segmentation 1.0
+|No
+
+|ImageNet 1.0
+|Yes
+
+|KITTI 1.0
+|Yes
+
+|LabelMe 3.0
+|Yes
+
+|LFW 1.0
+|No
+
+|Market-1501 1.0
+|No
+
+|MOT 1.1
+|Yes
+
+|MOTS PNG 1.0
+|No
+
+|Open Images V6 1.0
+|Yes
+
+|PASCAL VOC 1.1
+|Yes
+
+|Segmentation mask 1.1
+|Yes
+
+|TFRecord 1.0
+|Yes
+
+|VGGFace2 1.0
+|Yes
+
+|WiderFace 1.0
+|Yes
+
+|YOLO 1.1
+|Yes
+
+|===
+
+* For image classification, annotation information exported from CVAT can be converted into a format for use in the SDK for AI learning and quantization
+
+* The image format supported by the SDK is JPEG
+
+* Flow overview
++
+[source,mermaid, target="Legend"]
+----
+flowchart TD;
+    %% definition
+    classDef object fill:#FFE699, stroke:#FFD700
+    style legend fill:#FFFFFF, stroke:#000000
+
+    %% impl
+    subgraph legend["Legend"]
+        process(Processing/User behavior)
+    end
+----
++
+[source,mermaid, target="Flow overview"]
+----
+flowchart TD
+    start((Start)) --> id1(1.Start CVAT)
+    id1 --> id2(2.Prepare images you want to annotate)
+    id2 --> id3(3.Create and edit the configuration file for running the notebook)
+    id3 --> id4(4.Import images into CVAT)
+    id4 --> id5(5.Annotate with CVAT)
+    id5 --> id6(6.Export dataset from CVAT)
+    id6 --> |Object Detection| finish(((Finish)))
+
+    id6 --> |Image Classification| id7(7.Convert annotation information format)
+    id7 --> finish(((Finish)))
+----
+
+* Flow details
+. Start CVAT
+** Follow the procedures in the README to set up CVAT
+. Prepare images you want to annotate
+** Prepare images to annotate
+. Create and edit the configuration file for running the notebook
+** Create and edit the configuration file <<anchor-conf, _configuration.json_>> to configure notebook runtime settings
++
+NOTE: Only when running the notebook
+. Import images into CVAT
+** Import images using notebooks or CVAT Web UI
+. Annotate with CVAT
+** Annotate imported images with CVAT Web UI
+. Export dataset from CVAT
+** Export dataset using notebooks or CVAT Web UI
+. Convert annotation information format (for image classification only)
+** Convert annotation information exported from CVAT into a format for use in the SDK for AI learning and quantization
+
+== User interface specifications
+=== How to start each function
+. Jump to the `**README.md**` in the `**tutorials**` directory from the hyperlink in the SDK environment top directory
+. Jump to the `**2_prepare_dataset**` directory from the hyperlink in the `**README.md**` in the `**tutorials**` directory
+. Jump to the `**annotate_images**` directory from the hyperlink in the `**README.md**` in the `**2_prepare_dataset**` directory
+. Open the `**README.md**` in the `**image_classification**` directory or `**object_detection**` directory from the hyperlink in the `**README.md**` in the `**annotate_images**` directory
+. Run "Set up CVAT" and wait until the startup log stops
+. Open the 8080 port in your web browser in the [**Port Forwarding**] tab of VS Code
+** Wait until startup is complete and the CVAT login screen appears
+** (First-time only) Run a command in the [**Terminal**] tab of VS Code to create an account with superuser privileges for CVAT + 
+The commands are in the `**README.md**` in the `**image_classification**` directory or `**object_detection**` directory
+** Enter account information for CVAT superuser privileges at the CVAT login screen of your web browser
+** When authentication is successful, you are taken to the CVAT initial screen
+
+=== Prepare images you want to annotate
+.  Create the `**images**` directory under the `**image_classification**` directory or `**object_detection**` directory and store in it the images you want to import into CVAT and annotate
++
+NOTE: Directories can have any structure (If there is a child directory, images in the child directory will also be imported)
+
+=== Create and edit the configuration file for running the notebook
+
+. Create and edit the configuration file, `**configuration.json**`, of the execution directory in three cases: + 
+"When importing images from Dev Container local storage" or "When exporting annotation information to Dev Container local storage" or "When converting annotation information format"
++
+NOTE: All parameters are required, unless otherwise indicated.
++
+NOTE: All values are case sensitive, unless otherwise indicated.
++
+NOTE: Do not use symbolic links to files and directories.
+
+[[anchor-conf]]
+|===
+|Configuration |Meaning |Range |Remarks
+
+|`**cvat_username**`
+|Username to log in to CVAT
+|
+|Specify when importing or exporting
+
+|`**cvat_password**`
+|Password of the user logging in to CVAT
+|
+|Specify when importing or exporting
+
+|`**cvat_project_id**`
+|Project ID to import images into CVAT or export dataset from CVAT
+|
+|Specify when importing or exporting
+
+|`**import_dir**`
+|Path to store images to import into CVAT and annotate
+|Absolute path or relative to the notebook (*.ipynb)
+|Specify when importing
+
+|`**import_image_extension**`
+|Image extension to import into CVAT and annotate
+|
+|Specify when importing
+
+|`**import_task_name**`
+|Task name created when importing into CVAT
+|
+|Specify when importing
+
+|`**export_format**`
+|Format for exporting annotation information from CVAT
+|
+|Specify when exporting
+
+|`**export_dir**`
+|Path to store annotation information to export from CVAT
+|Absolute path or relative to the notebook (*.ipynb)
+|Specify when exporting or format converting
+
+|`**dataset_conversion_base_file**`
+|Path of file to convert format
+|Absolute path or relative to the notebook (*.ipynb)
+|Specify when converting format (image classification only)
+
+|`**dataset_conversion_dir**`
+|Path to store annotation information to export from CVAT and convert for use in AI model learning and quantization of the SDK
+|Absolute path or relative to the notebook (*.ipynb)
+|Specify when converting format (image classification only) + 
+If the directory contains an existing dataset, the error message is displayed and running is interrupted.
+
+|`**dataset_conversion_validation_split**`
+|Percentage of images in the dataset that are not used for training but are used for validation, when converting it's format
+|Greater than 0.0 and less than 1.0
+|Specify when converting format (image classification only)
+
+|`**dataset_conversion_seed**`
+|Random seed value for shuffling images in the dataset when converting it's format
+|0 - 4294967295
+|Specify when converting format (image classification only)
+
+|===
+
+=== Import images into CVAT
+* Import images from Dev Container local storage
+. (Only if you have not created a project) Create a project in CVAT Web UI by selecting the [**Create a new project**] from the [**+**] in the menu [**Project**]
+. Add a label by selecting the [**Add label**] in the [**Constructor**] from the project you created
+.  Import images in the directory specified by `**import_dir**` by running the `**import_api.ipynb**` in the `**image_classification**` directory or `**object_detection**` directory. + 
+(At this time, a task is created with the name specified by the `**import_task_name**` and associated with the project. If you import multiple times with the same name specified, a task with the same task name is created with a different task ID.)
+** The scripts do the following:
+*** Checks that <<anchor-conf, _configuration file_>> exists in the execution directory
+**** If an error occurs, the error description is displayed and running is interrupted.
+**** Pressing the stop button on a cell while the cell is running interrupts processing
+***  Checks that <<anchor-conf, _configuration file_>> includes each parameter
+**** If an error occurs, the error description is displayed and running is interrupted.
+**** Pressing the stop button on a cell while the cell is running interrupts processing
+***  Reads the value of each parameter from <<anchor-conf, _configuration file_>> to prepare the information needed for API client authentication
+**** If an error occurs, the error description is displayed and running is interrupted.
+**** Pressing the stop button on a cell while the cell is running interrupts processing
+***  Reads the value of each parameter from <<anchor-conf, _configuration file_>> and load the images
+**** If an error occurs, the error description is displayed and running is interrupted.
+**** Pressing the stop button on a cell while the cell is running interrupts processing
+*** Successful authentication and displays image in the project
+**** If an error occurs, the error description is displayed and running is interrupted.
+**** Pressing the stop button on a cell while the cell is running interrupts processing
+*** CVAT Web UI can verify that images have been imported into project tasks
+
+* Import images from a local environment with a web browser running
+. (Only if you have not created a project) Create a project in CVAT Web UI by selecting the [**Create a new project**] from the [**+**] in the menu [**Project**]
+. Create a task by selecting the [**Create a new task**] from the [**+**] at the bottom of the project you created
+. Open the [**Click or drag files to this area**] on the [**My computer**] tab in the [**Select files**] item of the task and select an image file
+. Press the [**Submit & Open**] button to import
++
+NOTE: See https://opencv.github.io/cvat/docs/[documentation] for import procedures
+
+=== Annotate with CVAT
+. If necessary, select the [**Add label**] in the [**Constructor**] in the CVAT project to add labels
+. Select the [**Jobs**] in a task in the project to go to the job screen
+. Select the tag you want to associate from the [**Setup tag**] and click it to annotate the image
+. To move to the next image, click the [**>**] button at the top of the image, then press the key on the next image as preceding to associate the tag
+. After annotating up to the last image, display the menu from the [**≡(menu)**] button and click the [**Finish the job**] to complete
++
+NOTE: See https://opencv.github.io/cvat/docs/[documentation] for annotation procedures
+
+=== Export dataset from CVAT
+* Export dataset to Dev Container local storage
+.  Export dataset from the project specified by `**cvat_project_name**` by running the `**export_api.ipynb**` in the `**image_classification**` directory or `**object_detection**` directory
+** The scripts do the following:
+*** Checks that <<anchor-conf, _configuration file_>> exists in the execution directory
+**** If an error occurs, the error description is displayed and running is interrupted.
+**** Pressing the stop button on a cell while the cell is running interrupts processing
+***  Checks that <<anchor-conf, _configuration file_>> includes each parameter
+**** If an error occurs, the error description is displayed and running is interrupted.
+**** Pressing the stop button on a cell while the cell is running interrupts processing
+***  Reads the value of each parameter from <<anchor-conf, _configuration file_>> to prepare the information needed for API client authentication
+**** If an error occurs, the error description is displayed and running is interrupted.
+**** Pressing the stop button on a cell while the cell is running interrupts processing
+*** After successful authentication, download a zip file of the dataset to the directory specified by `**export_dir**`
+**** If an error occurs, the error description is displayed and running is interrupted.
+**** Pressing the stop button on a cell while the cell is running interrupts processing
+**** If the directory specified by `**export_dir **` does not already exist, it is created at the same time.
+
+* Export dataset to a local environment running a web browser
+. In the CVAT Web UI, click the project's [**⁝**] and then click the [**Export dataset**] from the menu that appears
+. Select and click the [**ImageNet 1.0**] from the [**Export format**] in the [**Export project ～ as a dataset**] dialog
+. Enter the name of the file to download in the [**Custom name**]
+. Check the [**Save images**] to include image files in the export file
+. Use your browser's download function to specify the download destination and download a zip file.
+
+* In the case of image classification, the directory structure in the exported zip file is as follows: + 
+There are directories with annotation names, and each directory contains image files associated with the annotation
++
+For object detection, directory structure varies by format
++
+----
+Exported zip file
+  ├ Tag A/
+  │   ├ Image file
+  │   ├ Image file
+  │   ├ ・・・・
+  ├ Tag B/
+  │   ├ Image file
+  │   ├ Image file
+  │   ├ ・・・・
+  ├ ・・・・
+----
+
+=== Convert annotation information format (for image classification only)
+
+. Convert the format of a zip file of the dataset specified by `**dataset_conversion_base_file**` by running the `**convert_dataset.ipynb**` in the `**image_classification**` directory 
+** If the directory specified by `**dataset_conversion_dir**` is `**tutorials/_common/dataset**`, annotation information is stored in the `**tutorials/_common/dataset**` directory as follows:
++
+----
+tutorials/
+  ├ 2_prepare_dataset/
+  │  └ annotate_images/
+  │     └ image_classification/
+  │        ├ configuration.json
+  │        └ images/
+  │            ├  Image file
+  │            ├  Image file
+  │            ├ ・・・・
+  └ _common
+    └ dataset
+      ├ **.zip (1)
+      ├ cvat_exported/ (2)
+      │  ├ Image class name/
+      │  │   └ Image file
+      │  ├ Image class name/
+      │  │   └ Image file
+      │  ├ ・・・・
+      ├ labels.json (3)
+      ├ training/  (4)
+      │  ├ Image class name/
+      │  │   └ Image file
+      │  ├ Image class name/
+      │  │   └ Image file
+      │  ├ ・・・・
+      └ validation/ (5)
+          ├ Image class name/
+          │   └ Image file
+          ├ Image class name/
+          │   └ Image file
+          ├ ・・・・
+----
++
+(1) Data to be converted. Zip file exported from CVAT
++
+(2) Intermediate output data during conversion. The contents of the zip file exported from CVAT are extracted into this directory
++
+(3) Intermediate output data during conversion. Labels information file created from the `**cvat_exported**` directory
++
+(4) Conversion output data. Extracted for training from the `**cvat_exported**` directory
++
+(5) Conversion output data. Extracted for validation from the `**cvat_exported**` directory
+
+*** The format of label information files is a json file with the label name and its id value as follows:
++
+----
+{"daisy": 0, "dandelion": 1, "roses": 2, "sunflowers": 3, "tulips": 4}
+----
+
+*** If the directory specified by `**dataset_conversion_dir **` does not already exist, it is created at the same time.
+
+== Target performances/Impact on performances
+* Usability
+** When the SDK environment is built, CVAT can be run without any additional installation steps
+** UI response time of 1.2 seconds or less
+
+== Assumption/Restriction
+* CVAT fails to start if Codespaces Machine Type is minimally configured (2-core), so you must select a Machine Type greater than 4-core
+* If you cancel and restart an import or export process, start each process from the beginning instead of resuming in the middle
+
+== Remarks
+* No error codes and messages are defined in the SDK
+* [[novncpassword]]About putting the password in the document
+** No security issues because <<portforward, _port forward_>> is set to private by default, which means only the creator of the Codespaces can access the port
+
+* How to check the version of CVAT
+** After logging in to CVAT with Web UI, the version number is listed in the dialog that appears when you click your username and click [**About**]
+
+== Unconfirmed items
+None
