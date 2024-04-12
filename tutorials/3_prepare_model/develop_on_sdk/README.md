@@ -1,6 +1,6 @@
-# Develop AI model on "**Vision and Sensing Application SDK**"
+# Develop AI model on "**Edge Application SDK**"
 
-"**Vision and Sensing Application SDK**" provides following functions to prepare AI model:
+"**Edge Application SDK**" provides following functions to prepare AI model:
 
 ## 1. Transfer learning
 This part describes how to train an AI model. <br>

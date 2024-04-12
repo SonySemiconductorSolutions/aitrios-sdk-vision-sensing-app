@@ -3,7 +3,7 @@
 This tutorial shows you how to prepare AI model that can run on Edge AI Devices.
 
 
-## Prepare AI model on "**Vision and Sensing Application SDK**"
+## Prepare AI model on "**Edge Application SDK**"
 
 You can train, quantize and import AI model to "**Console for AITRIOS**" and deploy it to Edge AI Devices using the SDK.
 

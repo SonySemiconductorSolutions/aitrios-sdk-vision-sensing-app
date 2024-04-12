@@ -1,15 +1,15 @@
-# Vision and Sensing Application Sample for Image Classification
-"**Vision and Sensing Application**" sample for Image Classification is post-processing of the AI model output to limit the output by setting the maximum number of predictions.
+# Edge Application Sample for Image Classification
+"**Edge Application**" sample for Image Classification is post-processing of the AI model output to limit the output by setting the maximum number of predictions.
 
 Supporting Image Classification models such as the following.
 - Image Classification AI model transfer learned and quantized in the SDK
 
 ## Initialize process
-The PPL Parameter is used to process the "**Vision and Sensing Application**" and is passed by **`ConfigurationCallback`** to the "**Vision and Sensing Application**".
+The PPL Parameter is used to process the "**Edge Application**" and is passed by **`ConfigurationCallback`** to the "**Edge Application**".
 
 This function parses this value and sets it as a variable. Since PPL Parameter is in JSON format, it is parsed using [parson](../../../../third_party/parson/).
 
-The following parameters are used in the sample "**Vision and Sensing Application**" :
+The following parameters are used in the sample "**Edge Application**" :
 
 - **`header`**
   - **`id`**<br>
@@ -34,7 +34,7 @@ The following parameters are used in the sample "**Vision and Sensing Applicatio
   >
   > The value of the parameter depends on the AI model.
 - **`max_predictions`**<br>
-  Description: Threshold of predictions number. The maximum number of predictions you want to get after "**Vision and Sensing Application**".
+  Description: Threshold of predictions number. The maximum number of predictions you want to get after "**Edge Application**".
   > NOTE
   >
   > For Image Classification AI model transfer learned and quantized in the SDK, it can be changed from 0 to the number of classes set in transfer learning in the SDK. If an invalid value is entered, the default value is applied.

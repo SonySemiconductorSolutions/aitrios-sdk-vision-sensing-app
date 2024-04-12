@@ -1,6 +1,6 @@
 # Tutorials - 4. prepare application (post process)
 
-This tutorial shows you how to prepare "**Vision and Sensing Application**" that can run on Edge AI Devices.
+This tutorial shows you how to prepare "**Edge Application**" that can run on Edge AI Devices.
 
 You can develop, build and import application to "**Console for AITRIOS**" and deploy it to Edge AI Devices using the SDK.
 

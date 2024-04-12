@@ -1,10 +1,18 @@
-# Running/Debugging Wasm in "**Vision and Sensing Application SDK**"
+# Running/Debugging Wasm in "**Edge Application SDK**"
 
-You can run and debug Wasm in the VS Code UI using [LLDB](https://lldb.llvm.org/) and [WAMR-IDE](https://github.com/bytecodealliance/wasm-micro-runtime/tree/main/test-tools/wamr-ide).<br>
-The following APIs are mocked in the "**Vision and Sensing Application**" debugging :
-- "**EVP SDK API**"
-- "**SensCord SDK API**"
+You can run and debug Wasm in the VS Code UI using [LLDB](https://lldb.llvm.org/), [WAMR-IDE](https://github.com/bytecodealliance/wasm-micro-runtime/tree/main/test-tools/wamr-ide) and test application.<br>
+
+The following APIs are mocked by test application in the "**Edge Application**" debugging :
+- "**EVP API**"
+- "**SensCord API**"
 - "**Data Pipeline API**"
+
+The test application can input following parameters and these are used to mock APIs. <br>
+- Output Tensor
+- PPL Parameter
+- test application initial configuration
+
+
 
 ## 1. Initialize (only the first time)
 
@@ -68,7 +76,7 @@ The following APIs are mocked in the "**Vision and Sensing Application**" debugg
 
 The Output Tensor and PPL Parameter are stored in the following location.
 
-The data structure and value depend on the implementation of "**Vision and Sensing Application**".
+The data structure and value depend on the implementation of "**Edge Application**".
 
 Please edit the files to test if needed.
 
@@ -86,22 +94,157 @@ Please edit the files to test if needed.
 
     - **`./tutorials/4_prepare_application/1_develop/testapp/objectdetection/ppl_parameter.json`**
 
+- Switch DNN
+
+    - **`./tutorials/4_prepare_application/1_develop/testapp/switch_dnn/output_tensor.jsonc`**
+
+    - **`./tutorials/4_prepare_application/1_develop/testapp/switch_dnn/ppl_parameter.json`**
+
+You can change test application initial configuration.
+Please edit the following file to test if needed.
+- **`./tutorials/4_prepare_application/1_develop/testapp/configuration/testapp_configuration.json`**. <br>
+
+The testapp_configuration.json has following parameters:
+    
+  - `input_tensor_dewarp_crop_property`
+  - `senscord_dnn_property`
+  
+These parameters are set as the initial return values of mocked **`senscord_stream_get_property`** and **`senscord_channel_get_property`**. See ["**SensCord API Specification**"](https://developer.aitrios.sony-semicon.com/en/file/download/aitrios-apispec-senscordsdk-v1-0-1-en) for more information on the APIs.
+For details on the parameter settings, see [testapp_configuration_schema.json](./testapp/configuration/testapp_configuration_schema.json).
+
 > **NOTE**
 > 
-> **`output_tensor.jsonc`** and **`ppl_parameter.json`** are only used for running/debugging Wasm in "**Vision and Sensing Application SDK**".
+> **`output_tensor.jsonc`**, **`ppl_parameter.json`** and **`testapp_configuration.json`** are only used for running/debugging Wasm in "**Edge Application SDK**".
 
 > **NOTE**
 > 
 > For running the Wasm in the device, please specify the same content as the **`ppl_parameter.json`** to the **`PPLParameter`** of the **`StartUploadInferenceData`** which is a command parameter of "**Console for AITRIOS**".
 
+## 3. Check memory consumption
 
-## 3. Build and run test application with Wasm file for debugging
+You can check Wasm memory consumption after the Wasm exit by running test application. The Wasm memory consumption is displayed as console log output.
 
-Test application located in [testapp](./testapp) loads Wasm file, Output Tensor jsonc file and ppl parameter json file.
+Example of console log output when running test application:
 
-And the test application calls "**Vision and Sensing Application**" interface (**`main`**).
+```
+･･･
+
+Memory consumption summary (bytes):
+WASM module memory consumption, total size: 16223
+    module struct size: 304
+    types size: 532
+    imports size: 1332
+    funcs size: 13579  <-------------------------------------------------- *1
+    tables size: 168
+    memories size: 16
+    globals size: 96
+    exports size: 72
+    table segs size: 44
+    data segs size: 80
+    const strings size: 0
+    aot code size: 0
+WASM module inst memory consumption, total size: 72972
+    module inst struct size: 668
+    memories size: 65740     <-------------------------------------------- *2
+        app heap size: 0
+    tables size: 4
+    functions size: 6440
+    globals size: 96
+    exports size: 24
+Exec env memory consumption, total size: 34472
+    exec env struct size: 1704
+        block addr cache size: 1536
+    stack size: 32768  <-------------------------------------------------- *3
+
+Total memory consumption of module, module inst and exec env: 123667  <--- *4
+Total interpreter stack used: 2792  <------------------------------------- *5
+Total auxiliary stack used: 2480  <--------------------------------------- *6
+Total app heap used: 0  <------------------------------------------------- *7
+native_lib_count: 1
+```
+
+Explanation of above output contents:
+
+> **NOTE**
+> 
+> This feature is using the experimental feature of WebAssembly Micro Runtime (WAMR). So the following descriptions are inferred from our verification. The accurate information can be found [here](https://github.com/bytecodealliance/wasm-micro-runtime/blob/WAMR-1.1.2/doc/build_wamr.md#enable-performance-profiling-experiment).
+
+- Wasm memory consumption
+
+    | Marking | Summary | Description | Items to check | Remarks |
+    |:--:|:---|:---|:---|:---|
+    |*1|WASM module memory consumption|Memory used to load Wasm|funcs size|Memory consumption of executable code|
+    |*2|WASM module inst memory consumption|Memory used when instantiating Wasm module|memories size|Memory consumption for dynamic memory allocation|
+    |*3|Exec env memory consumption|Memory to run Wasm. Test application uses|stack size|Maximum stack value to use for Test application when executing Wasm|
+
+- Total memory, stack and heap
+
+    | Marking | Summary | Description |
+    |:--:|:---|:---|
+    |*4|Total memory consumption of module, module inst and exec env|Total memory consumption types|
+    |*5|Total interpreter stack used|Test application stack consumption|
+    |*6|Total auxiliary stack used|Wasm stack consumption|
+    |*7|Total app heap used|Heap consumption|
+
+If you want to check Wasm memory consumption at any line of the Wasm source code, please do following steps to call **`Memory consumption display API`** in the Wasm source code.
+
+> **NOTE**
+> 
+> **`Memory consumption display API`** is an native API implemented only in this test application. The API is not available in edge AI device. So if you deploy Wasm including calling the API to edge AI device, runtime error occurs. Before deploying to edge AI device, please remove the header file definition for the API and delete calling the API in the Wasm source code.
+
+1. Include header file.
+
+    ```c
+    #include "vision_app_memory_dump.h"  // Add this line.
+    ```
+
+2. Add calling **`Memory consumption display API`**.
+
+    API definition:
+    ```c
+    void TESTAPP_dump_mem_consumption();
+    ```
+
+    | parameters | returns |
+    |:---:|:---:|
+    | none | none |
+
+    Usage example:
+    ```c
+        ret = senscord_channel_get_raw_data(channel, &raw_data);
+        if (ret < 0) {
+            ERR_PRINTF("senscord_channel_get_raw_data : ret=%d", ret);
+            senscord_get_last_error(&status);
+            PrintError(status);
+                break;
+        }
+        TESTAPP_dump_mem_consumption();  // Add this line.
+    ```
+
+3. When running test application, please append the "-m" option to [start.sh](./start.sh).
+
+> **NOTE**
+> 
+> If you call the **`Memory consumption display API`** in the Wasm source code and execute start.sh without specifying the "-m" option, you will get an error and will not be able to execute.
+
+## 4. Build and run test application with Wasm file for debugging
+
+Test application located in [testapp](./testapp) loads Wasm file, Output Tensor jsonc file, ppl parameter json file and test application configuration file.
+
+And the test application calls "**Edge Application**" interface (**`main`**).
 
 To build and run test application, execute following command in TERMINAL.
+
+- **`start.sh`** command parameters used in this chapter:  
+
+    | Parameter | mandatory<br> / optional<br> | Description |
+    |:--:|:--:|:---|
+    | -t | mandatory | specify build/run Wasm type. value is [ic/od/switchdnn]. |
+    | -d | optional | build for debugging. start and wait for attaching debugger. |
+    | -o | optional | specify output tensor jsonc file for debugging. |
+    | -p | optional | specify ppl parameter json file for debugging. |
+    | -f | optional | Specify the user-created Wasm file you want to debug. value is the absolute path to the file. The file must be in ./tutorials/4_prepare_application/1_develop/**/*. |
+    | -m | optional | build with Memory consumption display API. If not specified, you will get an error and will not be able to execute. |
 
 - Image Classification (default setting)
 
@@ -122,6 +265,16 @@ To build and run test application, execute following command in TERMINAL.
     Or (specify input file setting)
     ```bash
     $ ./tutorials/4_prepare_application/1_develop/start.sh -d -t od -o <file1> -p <file2>  
+    ```
+
+- Switch DNN (default setting)
+    ```bash
+    $ ./tutorials/4_prepare_application/1_develop/start.sh -d -t switchdnn
+    ```
+
+    Or (specify input file setting)  
+    ```bash
+    $ ./tutorials/4_prepare_application/1_develop/start.sh -d -t switchdnn -o <file1> -p <file2>  
     ```
 
 > **NOTE**
@@ -149,7 +302,7 @@ Debug port : 1234
 
 > **NOTE**
 > 
-> The script is for debugging the sample. Modify the Wasm file path in [start.sh](./start.sh) to match the location of the "**Vision and Sensing Application**" you created.  
+> The script is for debugging the sample. Modify the Wasm file path in [start.sh](./start.sh) to match the location of the "**Edge Application**" you created.  
 > For example:
 > ```sh
 > WASM_FILE=${PWD}/sdk/sample/build/debug/vision_app_objectdetection.wasm
@@ -161,6 +314,17 @@ Debug port : 1234
 >
 > Internal information of [start.sh](./start.sh).  
 > The script has following sections.
+> 
+> - **`build.sh`** command parameters used in this chapter:
+> 
+>   | Parameter | mandatory<br> / optional<br> | Description |
+>   |:--:|:--:|:---|  
+>   | -t | optional | specify build Wasm type. value is [ic/od/switchdnn]. |
+>   | -d | optional | build for debugging. |
+>   | -c | optional | clean all Wasm object. |
+>   | -C | optional | clean all Wasm object and Docker image. |
+>   | -s | optional | run AOT file size check (only release build available) |
+>   | -m | optional | build with Memory consumption display API. If not specified, you will get an error. |
 > 
 > 1. Build Wasm 
 >     ```sh
@@ -204,7 +368,7 @@ Debug port : 1234
 >     ```
 >     **`<file3>`** Absolute path of the Wasm file.  
 
-## 4. Debugging Wasm
+## 5. Debugging Wasm
 
 1. Press F5 key to attach the debugger. Then "Could not load source" 
  message will be displayed in the top pane, so remove the message tab.
@@ -219,6 +383,10 @@ Debug port : 1234
   - [vision_app_objectdetection.cpp](./sdk/sample/vision_app/single_dnn/objectdetection/src/vision_app_objectdetection.cpp)
   - [analyzer_objectdetection.cpp](./sdk/sample/post_process/objectdetection/src/analyzer_objectdetection.cpp)
 
+- Switch DNN
+  - [vision_app_switch_dnn.cpp](./sdk/sample/vision_app/switch_dnn/switch_od_ic/src/vision_app_switch_dnn.cpp)
+  - [analyzer_switch_dnn.cpp](./sdk/sample/post_process/switch_dnn/src/analyzer_switch_dnn.cpp)
+
 3. Press the F5 key, then the program continues and stops at the breakpoint.
 
 4. Review variables in VARIABLES. And review log output in TERMINAL.  
@@ -230,10 +398,9 @@ Debug port : 1234
 > The mock implements following behavior.
 >
 > - Execute Wasm's **`ConfigurationCallback`** only once
-> - Execute Wasm's analyze method (for example, **`PPL_ObjectDetectionSsdAnalyze`**) only once
-> - After Wasm's **`SendDataDoneCallback`** called, Wasm application exits
+> - The Wasm application exits after all Wasm's **`SendDataDoneCallback`** is called.
 > - To achieve preceding behavior, **`senscord_stream_get_frame`** sometimes returns less than 0 and **`senscord_get_last_error`**'s status.cause is sometimes **`SENSCORD_ERROR_TIMEOUT`**
 
-## 5. Stop the test application
+## 6. Stop the test application
 
 Press [CTRL + C] keys in TERMINAL.

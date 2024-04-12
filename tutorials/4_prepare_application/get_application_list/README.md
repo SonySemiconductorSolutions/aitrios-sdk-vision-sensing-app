@@ -1,10 +1,10 @@
-# Get list of "**Vision and Sensing Application**" from "**Console for AITRIOS**"
-The SDK provides a Jupyter Notebook to get list of "**Vision and Sensing Applications**" from "**Console for AITRIOS**". <br>
-By running the [get_application_list.ipynb](./get_application_list.ipynb), you can get list of the "**Vision and Sensing Applications**".
+# Get list of "**Edge Application**" from "**Console for AITRIOS**"
+The SDK provides a Jupyter Notebook to get list of "**Edge Applications**" from "**Console for AITRIOS**". <br>
+By running the [get_application_list.ipynb](./get_application_list.ipynb), you can get list of the "**Edge Applications**".
 
 ## Get started
 ### 1. Setup "**Console Access Library**"
-To get list of the "**Vision and Sensing Applications**", setup access library client. 
+To get list of the "**Edge Applications**", setup access library client. 
 
 See [README](./../../_common/set_up_console_client/README.md) to get started.
 

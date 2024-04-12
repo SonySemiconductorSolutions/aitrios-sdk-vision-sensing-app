@@ -80,7 +80,7 @@ set (WAMR_BUILD_APP_FRAMEWORK 0)
 set (WAMR_BUILD_APP_LIST WAMR_APP_BUILD_BASE)
 
 # set (WAMR_BUILD_DUMP_CALL_STACK 1)
-# set (WAMR_BUILD_MEMORY_PROFILING 1)
+set (WAMR_BUILD_MEMORY_PROFILING 1)
 
 if (NOT MSVC)
   set (WAMR_BUILD_LIBC_WASI 1)
@@ -133,4 +133,4 @@ endif ()
 
 target_include_directories(loader PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../include)
 
-add_library (dev_mock SHARED mock/dev_mock.c ../../sdk/third_party/parson/parson.c)
+add_library (dev_mock SHARED mock/dev_mock_if.c mock/dev_mock.cpp ../../sdk/third_party/parson/parson.c)

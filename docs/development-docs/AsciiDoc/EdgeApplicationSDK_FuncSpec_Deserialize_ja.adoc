@@ -1,0 +1,286 @@
+= Edge Application SDK pass:[<br/>] デシリアライズ pass:[<br/>] 機能仕様書 pass:[<br/>]
+:sectnums:
+:sectnumlevels: 1
+:author: Copyright 2023 Sony Semiconductor Solutions Corporation
+:version-label: Version 
+:revnumber: x.x.x
+:revdate: YYYY - MM - DD
+:trademark-desc: AITRIOS™、およびそのロゴは、ソニーグループ株式会社またはその関連会社の登録商標または商標です。
+:toc:
+:toc-title: 目次
+:toclevels: 1
+:chapter-label:
+:lang: ja
+
+== 更新履歴
+
+|===
+|Date |What/Why
+
+|2023/05/26
+|初版作成
+
+|===
+
+== 用語・略語
+|===
+|Terms/Abbreviations |Meaning 
+
+|FlatBuffers
+|シリアライゼーションライブラリ
+
+|===
+
+== 参照資料
+
+[[anchor-ref]]
+* Reference/Related documents (関連資料)
+** 「**Console ユーザーマニュアル**」
+*** https://developer.aitrios.sony-semicon.com/en/documents/console-user-manual
+
+
+== 想定ユースケース
+
+* 推論結果をデシリアライズして内容を確認したい
+
+== 機能概要、アルゴリズム
+
+=== Functional Overview
+
+* Base64エンコードされた推論結果をデコードできる
+
+* 「FlatBuffers」でシリアライズされた内容をデシリアライズすることができる
+
+=== デシリアライズ機能
+==== デシリアライズ対応ファイル
+
+* 推論結果のバイナリファイル
+
+* 「**Console for AITRIOS**」にて推論実行した際に取得できる推論結果メタデータ (または同様のフォーマットのjsonファイル)
+** 下記は「**Console for AITRIOS**」にて推論実行した際に取得できる推論結果メタデータの例である
+
+[source,json]
+----
+{
+  "DeviceID": "xxxxx",
+  "ModelID": "xxxxx",
+  "Image": true,
+  "Inferences": [
+    {
+      "T": "xxxxx",
+      "O": "AQAAAA=="
+    }
+  ],
+  "id": "xxxxx",
+  "_rid": "xxxxx",
+  "_self": "xxxxx",
+  "_etag": "xxxxx",
+  "_attachments": "xxxxx",
+  "_ts": 0
+}
+----
+
+`**"Inferences"**` の `**"O"**` に推論結果が格納されている。上記では、Base64エンコードされたデバッグ情報 `**"AQAAAA=="**` が格納されている。
+
+
+=== フロー
+
+[source,mermaid, target="凡例"]
+----
+flowchart TD;
+    %% definition
+    classDef object fill:#FFE699, stroke:#FFD700
+    classDef external_service fill:#BFBFBF, stroke:#6b8e23, stroke-dasharray: 10 2
+    style legend fill:#FFFFFF,stroke:#000000
+
+    %% impl
+    subgraph legend["凡例"]
+        process(処理/ユーザーの行動)
+        object[入出力データ]:::object
+    end
+----
+
+[source,mermaid, target="フロー"]
+----
+flowchart TD
+    %% definition
+    classDef object fill:#FFE699, stroke:#FFD700
+    style sdk fill:#FFFFFF, stroke:#6b8e23, stroke-dasharray: 10 2
+
+    start((Start))
+    id1(デシリアライズするファイルを用意)
+    subgraph sdk["必要ファイル"]
+    data2[スキーマファイル.fbs]:::object
+    data3[バイナリファイル または jsonファイル]:::object
+    end
+    id2("デシリアライズ用設定ファイル作成・編集")
+    id3(デシリアライズ用Notebook実行)
+    data1[デシリアライズ済みファイル.json]:::object
+    finish(((Finish)))
+
+    %% impl
+    start --> id1
+    id1 --- sdk
+    sdk --- id2
+    id2 --- id3
+    id3 --- data1
+    data1 --> finish
+----
+
+
+* フロー詳細
+
+. デシリアライズするファイルを用意
+** シリアライズされたデータに合わせたスキーマファイル、デシリアライズするファイルを用意して任意のディレクトリへ格納する
+
+. デシリアライズ用設定ファイル作成・編集
+** 設定ファイル<<anchor-conf, configuration.json>>を作成、編集してNotebook実行時の設定を行う
+
+. デシリアライズ用Notebook実行
+
+=== シーケンス
+
+[source,mermaid, target="シーケンス"]
+----
+%%{init:{'themeCSS':'text.actor {font-size:18px !important;} .messageText {font-size:18px !important;} .labelText {font-size:18px !important;} .loopText {font-size:18px !important;} .noteText {font-size:18px !important;}'}}%%
+sequenceDiagram
+  participant User
+  participant Dev Container
+  participant dockerコンテナ
+
+  User->>Dev Container: デシリアライズするファイルを用意
+  User->>Dev Container: デシリアライズ用 <br> 設定ファイル作成・編集
+  User->>Dev Container: デシリアライズ用 <br> Notebook実行
+  opt デシリアライズするファイルがjsonファイルの場合 <br> (設定ファイルの input_type にて指定)
+    Dev Container->>Dev Container: jsonファイルから <br> Base64エンコードされた推論結果を取得
+    Dev Container->>Dev Container: 推論結果をBase64デコード処理実行
+    Dev Container->>Dev Container: Base64デコード処理済みの <br> バイナリファイルを作成
+    Dev Container-->>User: 結果表示    
+  end
+  Dev Container->>dockerコンテナ: デシリアライズ用 <br> シェルスクリプト実行
+  Note left of dockerコンテナ:スキーマファイル
+  Note left of dockerコンテナ:バイナリファイル
+  dockerコンテナ->>dockerコンテナ: バイナリファイルを <br> デシリアライズ処理
+  dockerコンテナ->>Dev Container: デシリアライズ処理済みの <br> jsonファイルを作成
+  Note right of Dev Container:jsonファイル
+  Dev Container-->>User: 結果表示
+  opt デシリアライズするファイルが <br> jsonファイルの場合 <br> (設定ファイルの input_type にて指定)
+    Dev Container->>Dev Container: バイナリファイルを削除
+    Dev Container-->>User: 結果表示
+  end
+----
+
+
+== 操作性仕様、画面仕様
+=== How to start each function
+. デシリアライズ処理を使用する各機能のディレクトリの `**README.md**` に含まれるハイパーリンクから、`**deserialize**` ディレクトリの `**README.md**` にジャンプする
+
+
+=== デシリアライズするファイルを用意
+. シリアライズされたデータに合わせたスキーマファイル、デシリアライズするファイルを用意し、`**deserialize**` ディレクトリ配下の任意のディレクトリへ格納する
+
+NOTE: 「**Console for AITRIOS**」で推論実行した結果を使用する場合、詳細は<<anchor-ref, 「**Console ユーザーマニュアル**」>>を参照。
+
+
+=== デシリアライズ用設定ファイル作成・編集
+NOTE: 特別な記載がある場合を除き、原則として省略は不可。
+
+NOTE: 特別な記載がある場合を除き、原則として大文字小文字を区別する。
+
+NOTE: 原則としてシンボリックリンクのディレクトリパス、ファイルパスは使用不可。
+
+NOTE: ディレクトリパス、ファイルパスには `**deserialize**` ディレクトリ配下のパスのみ指定可能。
+
+. `**deserialize**` ディレクトリに設定ファイル (`**configuration.json**`) を作成し、編集する
+
+[[anchor-conf]]
+|===
+|Configuration |Meaning |Range |Remarks
+
+|`**schema_file**`
+|スキーマファイルのパス
+|絶対パスまたはNotebook (*.ipynb) からの相対パス
+|
+
+|`**serialized_file**`
+|デシリアライズするファイルパス
+|絶対パスまたはNotebook (*.ipynb) からの相対パス
+|`**output_dir**` の設定を省略または空文字を指定した場合、Notebook (*.ipynb) と同じディレクトリのファイルは設定不可。
+
+|`**input_type**`
+|デシリアライズするファイルの種別
+|"binary" or "json" +
+ +
+"binary": 推論結果のバイナリファイル +
+"json": 推論結果が格納されているメタデータjsonファイル +
+|
+
+|`**output_dir**`
+|ファイル出力先パス +
+ +
+デシリアライズ結果ファイルの出力先
+|絶対パスまたはNotebook (*.ipynb) からの相対パス
+|省略可 +
+省略または空文字を指定した場合、Notebook (*.ipynb) と同じディレクトリをファイル出力先パスとする。 +
+ +
+出力ファイル名の形式は下記の通り。 +
+" `**serialized_file**` の拡張子無しファイル名".json +
+ +
+ファイル出力先パスに出力ファイル名と重複するファイルが含まれている場合、エラーメッセージを表示し処理を中断する。
+
+|===
+
+
+=== デシリアライズ用Notebook実行
+. `**deserialize**` ディレクトリの `**deserialize.ipynb**` を開き、その中のPythonスクリプトを実行する
+
+** その後下記の動作をする
+
+*** `**deserialize**` ディレクトリの<<anchor-conf, configuration.json>>の存在をチェックする
+**** エラー発生時はその内容を表示し、中断する
+
+*** <<anchor-conf, configuration.json>>の内容をチェックする
+**** エラー発生時はその内容を表示し、中断する
+
+*** <<anchor-conf, configuration.json>> `**schema_file**`、`**serialized_file**` の存在をチェックする
+**** エラー発生時はその内容を表示し、中断する
+
+*** <<anchor-conf, configuration.json>> の `**output_dir**` の存在をチェックする
+**** `**output_dir**` で指定するディレクトリがなければ作成する
+**** エラー発生時はその内容を表示し、中断する
+
+*** <<anchor-conf, configuration.json>> の `**input_type**` が "json" の場合、jsonファイル内の推論結果を取得する
+**** jsonファイル内の推論結果を取得できた場合、 推論結果をBase64デコード処理する
+***** Base64デコード処理に成功した場合、 `**output_dir**` にBase64デコード処理済みファイルを出力する
+***** 出力ファイル名は `**serialized_file**` のファイル名.bin の形式で出力し、デシリアライズ処理完了後に削除する
+**** エラー発生時はその内容を表示し、中断する
+
+*** デシリアライズ用シェルスクリプトを実行する
+**** 処理が成功した場合、`**output_dir**` へデシリアライズ結果ファイルを出力する
+**** 出力ファイル名は `**serialized_file**` のファイル名.json の形式で出力する
+**** エラー発生時はその内容を表示し、中断する
+
+*** `**input_type**` が "json" の場合、出力したBase64デコード処理済みファイルを削除する
+**** エラー発生時はその内容を表示し、中断する
+
+*** デシリアライズ結果ファイルへのリンクを表示する
+**** リンクをクリックすると、デシリアライズ結果ファイルの内容を表示する
+
+
+== 目標性能
+* ユーザビリティ
+
+** SDKの環境構築完了後、追加のインストール手順なしに、デシリアライズができること
+** UIの応答時間が1.2秒以内であること
+** 処理に5秒以上かかる場合は、処理中の表現を逐次更新表示できること
+** 利用ツールやバージョンの情報にユーザーがアクセスできるようドキュメントを提供すること
+
+
+== 制限事項
+* なし
+
+== その他特記事項
+* なし
+
+== 未決定事項
+* なし

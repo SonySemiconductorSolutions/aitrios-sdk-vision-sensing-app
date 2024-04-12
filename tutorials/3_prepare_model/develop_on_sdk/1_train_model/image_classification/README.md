@@ -14,12 +14,12 @@ In the development environment,
 
 2. Place JPEG images for training (for example, **`../../../../_common/dataset/training`** folder). The folder structure format is Image Net v1.
 
-    JPEG image format is supported in "**Vision and Sensing Application SDK**". Other formats depend on [TensorFlow](https://www.tensorflow.org/api_docs/python/tf/io/decode_jpeg).
+    JPEG image format is supported in "**Edge Application SDK**". Other formats depend on [TensorFlow](https://www.tensorflow.org/api_docs/python/tf/io/decode_jpeg).
 
 
 3. Place JPEG images for validation after training (for example, **`../../../../_common/dataset/validation`** folder). The folder structure format is ImageNet v1.
 
-    JPEG image format is supported in "**Vision and Sensing Application SDK**". Other formats depend on [TensorFlow](https://www.tensorflow.org/api_docs/python/tf/io/decode_jpeg).
+    JPEG image format is supported in "**Edge Application SDK**". Other formats depend on [TensorFlow](https://www.tensorflow.org/api_docs/python/tf/io/decode_jpeg).
 
 4. Place label file for training and validation (for example, **`../../../../_common/dataset/labels.json`** file). Supported label file format is a dictionary with key as label name and value as class id.
 

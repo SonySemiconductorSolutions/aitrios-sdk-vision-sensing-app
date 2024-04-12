@@ -1,6 +1,6 @@
-# Vision and Sensing Application API Sequence
+# Edge Application API Sequence
 
-The following is a sequence diagram that illustrates the basic processing of "**Vision and Sensing Application**". This sequence is based on the processing of the sample code.
+The following is a sequence diagram that illustrates the basic processing of "**Edge Application**". This sequence is based on the processing of the sample code.
 See the [sample code](./sdk/sample/vision_app/single_dnn/) and the [API Reference](https://developer.aitrios.sony-semicon.com/development-guides/documents/specifications) for more information on the actual processing and how to use these APIs.
 
 ## Sequence
@@ -11,12 +11,12 @@ sequenceDiagram
 participant Console as Console
 participant Native as Native (Firmware)
 box Wasm Native Library (Firmware)
-participant evp as EVP SDK API
-participant senscord as SensCord SDK API
+participant evp as EVP API
+participant senscord as SensCord API
 participant dpl as Data Pipeline API
 end
-participant Wasm as Wasm<br> (Vision and Sensing Application)
-participant Wasm_Thread as Wasm thread<br> (Vision and Sensing Application)
+participant Wasm as Wasm<br> (Edge Application)
+participant Wasm_Thread as Wasm thread<br> (Edge Application)
 
 
 %% Initialize
@@ -25,6 +25,9 @@ activate Native
 
 Native->>Wasm: Main()
 activate Wasm
+
+Wasm-)Wasm_Thread: pthread_create
+activate Wasm_Thread
 
 Wasm->>dpl: SessInit()
 activate dpl
@@ -35,9 +38,6 @@ Wasm->>dpl: SessRegisterSendDataCallback()
 activate dpl
 dpl-->>Wasm: 
 deactivate dpl
-
-Wasm-)Wasm_Thread: pthread_create
-activate Wasm_Thread
 
 Wasm_Thread->>evp: EVP_initialize()
 activate evp

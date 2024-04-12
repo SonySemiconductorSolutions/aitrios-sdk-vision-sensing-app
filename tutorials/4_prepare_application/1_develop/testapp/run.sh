@@ -18,10 +18,11 @@ echo "#### run test app with ppl sample wasm file ####"
 # DEBUG_PORT="127.0.0.1:1234"  # lldb debug port
 
 DEBUGGER=none
+DUMP_MEMORY_CONSUMPTION=none
 
 # Parameter check
 
-while getopts :df:o:p:t:n: option
+while getopts :dmf:o:p:t:n: option
 do
   case $option in
     d)
@@ -31,6 +32,8 @@ do
     p);;
     t);;
     n);;
+    m)
+      DUMP_MEMORY_CONSUMPTION="-m";;
     ?);;
   esac
 done
@@ -38,6 +41,7 @@ done
 LOADER=${PWD}/build/loader/loader
 
 echo "DEBUGGER ${DEBUGGER}"
+echo "DUMP_MEMORY_CONSUMPTION ${DUMP_MEMORY_CONSUMPTION}"
 
 if [ $DEBUGGER = "-d" ]; then
    echo "PROC: ${LOADER} -g $@"

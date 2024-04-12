@@ -16,4 +16,4 @@
 set -e
 
 cd .devcontainer/cvat/cvat/
-docker compose -f docker-compose.yml -f ../docker-compose.devcontainer.yml up -d
+docker compose -f docker-compose.yml -f ../docker-compose.devcontainer.yml -f ../docker-compose.devcontainer-2.yml up -d
