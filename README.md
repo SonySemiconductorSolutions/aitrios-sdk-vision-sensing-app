@@ -45,8 +45,8 @@ The models and "**Edge Applications**" can be deployed to Edge AI Devices throug
 - Import AI models and "**Edge Applications**" to "**Console for AITRIOS**" and deploy them to Edge AI Devices.
 
 ### Components
-"**Edge Application SDK**" is provided as Development Container (Dev Container) that runs on GitHub Codespaces or Docker environment on Local PC.
-This container includes tools and jupyter notebooks that can be used for development.
+"**Edge Application SDK**" is provided as Development Container (Dev Container) that runs on GitHub Codespaces or Docker environment on local PC.
+This container includes tools and Jupyter notebooks that can be used for development.
 
 <!-- mermaid alt text: Legend -->
   ```mermaid
@@ -120,7 +120,7 @@ graph TB;
         quantize_console --> quantize_model_console
         quantize_model_console --> deploy_console
         eval_console --> eval_result_console
-        
+
     end
 
     deploy_console --> device
@@ -161,8 +161,8 @@ graph TB;
     ppl_code[Application Code<br>C/C++]:::object
     output_tensor[Output Tensor<br>.jsonc]:::object
     ppl_parameter[PPL Parameter<br>.json]:::object
-    wasm[Appliaction<br>.wasm]:::object
-    wasm2[Appliaction<br>.wasm]:::object
+    wasm[Application<br>.wasm]:::object
+    wasm2[Application<br>.wasm]:::object
     aot[Application<br>.aot]:::object
     eval_result[Evaluation<br>Result]:::object
 
@@ -199,10 +199,10 @@ graph TB;
 
 
 - **Console for AITRIOS** <br>
-Following functions are available on "**Console for AITRIOS**":
+The following functions are available on "**Console for AITRIOS**":
     - manage device
     - upload image from device
-    - import image from your local PC or storages
+    - import image from your local PC or storage
     - import AI model
     - import "**Edge Application**"
     - deploy model and "**Edge Application**" to device
@@ -214,7 +214,7 @@ Following functions are available on "**Console for AITRIOS**":
 
 - **Dev Container** <br>
 Dev Container provides tools and notebooks to support cases where you want to create your own AI model and run it on Edge AI Devices.<br>
-Following functions are available on Dev Container.
+The following functions are available on Dev Container.
   - Prepare dataset:
     - Jupyter notebook for downloading images
     - Tools for image annotation
@@ -224,7 +224,7 @@ Following functions are available on Dev Container.
     - Jupyter notebook for importing models to "**Console for AITRIOS**"
     - Jupyter notebook for deploying models to Edge AI Devices
   - Prepare applications:
-    - Tools for developing, building and debugging "**Edge Applications**"
+    - Tools for developing, building, and debugging "**Edge Applications**"
     - Jupyter notebook for importing "**Edge Applications**" to "**Console for AITRIOS**"
     - Jupyter notebook for deploying "**Edge Applications**" to Edge AI Devices
   - See [Tutorials](./tutorials/README.md) for details on each notebook and tool.
@@ -234,7 +234,7 @@ Following functions are available on Dev Container.
 #### About "**Edge Application SDK**"
 
 - AI model training
-    - Datasets for Object Detection created on the Dev Container cannot be used for training base AI models (only for training user's custom AI models).
+    - Datasets for Object Detection created on the Dev Container cannot be used for training base AI models (only for training user custom AI models).
 <br>
 
 - AI model quantization on Dev Container
@@ -242,15 +242,15 @@ Following functions are available on Dev Container.
 <br>
 
 - Jupyter specification
-    - Variables in jupyter notebook are cleared when GitHub Codespaces stop.
+    - Variables in Jupyter notebook are cleared when GitHub Codespaces is stopped.
 
 #### About AITRIOS
 
 - Evaluation of output results
     - Images and inference results output from devices cannot be downloaded from "**Console for AITRIOS**".
-    - Inference results displayed on "**Console for AITRIOS**" are serialized. 
+    - Inference results displayed on "**Console for AITRIOS**" are serialized.
     - To deserialize inference results, see [README for deserializing](./tutorials/_common/deserialize/README.md).
-    
+
 <br>
 
 - Device operation
@@ -271,12 +271,12 @@ See [Development Environment Setup Guide](https://developer.aitrios.sony-semicon
 >**NOTE**
 >
 > - 4-core (8GB) or higher machine types are recommended when using the SDK on Codespaces.
->     - If 2-core is selected, an error may occur during Dev Container build.
+>     - If 2-core is selected, an error may occur during the Dev Container build.
 > - To ensure security of connection for CVAT, do NOT make [Codespace's port forwarding sharing option](https://docs.github.com/en/codespaces/developing-in-codespaces/forwarding-ports-in-your-codespace) "Public".
-> - If Jupyter Kernels picker displayed when you try to run Jupyter notebook first time, please select "Python Environment" and select "Python 3.8".
+> - If the Jupyter Kernels picker is displayed when you try to run Jupyter notebook for the first time, please select "Python Environment" then select "Python 3.8".
 
 ## Samples
-You can learn the development workflow using the samples in a day. <br>
+You can learn the development workflow in one day using the samples. <br>
 See ["**Edge Application SDK**" samples](./samples/README.md).
 
 ## Tutorials
@@ -310,7 +310,7 @@ See ["**Edge Application**" Migration Guide from SDK v0.2 to v1.0](./tutorials/4
     - ["**Application Development Functional Specifications**"](./docs/development-docs/AsciiDoc/EdgeApplicationSDK_FuncSpec_ApplicationDevelopment.adoc)
 
 - Setup "**Console Access Library**"
-    - ["**Console API Initialize Functional Specifications**"](./docs/development-docs/AsciiDoc/EdgeApplicationSDK_FuncSpec_APIInitialize.adoc) 
+    - ["**Console API Initialize Functional Specifications**"](./docs/development-docs/AsciiDoc/EdgeApplicationSDK_FuncSpec_APIInitialize.adoc)
 
 - Import AI model and "**Edge Applications**" to "**Console for AITRIOS**"
     - ["**AI model and application Import Functional Specifications**"](./docs/development-docs/AsciiDoc/EdgeApplicationSDK_FuncSpec_ModelAndPPLImport.adoc)
@@ -340,23 +340,23 @@ See ["**Edge Application**" Migration Guide from SDK v0.2 to v1.0](./tutorials/4
 - [Read This First](https://developer.aitrios.sony-semicon.com/en/documents/read-this-first)
 
 ## Security
-Before using Codespaces, please read the Site Policy of GitHub and understand the usage conditions. 
+Before using Codespaces, please read and understand the GitHub Codespaces Terms and Conditions.
 
 ## AI Ethics
 This SDK is optimized for use with Sony's AITRIOS™ (https://developer.aitrios.sony-semicon.com/edge-ai-sensing/). If you are willing to take part in the AITRIOS and use services provided through AITRIOS, you must sign up with https://developer.aitrios.sony-semicon.com/edge-ai-sensing/ and comply with AITRIOS Terms of Use and other applicable terms of use in addition to the license terms of this SDK.
 
 AITRIOS is a one-stop platform that provides tools and environments to facilitate software and application development and system construction.
 
-Sony, with the aim of utilizing AI technology to enrich people's life styles and contribute to the development of society, Sony will pursue accountability and transparency while actively engaging in dialogue with stakeholders. Sony will continue to promote responsible AI in order to maintain the trust of products and services by stakeholders. 
+Sony, with the aim of utilizing AI technology to enrich people's life styles and contribute to the development of society, Sony will pursue accountability and transparency while actively engaging in dialogue with stakeholders. Sony will continue to promote responsible AI in order to maintain the trust of products and services by stakeholders.
 
 Users of this SDK should refer to and understand our thoughts and initiatives about AI. You can learn more here, including Sony Group AI Ethics Guidelines. https://www.sony.com/en/SonyInfo/sony_ai/responsible_ai.html
 
 ## Versioning
 
-This repository aims to adhere to Semantic Versioning 2.0.0.
+This repository aims to adhere to [Semantic Versioning 2.0.0](https://semver.org/spec/v2.0.0.html).
 
 ## Branch
 
 See the "**Release Note**" from [**Releases**] for this repository.
 
-Each release is generated in the main branch. Pre-releases are generated in the develop branch. Releases will not be provided by other branches.
+Each release is generated in the `main` branch. Pre-releases are generated in the `develop` branch. Releases will not be provided by other branches.
