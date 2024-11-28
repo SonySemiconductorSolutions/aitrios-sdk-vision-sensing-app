@@ -46,10 +46,10 @@ Azure Storage リソースへの制限付きアクセス権を付与する URI
 * Reference/Related documents (関連資料)
 [[anchor-ref]]
 ** APIリファレンス
-*** https://developer.aitrios.sony-semicon.com/development-guides/reference/api-references/
+*** https://developer.aitrios.sony-semicon.com/edge-ai-sensing/guides/
 
 ** 「**Console Access Library**」機能仕様書
-*** https://developer.aitrios.sony-semicon.com/development-guides/documents/specifications/
+*** https://developer.aitrios.sony-semicon.com/edge-ai-sensing/guides/
 
 == 想定ユースケース
 
@@ -75,7 +75,7 @@ Azure Storage リソースへの制限付きアクセス権を付与する URI
 
 *** AIモデルを「**Console for AITRIOS**」にインポートできる
 
-**** 使用できるAIモデルは https://developer.aitrios.sony-semicon.com/development-guides/overview[「**Console for AITRIOS**」の動作仕様] に従う
+**** 使用できるAIモデルは https://developer.aitrios.sony-semicon.com/edge-ai-sensing/system-overview/[「**Console for AITRIOS**」の動作仕様] に従う
 
 **** 「**Console for AITRIOS**」へのインポート元はAzure Blob Storageの為、AIモデルはAzure Blob Storageへの保存が必要
 
@@ -571,7 +571,7 @@ Custom Visionの場合、AIモデルファイルに付属するlabel.txtファ�
 
 ** エラー発生時は `**import_to_console.ipynb**` 内の出力にエラー内容を表示し、中断する
 
-*** エラーや応答時間の詳細については、 https://developer.aitrios.sony-semicon.com/development-guides/documents/specifications/[「**Cloud SDK Console Access Library(Python) 機能仕様書**」] 参照
+*** エラーや応答時間の詳細については、 https://developer.aitrios.sony-semicon.com/edge-ai-sensing/guides/[「**Cloud SDK Console Access Library(Python) 機能仕様書**」] 参照
 
 
 == 操作性仕様、画面仕様 (AIモデル削除)
@@ -643,7 +643,7 @@ NOTE: 「**Console Access Library**」APIに渡されるパラメータについ
 
 ** エラー発生時は `**delete_model_on_console.ipynb**` 内の出力にエラー内容を表示し、中断する
 
-*** エラーや応答時間の詳細については、 https://developer.aitrios.sony-semicon.com/development-guides/documents/specifications/[「**Cloud SDK Console Access Library(Python) 機能仕様書**」] 参照
+*** エラーや応答時間の詳細については、 https://developer.aitrios.sony-semicon.com/edge-ai-sensing/guides/[「**Cloud SDK Console Access Library(Python) 機能仕様書**」] 参照
 
 
 
@@ -751,7 +751,7 @@ NOTE: 「**Console Access Library**」APIに渡されるパラメータについ
 
 ** エラー発生時は `**import_to_console.ipynb**` 内の出力にエラー内容を表示し、中断する
 
-*** エラーや応答時間の詳細については、 https://developer.aitrios.sony-semicon.com/development-guides/documents/specifications/[「**Cloud SDK Console Access Library(Python) 機能仕様書**」] 参照
+*** エラーや応答時間の詳細については、 https://developer.aitrios.sony-semicon.com/edge-ai-sensing/guides/[「**Cloud SDK Console Access Library(Python) 機能仕様書**」] 参照
 
 
 
@@ -831,7 +831,7 @@ NOTE: 「**Console Access Library**」APIに渡されるパラメータについ
 
 ** エラー発生時は `**delete_application_on_console.ipynb**` 内の出力にエラー内容を表示し、中断する
 
-*** エラーや応答時間の詳細については、 https://developer.aitrios.sony-semicon.com/development-guides/documents/specifications/[「**Cloud SDK Console Access Library(Python) 機能仕様書**」] 参照
+*** エラーや応答時間の詳細については、 https://developer.aitrios.sony-semicon.com/edge-ai-sensing/guides/[「**Cloud SDK Console Access Library(Python) 機能仕様書**」] 参照
 
 
 

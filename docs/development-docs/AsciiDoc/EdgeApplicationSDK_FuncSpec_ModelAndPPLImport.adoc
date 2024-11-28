@@ -47,10 +47,10 @@ URI that grant limited access to Azure storage resources
 * Reference/Related documents
 [[anchor-ref]]
 ** API Reference
-*** https://developer.aitrios.sony-semicon.com/development-guides/reference/api-references/
+*** https://developer.aitrios.sony-semicon.com/en/edge-ai-sensing/guides/
 
 ** "**Console Access Library**" Functional Specifications
-*** https://developer.aitrios.sony-semicon.com/development-guides/documents/specifications/
+*** https://developer.aitrios.sony-semicon.com/en/edge-ai-sensing/guides/
 
 == Expected use case
 
@@ -76,7 +76,7 @@ URI that grant limited access to Azure storage resources
 
 *** Import AI models into "**Console for AITRIOS**"
 
-**** Use AI models supported by "**Console for AITRIOS**". See https://developer.aitrios.sony-semicon.com/development-guides/overview[here].
+**** Use AI models supported by "**Console for AITRIOS**". See https://developer.aitrios.sony-semicon.com/en/edge-ai-sensing/system-overview/[here].
 
 **** Must store AI models to Azure Blob Storage to import into "**Console for AITRIOS**"
 
@@ -573,7 +573,7 @@ Used for the following "**Console Access Library**" API.
 
 ** If an error occurs, the error description is displayed in the `**import_to_console.ipynb**` and running is interrupted.
 
-*** See https://developer.aitrios.sony-semicon.com/development-guides/documents/specifications/["**Cloud SDK Console Access Library (Python) Functional Specifications**"] for details on errors and response times
+*** See https://developer.aitrios.sony-semicon.com/en/edge-ai-sensing/guides/["**Cloud SDK Console Access Library (Python) Functional Specifications**"] for details on errors and response times
 
 
 == User interface specifications (Delete AI model)
@@ -645,7 +645,7 @@ Used for the following "**Console Access Library**" API.
 
 ** If an error occurs, the error description is displayed in the `**delete_model_on_console.ipynb**` and running is interrupted.
 
-*** See https://developer.aitrios.sony-semicon.com/development-guides/documents/specifications/["**Cloud SDK Console Access Library (Python) Functional Specifications**"] for details on errors and response times
+*** See https://developer.aitrios.sony-semicon.com/en/edge-ai-sensing/guides/["**Cloud SDK Console Access Library (Python) Functional Specifications**"] for details on errors and response times
 
 
 
@@ -753,7 +753,7 @@ Used for the following "**Console Access Library**" API.
 
 ** If an error occurs, the error description is displayed in the `**import_to_console.ipynb**` and running is interrupted.
 
-*** See https://developer.aitrios.sony-semicon.com/development-guides/documents/specifications/["**Cloud SDK Console Access Library (Python) Functional Specifications**"] for details on errors and response times
+*** See https://developer.aitrios.sony-semicon.com/en/edge-ai-sensing/guides/["**Cloud SDK Console Access Library (Python) Functional Specifications**"] for details on errors and response times
 
 
 
@@ -833,7 +833,7 @@ Used for the following "**Console Access Library**" API.
 
 ** If an error occurs, the error description is displayed in the `**delete_application_on_console.ipynb**` and running is interrupted.
 
-*** See https://developer.aitrios.sony-semicon.com/development-guides/documents/specifications/["**Cloud SDK Console Access Library (Python) Functional Specifications**"] for details on errors and response times
+*** See https://developer.aitrios.sony-semicon.com/en/edge-ai-sensing/guides/["**Cloud SDK Console Access Library (Python) Functional Specifications**"] for details on errors and response times
 
 
 

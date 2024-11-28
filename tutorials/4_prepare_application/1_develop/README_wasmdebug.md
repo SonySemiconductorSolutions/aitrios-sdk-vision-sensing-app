@@ -109,7 +109,7 @@ The testapp_configuration.json has following parameters:
   - `input_tensor_dewarp_crop_property`
   - `senscord_dnn_property`
   
-These parameters are set as the initial return values of mocked **`senscord_stream_get_property`** and **`senscord_channel_get_property`**. See ["**SensCord API Specification**"](https://developer.aitrios.sony-semicon.com/en/file/download/aitrios-apispec-senscordsdk-v1-0-1-en) for more information on the APIs.
+These parameters are set as the initial return values of mocked **`senscord_stream_get_property`** and **`senscord_channel_get_property`**. See ["**SensCord API Specification**"](https://developer.aitrios.sony-semicon.com/en/edge-ai-sensing/documents/senscord-sdk-api-specification/) for more information on the APIs.
 For details on the parameter settings, see [testapp_configuration_schema.json](./testapp/configuration/testapp_configuration_schema.json).
 
 > **NOTE**

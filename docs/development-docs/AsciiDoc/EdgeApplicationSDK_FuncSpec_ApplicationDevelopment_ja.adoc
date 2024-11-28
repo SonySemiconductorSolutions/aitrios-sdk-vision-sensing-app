@@ -66,11 +66,11 @@
 ** WebAssembly
 *** https://webassembly.org/
 ** [[dplspec]]Data Pipeline API規格書（for Edge Application version 1.1.0）
-*** https://developer.aitrios.sony-semicon.com/file/download/aitrios-apispec-datapipeline-v1-0-0-ja
+*** https://developer.aitrios.sony-semicon.com/edge-ai-sensing/documents/data-pipeline-api-specification/
 ** [[evpspec]]EVP API規格書（for Edge Application version 1.1.0）
-*** https://developer.aitrios.sony-semicon.com/file/download/aitrios-apispec-evpsdk-v1-0-0-ja
+*** https://developer.aitrios.sony-semicon.com/edge-ai-sensing/documents/evp-sdk-api-specification/
 ** [[senscordspec]]SensCord API規格書（for Edge Application version 1.1.0）
-*** https://developer.aitrios.sony-semicon.com/file/download/aitrios-apispec-senscordsdk-v1-0-1-ja
+*** https://developer.aitrios.sony-semicon.com/edge-ai-sensing/documents/senscord-sdk-api-specification/
 ** FlatBuffers
 *** https://google.github.io/flatbuffers/
 ** WebAssembly Micro Runtime (WAMR)

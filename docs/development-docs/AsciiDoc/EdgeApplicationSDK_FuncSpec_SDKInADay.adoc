@@ -85,7 +85,7 @@ Note that it is separate from the `**configuration.json**` to configure notebook
 
 * Reference/Related documents
 ** API Reference
-*** https://developer.aitrios.sony-semicon.com/development-guides/reference/api-references/
+*** https://developer.aitrios.sony-semicon.com/en/edge-ai-sensing/guides/
 
 == Expected use case
 

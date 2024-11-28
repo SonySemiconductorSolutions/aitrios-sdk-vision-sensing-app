@@ -49,7 +49,7 @@ The parameters required to run this notebook are :
 |**`comment`**|The description of the "**Edge Application**" |String. <br>See NOTE. |Optional|Used for "**Console Access Library**" API:<br>**`deployment.deployment.Deployment.import_device_app`** |
 
 > **NOTE**<br>
-> See [API Reference](https://developer.aitrios.sony-semicon.com/development-guides/reference/api-references/) of "**Console Access Library**" for other restrictions.
+> See [API Reference](https://developer.aitrios.sony-semicon.com/en/edge-ai-sensing/guides/) of "**Console Access Library**" for other restrictions.
 
 ### 5. Run the notebook
 Open [notebook](./import_to_console.ipynb) and run the cells.

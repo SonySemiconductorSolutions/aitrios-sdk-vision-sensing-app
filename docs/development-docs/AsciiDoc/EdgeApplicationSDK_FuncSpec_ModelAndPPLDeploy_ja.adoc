@@ -45,9 +45,9 @@ Notebook実行に使用する `**configuration.json**` とは別物であるこ�
 [[anchor-ref]]
 * Reference/Related documents (関連資料)
 ** APIリファレンス
-*** https://developer.aitrios.sony-semicon.com/development-guides/reference/api-references/
+*** https://developer.aitrios.sony-semicon.com/edge-ai-sensing/guides/
 ** 「**Console ユーザーマニュアル**」
-*** https://developer.aitrios.sony-semicon.com/en/documents/console-user-manual
+*** https://developer.aitrios.sony-semicon.com/edge-ai-sensing/documents/console-user-manual/
 
 
 == 想定ユースケース
@@ -602,7 +602,7 @@ false:登録済みデプロイConfigを使用
 **** 結果取得に成功した場合、 `**deploy_to_device.ipynb**` に成功した旨のメッセージとデプロイ結果を表示する
 **** エラー発生時はその内容を表示し、中断する
 
-**** エラーや応答時間の詳細については、 https://developer.aitrios.sony-semicon.com/development-guides/documents/specifications/[「**Cloud SDK Console Access Library(Python) 機能仕様書**」] 参照
+**** エラーや応答時間の詳細については、 https://developer.aitrios.sony-semicon.com/edge-ai-sensing/guides/[「**Cloud SDK Console Access Library(Python) 機能仕様書**」] 参照
 
 == 操作性仕様、画面仕様 (AIモデルデプロイ状態キャンセル)
 
@@ -757,7 +757,7 @@ NOTE:「**Console Access Library**」APIに渡されるパラメータについ�
 
 ** エラー発生時は `**delete_deploy_config.ipynb**` 内の出力にエラー内容を表示し、中断する
 
-*** エラーや応答時間の詳細については、 https://developer.aitrios.sony-semicon.com/development-guides/documents/specifications/[「**Cloud SDK Console Access Library(Python) 機能仕様書**」] 参照
+*** エラーや応答時間の詳細については、 https://developer.aitrios.sony-semicon.com/edge-ai-sensing/guides/[「**Cloud SDK Console Access Library(Python) 機能仕様書**」] 参照
 
 
 
@@ -868,7 +868,7 @@ NOTE:「**Console Access Library**」APIに渡されるパラメータについ�
 **** 結果取得に成功した場合、 `**deploy_to_device.ipynb**` に成功した旨のメッセージとデプロイ結果を表示する
 **** エラー発生時はその内容を表示し、中断する
 
-**** エラーや応答時間の詳細については、 https://developer.aitrios.sony-semicon.com/development-guides/documents/specifications/[「**Cloud SDK Console Access Library(Python) 機能仕様書**」] 参照
+**** エラーや応答時間の詳細については、 https://developer.aitrios.sony-semicon.com/edge-ai-sensing/guides/[「**Cloud SDK Console Access Library(Python) 機能仕様書**」] 参照
 
 
 
