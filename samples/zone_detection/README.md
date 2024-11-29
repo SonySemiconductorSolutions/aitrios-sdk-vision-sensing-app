@@ -6,7 +6,7 @@
 
 - "**Zone Detection**"
 
-    ["**Zone Detection**"](https://developer.aitrios.sony-semicon.com/development-guides/tutorials/sample-application/) is a sample application of AITRIOS.
+    ["**Zone Detection**"](https://developer.aitrios.sony-semicon.com/en/edge-ai-sensing/guides/) is a sample application of AITRIOS.
 
 - "**Edge Application**"
 

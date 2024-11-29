@@ -1,7 +1,7 @@
 # Edge Application API Sequence
 
 The following is a sequence diagram that illustrates the basic processing of "**Edge Application**". This sequence is based on the processing of the sample code.
-See the [sample code](./sdk/sample/vision_app/single_dnn/) and the [API Reference](https://developer.aitrios.sony-semicon.com/development-guides/documents/specifications) for more information on the actual processing and how to use these APIs.
+See the [sample code](./sdk/sample/vision_app/single_dnn/) and the [API Reference](https://developer.aitrios.sony-semicon.com/en/edge-ai-sensing/guides/) for more information on the actual processing and how to use these APIs.
 
 ## Sequence
 

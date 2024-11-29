@@ -42,14 +42,14 @@ Added alternate text to images.
 == Reference materials
 
 * "**Portal User Manual**" +
-** https://developer.aitrios.sony-semicon.com/en/documents/portal-user-manual
+** https://developer.aitrios.sony-semicon.com/en/edge-ai-sensing/documents/portal-user-manual/
 
 [[anchor-ref]]
 * API Reference
-** https://developer.aitrios.sony-semicon.com/development-guides/reference/api-references/
+** https://developer.aitrios.sony-semicon.com/en/edge-ai-sensing/guides/
 
 * "**Console Access Library**" Functional Specifications
-** https://developer.aitrios.sony-semicon.com/development-guides/documents/specifications/
+** https://developer.aitrios.sony-semicon.com/en/edge-ai-sensing/guides/
 
 == Expected use case
 * Use "**Console for AITRIOS**" through API
@@ -116,7 +116,7 @@ Check the following from the documentation of this function (`**README.md**`) :
 
 * Client app details + 
 Get from the list of client apps in "**Portal for AITRIOS**": + 
-See https://developer.aitrios.sony-semicon.com/en/documents/portal-user-manual["**Portal User Manual**"] for details.
+See https://developer.aitrios.sony-semicon.com/en/edge-ai-sensing/documents/portal-user-manual/["**Portal User Manual**"] for details.
 
 ** Client ID
 ** Secret
@@ -183,7 +183,7 @@ Used for the following "**Console Access Library**" API +
 **** If an error occurs, the error description is displayed and running is interrupted.
 **** If authentication succeeds and the client instance is created successfully, displays a successful message
 *** Saves the client instance for use by other notebooks in the SDK
-** See https://developer.aitrios.sony-semicon.com/development-guides/documents/specifications/["**Console Access Library**" Functional Specifications] for details on errors and response times
+** See https://developer.aitrios.sony-semicon.com/en/edge-ai-sensing/guides/["**Console Access Library**" Functional Specifications] for details on errors and response times
 
 === Sequence
 

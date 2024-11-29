@@ -35,7 +35,7 @@ The parameters required to run this notebook are :
 |**`version_number`**|The version number of the "**Edge Application**" you want to delete |String. <br>See NOTE. |Required|Used for "**Console Access Library**" API:<br>**`deployment.deployment.Deployment.delete_device_app`**|
 
 > **NOTE**<br>
-> See [API Reference](https://developer.aitrios.sony-semicon.com/development-guides/reference/api-references/) of "**Console Access Library**" for other restrictions.
+> See [API Reference](https://developer.aitrios.sony-semicon.com/en/edge-ai-sensing/guides/) of "**Console Access Library**" for other restrictions.
 
 ### 5. Run the notebook
 Open [notebook](./delete_application_on_console.ipynb) and run the cells.

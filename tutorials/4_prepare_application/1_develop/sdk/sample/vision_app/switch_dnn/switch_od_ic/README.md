@@ -43,7 +43,7 @@ The following parameters are used in the sample "**Edge Application**" :
     >
     > Set to 6 digits.
     > The network_id can be obtained from the "**Console UI**".
-    > See ["**Console User Manual**"](https://developer.aitrios.sony-semicon.com/en/documents/console-user-manual) for details.
+    > See ["**Console User Manual**"](https://developer.aitrios.sony-semicon.com/en/edge-ai-sensing/documents/console-user-manual/) for details.
     - **`param`**<br>
       - **`dnn_output_detections`**<br>
         Description: The maximum number of Bounding boxes which can be detected by Object Detection AI Model.
@@ -81,7 +81,7 @@ The following parameters are used in the sample "**Edge Application**" :
         >
         > Set to 6 digits.
         > The network_id can be obtained from the "**Console UI**".
-        > See ["**Console User Manual**"](https://developer.aitrios.sony-semicon.com/en/documents/console-user-manual) for details.
+        > See ["**Console User Manual**"](https://developer.aitrios.sony-semicon.com/en/edge-ai-sensing/documents/console-user-manual/) for details.
     - **`param`**<br>
       - **`dnn_output_classes`**<br>
         Description: The total number of classes in AI model output.

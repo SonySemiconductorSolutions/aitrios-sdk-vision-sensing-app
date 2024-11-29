@@ -47,9 +47,9 @@ Note that it is separate from the `**configuration.json**` to configure notebook
 [[anchor-ref]]
 * Reference/Related documents
 ** API Reference
-*** https://developer.aitrios.sony-semicon.com/development-guides/reference/api-references/
+*** https://developer.aitrios.sony-semicon.com/en/edge-ai-sensing/guides/
 ** "**Console User Manual**"
-*** https://developer.aitrios.sony-semicon.com/en/documents/console-user-manual
+*** https://developer.aitrios.sony-semicon.com/en/edge-ai-sensing/documents/console-user-manual/
 
 
 == Expected use case
@@ -609,7 +609,7 @@ Used for the following "**Console Access Library**" API.
 **** If results are gotten successfully, `**deploy_to_device.ipynb**` displays a successful message and deployment results
 **** If an error occurs, the error description is displayed and running is interrupted.
 
-**** See https://developer.aitrios.sony-semicon.com/development-guides/documents/specifications/["**Cloud SDK Console Access Library (Python) Functional Specifications**"] for details on errors and response times
+**** See https://developer.aitrios.sony-semicon.com/en/edge-ai-sensing/guides/["**Cloud SDK Console Access Library (Python) Functional Specifications**"] for details on errors and response times
 
 == User interface specifications (Cancel AI model deployment state)
 
@@ -764,7 +764,7 @@ Used for the following "**Console Access Library**" API.
 
 ** If an error occurs, the error description is displayed in the `**delete_deploy_config.ipynb**` and running is interrupted.
 
-*** See https://developer.aitrios.sony-semicon.com/development-guides/documents/specifications/["**Cloud SDK Console Access Library (Python) Functional Specifications**"] for details on errors and response times
+*** See https://developer.aitrios.sony-semicon.com/en/edge-ai-sensing/guides/["**Cloud SDK Console Access Library (Python) Functional Specifications**"] for details on errors and response times
 
 
 
@@ -875,7 +875,7 @@ Used for the following "**Console Access Library**" API.
 **** If results are gotten successfully, `**deploy_to_device.ipynb**` displays a successful message and deployment results
 **** If an error occurs, the error description is displayed and running is interrupted.
 
-**** See https://developer.aitrios.sony-semicon.com/development-guides/documents/specifications/["**Cloud SDK Console Access Library (Python) Functional Specifications**"] for details on errors and response times
+**** See https://developer.aitrios.sony-semicon.com/en/edge-ai-sensing/guides/["**Cloud SDK Console Access Library (Python) Functional Specifications**"] for details on errors and response times
 
 
 

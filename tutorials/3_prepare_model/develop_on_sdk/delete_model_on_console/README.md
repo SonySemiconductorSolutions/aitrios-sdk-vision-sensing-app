@@ -33,7 +33,7 @@ The parameters required to run this notebook are :
 |**`model_id`**|The ID of the AI model you want to delete |String. <br>See NOTE. |Required|Used for "**Console Access Library**" API:<br>**`ai_model.ai_model.AIModel.delete_model`**|
 
 > **NOTE**<br>
-> See [API Reference](https://developer.aitrios.sony-semicon.com/development-guides/reference/api-references/) of "**Console Access Library**" for other restrictions.
+> See [API Reference](https://developer.aitrios.sony-semicon.com/en/edge-ai-sensing/guides/) of "**Console Access Library**" for other restrictions.
 
 ### 5. Run the notebook
 Open [notebook](./delete_model_on_console.ipynb) and run the cells.

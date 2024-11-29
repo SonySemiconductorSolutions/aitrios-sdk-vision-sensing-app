@@ -108,7 +108,7 @@ When designing a "**Edge Application**", you need to implement it using the foll
 
 1. "**EVP API**"<br>
 Register a callback function and get a configuration file such as PPL Parameter used to process a "**Edge Application**".<br>
-See ["**Console User Manual**"](https://developer.aitrios.sony-semicon.com/en/documents/console-user-manual) for how to set the PPL Parameter when using Edge AI Devices.
+See ["**Console User Manual**"](https://developer.aitrios.sony-semicon.com/en/edge-ai-sensing/documents/console-user-manual/) for how to set the PPL Parameter when using Edge AI Devices.
     - Command parameter file (JSON) specifications
 
 2. "**SensCord API**"<br>
@@ -160,9 +160,9 @@ end
 ```
 
 See the following API specification or the [API sequence diagram](./README_api_seq.md) for more information.
-- ["**Data Pipeline API Specification (for Edge Application version 1.1.0)**"](https://developer.aitrios.sony-semicon.com/en/file/download/aitrios-apispec-datapipeline-v1-0-0-en)
-- ["**EVP API Specification (for Edge Application version 1.1.0)**"](https://developer.aitrios.sony-semicon.com/en/file/download/aitrios-apispec-evpsdk-v1-0-0-en)
-- ["**SensCord API Specification (for Edge Application version 1.1.0)**"](https://developer.aitrios.sony-semicon.com/en/file/download/aitrios-apispec-senscordsdk-v1-0-1-en)
+- ["**Data Pipeline API Specification (for Edge Application version 1.1.0)**"](https://developer.aitrios.sony-semicon.com/en/edge-ai-sensing/documents/data-pipeline-api-specification/)
+- ["**EVP API Specification (for Edge Application version 1.1.0)**"](https://developer.aitrios.sony-semicon.com/en/edge-ai-sensing/documents/evp-sdk-api-specification/)
+- ["**SensCord API Specification (for Edge Application version 1.1.0)**"](https://developer.aitrios.sony-semicon.com/en/edge-ai-sensing/documents/senscord-sdk-api-specification/)
 
 See also the [interface definition file](./sdk/vision_app_sdk/include/vision_app_public.h).
 
@@ -331,9 +331,9 @@ For example, the logs can be implemented as follows :
 #define DBG_PRINTF(fmt, ...) printf( "D [VisionAPP] "); printf( fmt, ##__VA_ARGS__); printf( "\n")
 #define VER_PRINTF(fmt, ...) printf( "V [VisionAPP] "); printf( fmt, ##__VA_ARGS__); printf( "\n")
 ```
-For more information about implementing logs, see [implementation requirements](https://developer.aitrios.sony-semicon.com/en/file/download/dev-implementationrequirements-v1-4-2-00-en).
+For more information about implementing logs, see [implementation requirements](https://developer.aitrios.sony-semicon.com/en/edge-ai-sensing/documents/vision-and-sensing-application-implementation-requirements/).
 
-See ["**Console User Manual**"](https://developer.aitrios.sony-semicon.com/en/documents/console-user-manual) for how to enable Wasm logging and retrieve logs.
+See ["**Console User Manual**"](https://developer.aitrios.sony-semicon.com/en/edge-ai-sensing/documents/console-user-manual/) for how to enable Wasm logging and retrieve logs.
 
 > **TIP**
 > 
@@ -344,10 +344,10 @@ See ["**Console User Manual**"](https://developer.aitrios.sony-semicon.com/en/do
 > To use this feature, you need to import Wasm to "**Console for AITRIOS**" and deploy it to a Edge AI Device. See [README](../README.md) for information on how to import and deploy.
 
 ## Restrictions
-- "**Edge Application**" has memory and implementation restrictions. See [implementation requirements](https://developer.aitrios.sony-semicon.com/en/file/download/dev-implementationrequirements-v1-4-2-00-en) for more information.
+- "**Edge Application**" has memory and implementation restrictions. See [implementation requirements](https://developer.aitrios.sony-semicon.com/en/edge-ai-sensing/documents/vision-and-sensing-application-implementation-requirements/) for more information.
 - Users are responsible for the combination of AI model and "**Edge Application**", and the system does not check beforehand.
 - To get the output of the "**Edge Application**" using Edge AI devices, you need to set the **`Mode`** parameter of the inferencing command **`StartUploadInferenceData`** to the mode that gets inferencing results. The **`SessSendData`** of the "**Data Pipeline API**" depends on this specification, and if it is not configured correctly, the specified data will not be uploaded to the cloud.<br>
-See ["**Console User Manual**"](https://developer.aitrios.sony-semicon.com/en/documents/console-user-manual) for **`StartUploadInferenceData`** command details.
+See ["**Console User Manual**"](https://developer.aitrios.sony-semicon.com/en/edge-ai-sensing/documents/console-user-manual/) for **`StartUploadInferenceData`** command details.
   - Command parameter file (JSON) specifications
 
 ## References

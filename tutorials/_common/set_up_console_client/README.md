@@ -8,12 +8,12 @@ To use the "**Console Access Library**", you need following information to acces
 
 - **`console_endpoint`**
 - **`portal_authorization_endpoint`**
-  - See ["**REST API Authentication**"](https://developer.aitrios.sony-semicon.com/file/download/rest-api-authentication) for more information on how to obtain these endpoints.
+  - See ["**REST API Authentication**"](https://developer.aitrios.sony-semicon.com/en/file/download/edge-ai-sensing-portal-console-end-point-info) for more information on how to obtain these endpoints.
 
 - **`client_secret`**
 - **`client_id`**
   - You can obtain Client Secret and Client ID on "**Portal for AITRIOS**". <br>
-  See ["**Portal for AITRIOS User Manual**"](https://developer.aitrios.sony-semicon.com/en/documents/portal-user-manual) for details.
+  See ["**Portal for AITRIOS User Manual**"](https://developer.aitrios.sony-semicon.com/en/edge-ai-sensing/documents/portal-user-manual/) for details.
 
 ### 2. Create setting file
 Place setting file (**`./configuration.json`** file) for using the "**Console Access Library**". 
@@ -41,7 +41,7 @@ Edit the parameters in [configuration.json](./configuration.json).
 |**`client_id`**|String. See NOTE.|Required|Used for "**Console Access Library**" API: **`common.config.Config`**
 
 > **NOTE**
-> See [API Reference](https://developer.aitrios.sony-semicon.com/development-guides/reference/api-references/) of "**Console Access Library**" for other restrictions.
+> See [API Reference](https://developer.aitrios.sony-semicon.com/en/edge-ai-sensing/guides/) of "**Console Access Library**" for other restrictions.
 
 ### 4. Run the notebook
 Open [notebook](./set_up_console_client.ipynb) and run the cells.

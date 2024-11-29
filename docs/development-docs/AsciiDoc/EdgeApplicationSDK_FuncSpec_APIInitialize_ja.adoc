@@ -42,14 +42,14 @@
 == 参照資料
 
 * 「**Portal ユーザーマニュアル**」 +
-** https://developer.aitrios.sony-semicon.com/en/documents/portal-user-manual
+** https://developer.aitrios.sony-semicon.com/edge-ai-sensing/documents/portal-user-manual/
 
 [[anchor-ref]]
 * APIリファレンス
-** https://developer.aitrios.sony-semicon.com/development-guides/reference/api-references/
+** https://developer.aitrios.sony-semicon.com/edge-ai-sensing/guides/
 
 * 「**Console Access Library**」機能仕様書
-** https://developer.aitrios.sony-semicon.com/development-guides/documents/specifications/
+** https://developer.aitrios.sony-semicon.com/edge-ai-sensing/guides/
 
 == 想定ユースケース
 * 「**Console for AITRIOS**」を、API経由で利用したい
@@ -116,7 +116,7 @@ APIを使用して「**Console for AITRIOS**」に接続するため、下記の
 
 * クライアントアプリ詳細情報 +
 「**Portal for AITRIOS**」のクライアントアプリ一覧から、下記を取得する。 +
-詳細は https://developer.aitrios.sony-semicon.com/en/documents/portal-user-manual[「**Portal ユーザーマニュアル**」] を参照。
+詳細は https://developer.aitrios.sony-semicon.com/edge-ai-sensing/documents/portal-user-manual/[「**Portal ユーザーマニュアル**」] を参照。
 
 ** クライアントID
 ** シークレット 
@@ -183,7 +183,7 @@ NOTE:「**Console Access Library**」APIに渡されるパラメータについ�
 **** エラー発生時はその内容を表示し、中断する
 **** 認証に成功し、クライアントインスタンスの生成に成功した場合は、成功した旨のメッセージを表示する
 *** クライアントインスタンスをSDK内の他のNotebookからも使用できるよう保存する
-** エラーや応答時間の詳細については、 https://developer.aitrios.sony-semicon.com/development-guides/documents/specifications/[「**Console Access Library**」機能仕様書]参照
+** エラーや応答時間の詳細については、 https://developer.aitrios.sony-semicon.com/edge-ai-sensing/guides/[「**Console Access Library**」機能仕様書]参照
 
 === シーケンス
 

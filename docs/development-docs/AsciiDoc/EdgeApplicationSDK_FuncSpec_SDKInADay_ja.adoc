@@ -83,7 +83,7 @@ Notebook実行に使用する `**configuration.json**` とは別物であるこ�
 
 * Reference/Related documents (関連資料)
 ** APIリファレンス
-*** https://developer.aitrios.sony-semicon.com/development-guides/reference/api-references/
+*** https://developer.aitrios.sony-semicon.com/edge-ai-sensing/guides/
 
 == 想定ユースケース
 

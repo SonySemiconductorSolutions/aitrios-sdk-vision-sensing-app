@@ -44,7 +44,7 @@ The parameters required to run this notebook are :
 
 > **NOTE**
 >
-> See [API Reference](https://developer.aitrios.sony-semicon.com/development-guides/reference/api-references/) of "**Console Access Library**" for other restrictions.
+> See [API Reference](https://developer.aitrios.sony-semicon.com/en/edge-ai-sensing/guides/) of "**Console Access Library**" for other restrictions.
 
 ### 5. Run the notebook
 Open the [notebook](./cancel_deploy_state.ipynb) and run the cells.
