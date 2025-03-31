@@ -29,6 +29,9 @@ Updated the PDF build environment.
 
 |2023/05/26
 |Fixed the notation of tool names and parentheses and parameters.
+
+|2025/03/31
+|Changes to Edge Application SDK functions due to discontinuation of TFLite support.
 |===
 
 
@@ -94,21 +97,6 @@ Updated the PDF build environment.
 |===
 |Feature type |Control target |Description |Possible fix |Purpose of version control (example)
 
-|prepare dataset
-|Notebooks, configuration files
-|Jupyter Notebooks to download image data for learning
-|Edit various settings according to your purpose. (Image category, number of images acquired, etc.)
-|Record the parameters and settings specified at the time of image download,  +
-so that you can refer to them when you want to reproduce your learning 
-with the same image data. 
-
-|prepare model
-|Notebooks for learning, quantization, configuration files
-|Jupyter Notebooks for learning and quantizing your own AI models
-|Edit various settings according to your purpose.
-|Record parameters and other information used to learn and quantize the model,  +
-so that you can refer to them when you want to reproduce the learning with the same parameters.
-
 |prepare application
 |A set of post-processing sources, Makefile
 |Source code describing AI model post-processing,  + 
@@ -122,7 +110,7 @@ It also makes it easier for teams to develop.
 * Branch
 ** By creating a branch, multiple feature development can proceed simultaneously
 ** It can also be independently versioned + 
-by editing the prepare dataset, prepare model and prepare application in separate branches
+by editing the prepare application in separate branches
 *** Branch operation example:
 +
 [source, sh]
@@ -130,15 +118,11 @@ by editing the prepare dataset, prepare model and prepare application in separat
 main
 	│-- feature/prepare_application/object_detection_xxx (1)
 	│-- feature/prepare_application/image_classification_xxx (2)
-	│-- feature/prepare_model/xxx (3)
-	│-- feature/prepare_dataset/xxx (4)
-	│-- bugfix/XXX (5)
+	│-- bugfix/XXX (3)
 ----
 (1) Feature development branch for object detection model +
 (2) Feature development branch for image classification model +
-(3) AI model creation management branch +
-(4) Dataset download management branch +
-(5) Bug fix branch
+(3) Bug fix branch
 
 * Commit history
 ** Commit changes to a file when you want to save them, so you can refer to them later as a revision history

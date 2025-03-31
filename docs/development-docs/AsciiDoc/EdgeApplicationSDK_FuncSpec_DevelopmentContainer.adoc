@@ -28,6 +28,9 @@
 |Fixed the notation of tool names and parentheses. + 
 Some environments do not render AsciiDoc's Mermaid diagrams, so modified to rendered image references. + 
 Added alternate text to images.
+
+|2025/03/31
+|Changes to Edge Application SDK functions due to discontinuation of TFLite support.
 |===
 
 == Terms/Abbreviations
@@ -149,29 +152,13 @@ flowchart TB
 * "**Console for AITRIOS**" procedure
 |
 * Environment where CVAT can be used
-* Notebook to download images from COCO
 * Notebook importing and exporting datasets from CVAT
-* Notebook that splits datasets for train/validate
 
 |Create an AI model
 |
-* Procedure for transfer learning an AI model (Image Classification)
 * "**Console for AITRIOS**" procedure
 |
-* Sample notebook for transfer learning an AI model (Image Classification)
-
-|Quantize an AI model
-|
-* Procedure for quantizing a user-created AI model (Image Classification) using "**MCT**"
-* Procedure for evaluating the accuracy of a user-created AI model (Image Classification) before and after quantization
-|
-* Environment for quantization using "**MCT**"
-* AI model evaluation environment
-* Sample notebook quantizing an AI model (Image Classification)
-* Sample notebook evaluating the following types of AI models (Image Classification)
-** Keras
-** TFLite
-** TFLite (quantized)
+*
 
 |Develop post-processing
 |

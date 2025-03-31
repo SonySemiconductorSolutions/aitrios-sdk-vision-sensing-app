@@ -28,6 +28,9 @@ PDFビルド環境更新。
 
 |2023/05/26
 |ツール名と括弧、パラメータの表記の修正
+
+|2025/03/31
+|TFLiteサポート中止に伴うEdge Application SDKの提供機能の変更。
 |===
 
 
@@ -93,21 +96,6 @@ PDFビルド環境更新。
 |===
 |機能種別 |管理対象|説明 |想定される修正 |バージョン管理の目的 (例)
 
-|prepare dataset
-|Notebook、設定ファイル
-|学習用画像データをダウンロードするためのJupyter Notebook
-|目的に合わせて各種設定値を編集する。 (画像のカテゴリや取得枚数など)
-|画像ダウンロード時に指定したパラメータや設定値を記録しておき、 +
-同じ画像データで学習を再現したい場合などに参照
-できるようにしておく。
-
-|prepare model
-|学習用、量子化用Notebook、設定ファイル
-|自前のAIモデルを学習、量子化するためのJupyter Notebook
-|目的に合わせて各種設定値を編集する。
-|モデルを学習、量子化した際のパラメータなどの情報を記録しておき、 +
-同じパラメータで学習を再現したい場合などに参照できるようにしておく。
-
 |prepare application
 |post processソース一式、Makefile
 |モデルの後処理を記述するソースコード、 + 
@@ -120,7 +108,7 @@ PDFビルド環境更新。
 
 * ブランチ
 ** ブランチを作成することで、複数の機能開発を同時に進めることができる
-** また、prepare dataset、prepare model、prepare applicationの編集をそれぞれ別ブランチで行うことにより、 +
+** また、prepare applicationの編集をそれぞれ別ブランチで行うことにより、 +
 独立してバージョン管理することもできる
 *** ブランチ運用例：
 +
@@ -129,15 +117,11 @@ PDFビルド環境更新。
 main
 	│-- feature/prepare_application/object_detection_xxx (1)
 	│-- feature/prepare_application/image_classification_xxx (2)
-	│-- feature/prepare_model/xxx (3)
-	│-- feature/prepare_dataset/xxx (4)
-	│-- bugfix/XXX (5)
+	│-- bugfix/XXX (3)
 ----
 (1) Object Detectionモデル向け機能開発ブランチ +
 (2) Image Classificationモデル向け機能開発ブランチ +
-(3) モデル作成管理用ブランチ +
-(4) データセットダウンロード管理用ブランチ +
-(5) バグ修正用ブランチ
+(3) バグ修正用ブランチ
 
 * コミット履歴
 ** ファイルの変更内容を、保存したいタイミングでコミットすることで、変更履歴として後から参照できる

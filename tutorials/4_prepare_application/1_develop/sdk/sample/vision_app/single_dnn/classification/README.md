@@ -37,7 +37,7 @@ The following parameters are used in the sample "**Edge Application**" :
   Description: Threshold of predictions number. The maximum number of predictions you want to get after "**Edge Application**".
   > NOTE
   >
-  > For Image Classification AI model transfer learned and quantized in the SDK, it can be changed from 0 to the number of classes set in transfer learning in the SDK. If an invalid value is entered, the default value is applied.
+  > If an invalid value is entered, the default value is applied.
 
 ### PPL Parameter
 Even if the PPL Parameter is not specified in the "**Console for AITRIOS**", it is possible to operate by setting an initial value in [the program](../../../post_process/classification/include/analyzer_classification.h). The sample sets the following values :
