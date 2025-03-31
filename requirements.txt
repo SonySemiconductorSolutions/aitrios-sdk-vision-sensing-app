@@ -10,7 +10,7 @@ model-compression-toolkit==1.8.0
 tensorflow==2.11.1
 tensorflow-model-optimization==0.7.3
 tqdm==4.64.0
-jsonschema
+jsonschema==4.20.0
 cvat-sdk==2.6.1
 .devcontainer/dependencies/aitrios-sdk-console-access-lib-python/lib/python-client
 .devcontainer/dependencies/aitrios-sdk-console-access-lib-python/src
