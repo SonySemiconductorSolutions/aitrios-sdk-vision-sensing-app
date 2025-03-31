@@ -1,5 +1,5 @@
 /****************************************************************************
- * Copyright 2023 Sony Semiconductor Solutions Corp. All rights reserved.
+ * Copyright 2023, 2024 Sony Semiconductor Solutions Corp. All rights reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,6 +34,9 @@ extern "C" {
 #define SENSCORD_PROPERTY_KEY_DEWARP_CROP "devicesdk_imx500_input_tensor_dewarp_crop_property"
 #define SENSCORD_PROPERTY_KEY_DNN         "devicesdk_imx500_dnn_property"
 
+#define SENSCORD_POST_PROCESS_PARAMETER_PROPERTY_KEY  "post_process_paramter_property"
+#define SENSCORD_POST_PROCESS_PARAM_SIZE 256
+
 #define SESS_SEND_MAX_SIZE 90112 /**< 88KB */
 
 struct input_tensor_dewarp_crop_property {
@@ -46,6 +49,10 @@ struct input_tensor_dewarp_crop_property {
 struct senscord_dnn_property {
   uint32_t network_id; /**< network id */
   uint8_t network_ordinal; /**< network ordinal */
+};
+
+struct senscord_post_process_parameter_t {
+  uint8_t  param[SENSCORD_POST_PROCESS_PARAM_SIZE];
 };
 
 typedef void* senscord_core_t;
