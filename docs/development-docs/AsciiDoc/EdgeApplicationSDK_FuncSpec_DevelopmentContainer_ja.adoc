@@ -27,6 +27,9 @@
 |ツール名と括弧の表記の修正 + 
 一部環境でAsciiDocのMermaid図が表示されないため、レンダリング後の画像参照に修正 + 
 図の代替テキスト追加
+
+|2025/03/31
+|TFLiteサポート中止に伴うEdge Application SDKの提供機能の変更。
 |===
 
 == 用語・略語
@@ -148,29 +151,13 @@ flowchart TB
 * 「**Console for AITRIOS**」手順
 |
 * CVATを使用できる環境
-* COCOから画像をダウンロードするNotebook
 * CVATからデータセットをインポート・エクスポートするNotebook
-* データセットをTrain用/Validate用に分割するNotebook
 
 |AIモデルの作成
 |
-* AIモデル (Image Classification) を転移学習する手順
 * 「**Console for AITRIOS**」手順
 |
-* AIモデル (Image Classification) を転移学習するサンプルNotebook
-
-|AIモデル量子化
-|
-* ユーザーが作成したAIモデル (Image Classification) を「**MCT**」を使用して量子化する手順
-* ユーザーが作成したAIモデル (Image Classification) の量子化前後の精度評価する手順
-|
-* 「**MCT**」を使用して量子化できる環境
-* AIモデルの評価環境
-* AIモデル (Image Classification) を量子化するサンプルNotebook
-* 下記のAIモデル (Image Classification) を評価するサンプルNotebook
-** Keras
-** TFLite
-** TFLite (量子化済み)
+*
 
 |後処理開発
 |

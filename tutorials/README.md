@@ -10,16 +10,15 @@ See [README](./1_initialize/README.md) for details.
 This part describes how to prepare images and datasets for training and evaluation of your custom AI models.
 
 It contains the following sub-parts:
-- download images
 - annotate images
 
 See [README](./2_prepare_dataset/README.md) for details.
 
 ## 3. Prepare model
 This part describes how to prepare AI models that can run on Edge AI Devices. <br>
-You can develop AI models on SDK or "**Console for AITRIOS**".
+You can develop AI models on "**Console for AITRIOS**" or other guides.
 
-See [README](3_prepare_model/README.md) for details.
+See [README](./3_prepare_model/README.md) for details.
 
 ## 4. Prepare application
 This part describes how to develop and build a "**Edge Application**".<br>

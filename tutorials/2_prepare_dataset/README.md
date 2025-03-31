@@ -1,9 +1,9 @@
 # Tutorials - 2. Prepare dataset
 
 ## Download Images
-This tutorial shows you how to download images from [COCO](https://cocodataset.org/#home).
+Please refer to "Keras Model Deployment Guide" to prepare dataset. <br>
 
-See [README](./download_images/README.md) to get started.
+See ["Keras Model Deployment Guide"](https://developer.aitrios.sony-semicon.com/en/edge-ai-sensing/documents/keras-model-deployment-guide) for details.
 
 >**NOTE**
 >
@@ -18,4 +18,4 @@ See [README](./annotate_images/README.md) to get started.
 >**NOTE**
 >
 >"**Console for AITRIOS**" doesn't support importing annotation data.
->So the tagged annotation data is useful for training your custom AI model on "**Edge Application SDK**" or your own environment.
+>So the tagged annotation data is useful for training your custom AI model on your own environment.

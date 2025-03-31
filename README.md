@@ -5,7 +5,6 @@
   - [Overview](#overview)
     - [What you can do with the "**Edge Application SDK**"](#what-you-can-do-with-the-edge-application-sdk)
     - [Components](#components)
-      - [Workflow for developing AI models](#workflow-for-developing-ai-models)
       - [Workflow for developing Edge Applications](#workflow-for-developing-edge-applications)
     - [Restrictions](#restrictions)
       - [About "**Edge Application SDK**"](#about-edge-application-sdk)
@@ -26,17 +25,14 @@
   - [Branch](#branch)
 
 ## Overview
-"**Edge Application SDK**" for AITRIOS is a toolkit for developing AI models and post-processing applications that can be installed on Edge AI Devices. Post-processing applications are called "**Edge Applications**".
-The models and "**Edge Applications**" can be deployed to Edge AI Devices through "**Console for AITRIOS**".
+"**Edge Application SDK**" for AITRIOS is a toolkit for developing post-processing applications that can be installed on Edge AI Devices. Post-processing applications are called "**Edge Applications**".
+"**Edge Applications**" can be deployed to Edge AI Devices through "**Console for AITRIOS**".
 
 ![overview](./Images_README/overview.png)
 
 ### What you can do with the "**Edge Application SDK**"
 - Use GitHub Codespaces (Dev Container) as development environment.
   - You don't need to install any additional tools in your environment.
-<br>
-
-- Develop your AI models in the container.
 <br>
 
 - Develop "**Edge Applications**" using build environment and sample code included in the container.
@@ -68,84 +64,6 @@ This container includes tools and jupyter notebooks that can be used for develop
     end
 
   ```
-
-#### Workflow for developing AI models
-<!-- mermaid alt text: Workflow for developing AI models -->
-```mermaid
-%%{init: {'theme': 'default'}}%%
-graph TB;
-    style DevContainer fill:#FFFFFF, stroke:#6b8e23, stroke-dasharray: 10 2
-    style Console fill:#BFBFBF, stroke:#6b8e23, stroke-dasharray: 10 2
-    style your_env fill:#BFBFBF, stroke:#6b8e23, stroke-dasharray: 10 2
-
-    classDef object fill:#FFE699, stroke:#FFD700
-    classDef device fill:#FFFFFF
-
-    prepare_sdk(Prepare Dataset)
-    train_sdk(Train Model)
-    quantize_sdk(Quantize Model)
-
-    train_yours(Train Model)
-
-    prepare_console(Prepare Dataset)
-    train_console(Create/Train Model)
-    quantize_console(Quantize Model)
-    deploy_console(Deploy)
-    eval_console(Evaluate)
-
-    img_sdk[Images]:::object
-    img_console[Images]:::object
-    data_sdk[Dataset]:::object
-    data_console[Dataset]:::object
-    ai_model[AI-Model]:::object
-    custom_model[Your<br>AI-Model]:::object
-    quantize_model_sdk[Quantized<br>TFLite-Model]:::object
-    quantize_model_console[Quantized<br>TFLite-Model]:::object
-    eval_result_sdk[Evaluation<br>Result]:::object
-    eval_result_console[Evaluation<br>Result]:::object
-
-    device[Edge AI Device]:::device
-
-    subgraph your_env[Your Training Environment]
-        train_yours
-    end
-
-    subgraph Console["Console for AITRIOS"]
-        img_console --> prepare_console
-        prepare_console --> data_console
-
-        data_console --> train_console
-        train_console --> ai_model
-        ai_model --> quantize_console
-        quantize_console --> quantize_model_console
-        quantize_model_console --> deploy_console
-        eval_console --> eval_result_console
-        
-    end
-
-    deploy_console --> device
-    device --> eval_console
-
-    subgraph DevContainer[Edge Application SDK Dev Container]
-        prepare_sdk --> img_sdk
-        img_sdk --> prepare_sdk
-        prepare_sdk --> data_sdk
-        data_sdk --> train_sdk
-        train_sdk --> custom_model
-        custom_model --> quantize_sdk
-        %%img_sdk --> quantize_sdk
-        quantize_sdk --> quantize_model_sdk
-        quantize_sdk --> eval_result_sdk
-    end
-
-    data_sdk --> train_yours
-    img_sdk --> train_yours
-    train_yours --> custom_model
-    img_sdk --> img_console
-    quantize_model_sdk --> deploy_console
-
-
-```
 
 #### Workflow for developing "**Edge Applications**"
 <!-- mermaid alt text: Workflow for developing Edge Applications -->
@@ -213,16 +131,10 @@ Following functions are available on "**Console for AITRIOS**":
 <br>
 
 - **Dev Container** <br>
-Dev Container provides tools and notebooks to support cases where you want to create your own AI model and run it on Edge AI Devices.<br>
+Dev Container provides tools and notebooks to support cases where you want to create your own Edge Application and run it on Edge AI Devices.<br>
 Following functions are available on Dev Container.
   - Prepare dataset:
-    - Jupyter notebook for downloading images
     - Tools for image annotation
-  - Prepare models:
-    - Jupyter notebook for training models
-    - Jupyter notebook for quantizing models
-    - Jupyter notebook for importing models to "**Console for AITRIOS**"
-    - Jupyter notebook for deploying models to Edge AI Devices
   - Prepare applications:
     - Tools for developing, building and debugging "**Edge Applications**"
     - Jupyter notebook for importing "**Edge Applications**" to "**Console for AITRIOS**"
@@ -232,14 +144,6 @@ Following functions are available on Dev Container.
 ### Restrictions
 
 #### About "**Edge Application SDK**"
-
-- AI model training
-    - Datasets for Object Detection created on the Dev Container cannot be used for training base AI models (only for training user's custom AI models).
-<br>
-
-- AI model quantization on Dev Container
-    - Supported AI models are based on ["**Model Compression Toolkit (MCT)**"'s features](https://github.com/sony/model_optimization/tree/v1.8.0#supported-features).
-<br>
 
 - Jupyter specification
     - Variables in jupyter notebook are cleared when GitHub Codespaces stop.
@@ -299,12 +203,7 @@ See ["**Edge Application**" Migration Guide from SDK v0.2 to v1.0](./tutorials/4
 ## Documentation
 ### SDK Functional Specifications
 - Prepare dataset
-    - ["**Image Download Functional Specifications**"](./docs/development-docs/AsciiDoc/EdgeApplicationSDK_FuncSpec_ImageDownload.adoc)
     - ["**Image Annotation CVAT Functional Specifications**"](./docs/development-docs/AsciiDoc/EdgeApplicationSDK_FuncSpec_ImageAnnotationCvat.adoc)
-
-- Prepare model
-    - ["**Model Training Functional Specifications**"](./docs/development-docs/AsciiDoc/EdgeApplicationSDK_FuncSpec_ModelTraining.adoc)
-    - ["**Model Quantization Functional Specifications**"](./docs/development-docs/AsciiDoc/EdgeApplicationSDK_FuncSpec_ModelQuantization.adoc)
 
 - Prepare application
     - ["**Application Development Functional Specifications**"](./docs/development-docs/AsciiDoc/EdgeApplicationSDK_FuncSpec_ApplicationDevelopment.adoc)
